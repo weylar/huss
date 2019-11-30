@@ -1,33 +1,41 @@
-package com.android.huss.views;
+package com.android.huss.views.Home;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.android.huss.R;
+import com.android.huss.models.Ads;
 import com.android.huss.models.Category;
-import com.android.huss.repositories.CategoryRepository;
 import com.android.huss.viewModels.HomeViewModel;
+import com.ldoublem.loadingviewlib.view.LVGearsTwo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView catRecyclerView;
+    RecyclerView topAdsRecyclerView;
     CategoryRecycler categoryRecycler;
     RecyclerView.LayoutManager layoutManager;
     HomeViewModel homeViewModel;
+    LVGearsTwo progressBar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        progressBar = findViewById(R.id.progress);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        progressBar.setViewColor(getResources().getColor(R.color.gray));
+        progressBar.startAnim(10);
 
 
     }
@@ -44,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
                 articleArrayList.addAll(catResponse);
 
                 MainActivity.this.generateCategoryList(articleArrayList);
+                progressBar.stopAnim();
+                progressBar.setVisibility(View.GONE);
             }
         });
 
@@ -52,10 +62,16 @@ public class MainActivity extends AppCompatActivity {
     private void generateCategoryList(List<Category> categories) {
         catRecyclerView = findViewById(R.id.recycler_cat);
         categoryRecycler = new CategoryRecycler(this, categories);
-        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         catRecyclerView.setLayoutManager(layoutManager);
         catRecyclerView.setAdapter(categoryRecycler);
         categoryRecycler.notifyDataSetChanged();
+
+    }
+
+    private void generateTopAdsList(List<Ads> ads){
+        topAdsRecyclerView = findViewById(R.id.recycler_top_ads);
+        topAdsRecyclerView.setLayoutManager(layoutManager);
+        topAdsRecyclerView.setAdapter();
 
     }
 }

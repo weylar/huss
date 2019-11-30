@@ -44,6 +44,8 @@ dependencies {
     def lifecycle_version = "2.1.0"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
 
+    /*Progress Bar*/
+    implementation 'com.ldoublem.loadingview:loadingviewlib:1.0'
     /*Testing */
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

@@ -9,8 +9,6 @@ import com.android.huss.repositories.CategoryRepository;
 
 import java.util.List;
 
-import static com.android.huss.utility.Utility.ACCESS_KEY;
-
 public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<List<Category>> mutableLiveData;

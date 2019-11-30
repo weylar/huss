@@ -1,4 +1,4 @@
-package com.android.huss.views;
+package com.android.huss.views.Home;
 
 import android.content.Context;
 import android.view.LayoutInflater;
