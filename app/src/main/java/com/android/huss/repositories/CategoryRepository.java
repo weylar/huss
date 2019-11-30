@@ -1,6 +1,9 @@
 package com.android.huss.repositories;
 
 import android.util.Log;
+
+import androidx.lifecycle.MutableLiveData;
+
 import retrofit2.Callback;
 import com.android.huss.data.HussAPI;
 import com.android.huss.data.RetrofitClientInstance;
@@ -15,26 +18,37 @@ import static com.android.huss.utility.Utility.ACCESS_KEY;
 public class CategoryRepository {
 
     private static final String TAG = "CategoryRepository";
+    private static CategoryRepository categoryRepository;
 
+    public static CategoryRepository getInstance(){
+        if (categoryRepository == null){
+            categoryRepository = new CategoryRepository();
+        }
+        return categoryRepository;
+    }
 
-    public void getCategories() {
+    public MutableLiveData<List<Category>>getCategories() {
+        Log.e(TAG, "getCategories: " );
+        final MutableLiveData<List<Category>> categoryData = new MutableLiveData<>();
         HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
-        Call<List<Category>> call = retrofit.getCategory(ACCESS_KEY);
+        Call<List<Category>> call = retrofit.getCategory();
         call.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if (response.isSuccessful()) {
                     Log.e(TAG, "onResponse: SUCCESS");
+                    categoryData.setValue(response.body());
                 }
             }
 
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {
-                Log.e(TAG, "onFailure: ERROR LOADING DATA");
                 Log.e(TAG, t.getMessage() + "Failed");
+//                categoryData.setValue(null);
+                //System.out.println(categoryData);
             }
         });
-
+        return categoryData;
     }
 
 

@@ -1,10 +1,13 @@
 package com.android.huss.models;
 
 
+import com.google.gson.annotations.SerializedName;
 
 public class Category {
     private int id;
+    @SerializedName("title")
     private String name;
+    @SerializedName("url")
     private String iconUrl;
     private String createdAt;
     private String updateAt;

@@ -12,7 +12,7 @@ import retrofit2.http.Query;
 
 public interface HussAPI {
 
-    @GET("api")
-    Call<List<Category>> getCategory(@Query("access_key") String key);
+    @GET("photos")
+    Call<List<Category>> getCategory();
 
 }
