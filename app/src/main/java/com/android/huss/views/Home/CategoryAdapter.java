@@ -16,13 +16,13 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class CategoryRecycler extends RecyclerView.Adapter<CategoryRecycler.CustomViewHolder>{
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CustomViewHolder>{
 
 
         private List<Category> dataList;
         private Context context;
 
-        public CategoryRecycler(Context context, List<Category> dataList){
+        public CategoryAdapter(Context context, List<Category> dataList){
             this.context = context;
             this.dataList = dataList;
         }

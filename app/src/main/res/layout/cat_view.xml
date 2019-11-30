@@ -4,17 +4,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_margin="10dp"
-    android:layout_width="100dp"
-    android:layout_height="140dp">
+    android:layout_width="80dp"
+    android:layout_height="120dp">
 
     <androidx.cardview.widget.CardView
 
         android:id="@+id/card_category"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="90dp"
         app:cardCornerRadius="10dp"
-        app:cardElevation="2dp"
-        app:contentPadding="2dp">
+        app:cardElevation="2dp">
 
         <ImageView
             android:id="@+id/icon"

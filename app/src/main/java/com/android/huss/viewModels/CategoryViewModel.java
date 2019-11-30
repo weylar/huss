@@ -9,7 +9,7 @@ import com.android.huss.repositories.CategoryRepository;
 
 import java.util.List;
 
-public class HomeViewModel extends ViewModel {
+public class CategoryViewModel extends ViewModel {
 
     private MutableLiveData<List<Category>> mutableLiveData;
     private CategoryRepository categoryRepository;

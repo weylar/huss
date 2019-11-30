@@ -13,8 +13,6 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 
-import static com.android.huss.utility.Utility.ACCESS_KEY;
-
 public class CategoryRepository {
 
     private static final String TAG = "CategoryRepository";
@@ -28,7 +26,6 @@ public class CategoryRepository {
     }
 
     public MutableLiveData<List<Category>>getCategories() {
-        Log.e(TAG, "getCategories: " );
         final MutableLiveData<List<Category>> categoryData = new MutableLiveData<>();
         HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
         Call<List<Category>> call = retrofit.getCategory();
@@ -44,8 +41,8 @@ public class CategoryRepository {
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {
                 Log.e(TAG, t.getMessage() + "Failed");
-//                categoryData.setValue(null);
-                //System.out.println(categoryData);
+//               categoryData.setValue(null);
+
             }
         });
         return categoryData;
