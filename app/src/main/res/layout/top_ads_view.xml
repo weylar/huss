@@ -4,8 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_margin="10dp"
-    android:layout_width="160dp"
-    android:layout_height="200dp">
+    android:layout_width="130dp"
+    android:layout_height="160dp">
 
     <androidx.cardview.widget.CardView
 
@@ -23,7 +23,7 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="140dp">
+                android:layout_height="110dp">
 
                 <ImageView
                     android:id="@+id/image"
@@ -33,20 +33,13 @@
                     android:layout_centerHorizontal="true"
                     android:contentDescription="@string/cat_description"/>
 
-                <ImageView
-                    android:id="@+id/favorite"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    tools:src="@drawable/favorite_no"
-                    android:layout_alignParentEnd="true"
-                    android:layout_margin="10dp"/>
+
 
                 <TextView
                     android:id="@+id/label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Top Ads"
-                    android:layout_margin="10dp"
+                    android:text="@string/top_ads"
                     android:padding="5dp"
                     android:background="@color/colorAccent"
                     android:textColor="@color/colorPrimary"/>
@@ -62,19 +55,33 @@
                 tools:text="iphone s8 plus"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:textSize="18sp"/>
+                android:textColor="@color/colorPrimaryDark"/>
 
-            <TextView
-                android:id="@+id/price"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                tools:text="$45"
-                android:textStyle="bold"
-                android:textColor="@color/colorAccent"
-                android:textSize="18sp"/>
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    tools:text="$45"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorAccent"/>
+
+                <ImageView
+                    android:id="@+id/favorite"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    tools:src="@drawable/favorite_yes"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="3dp"/>
+
+            </RelativeLayout>
+
 
 
 

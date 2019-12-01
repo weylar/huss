@@ -1,11 +1,14 @@
 package com.android.huss.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Ads {
 
 
     private int id;
     private String title;
     private String favorite;
+    @SerializedName("url")
     private String featureImgUrl;
     private String userId;
     private String categoryId;

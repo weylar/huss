@@ -64,7 +64,8 @@ public class AllLatestAdsAdapter extends RecyclerView.Adapter<AllLatestAdsAdapte
             String adTitle = dataList.get(position).getTitle();
             holder.txtTitle.setText( "iPhone X Max"/*adTitle.length() > 70 ? adTitle.substring(0, 67).concat("...") : adTitle*/);
             holder.price.setText("$35"/*dataList.get(position).getPrice()*/);
-            holder.description.setText("Lorem ipsum dolor sit amet, minim veniam, ut aliquip ex ea commodo consequat");
+            String description = "Lorem ipsum dolor sit amet, minim veniam, ut aliquip ex ea commodo consequat";
+            holder.description.setText( description/*description.length() > 90 ? description.substring(0, 86).concat("..."): description*/);
           //  if (dataList.get(position).getFavorite().equals("Yes")){
                holder.favorite.setImageResource(R.drawable.favorite_yes);
 

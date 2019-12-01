@@ -22,6 +22,7 @@
                 android:id="@+id/back"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="wrap_content"
+                android:onClick="goBack"
                 android:src="@drawable/back" />
 
             <TextView

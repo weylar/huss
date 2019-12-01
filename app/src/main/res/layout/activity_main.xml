@@ -4,7 +4,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".views.home.MainActivity">
 
@@ -80,6 +80,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="@string/categories"
+                        android:padding="2dp"
                         android:textSize="18sp" />
 
                     <TextView
@@ -122,18 +123,8 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="@string/top_ads"
+                        android:padding="2dp"
                         android:textSize="18sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:drawableEnd="@drawable/small_more"
-                        android:drawablePadding="4dp"
-                        android:gravity="center"
-                        android:text="@string/see_more"
-                        android:textColor="@color/colorAccent" />
 
 
                 </RelativeLayout>
@@ -164,6 +155,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="@string/latest_ads"
+                        android:padding="2dp"
                         android:textSize="18sp" />
 
 

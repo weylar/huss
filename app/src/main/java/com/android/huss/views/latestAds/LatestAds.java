@@ -19,11 +19,12 @@ import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 import java.util.List;
 
 public class LatestAds extends AppCompatActivity {
-RecyclerView all_latest_ads;
-    RecyclerView.LayoutManager  layoutManagerAllLatestAds;
+    RecyclerView all_latest_ads;
+    RecyclerView.LayoutManager layoutManagerAllLatestAds;
     AllLatestAdsAdapter latestAdsAdapter;
     AdsViewModel adsViewModel;
     LVCircularZoom progressBarLatestAds;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +35,10 @@ RecyclerView all_latest_ads;
         progressBarLatestAds.startAnim(100);
 
 
+    }
+
+    public void goBack(View view) {
+        finish();
     }
 
     @Override
@@ -55,12 +60,11 @@ RecyclerView all_latest_ads;
     }
 
 
-    private void generateLatestAdsList(List<Ads> ads){
+    private void generateLatestAdsList(List<Ads> ads) {
         latestAdsAdapter = new AllLatestAdsAdapter(this, ads);
         layoutManagerAllLatestAds = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         all_latest_ads.setLayoutManager(layoutManagerAllLatestAds);
         all_latest_ads.setAdapter(latestAdsAdapter);
-
 
 
     }
