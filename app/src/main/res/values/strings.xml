@@ -9,6 +9,10 @@
     <string name="latest_ads">Latest Ads</string>
     <string name="ads_image">ads image</string>
     <string name="favorite">favorite</string>
+    <string name="navigation_drawer_open">Drawer Open</string>
+    <string name="navigation_drawer_close">Drawer Closed</string>
+    <string name="profile_image">profile image</string>
+    <string name="logout">Logout</string>
 
 
 </resources>

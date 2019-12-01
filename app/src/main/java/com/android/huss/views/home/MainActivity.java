@@ -1,12 +1,20 @@
 package com.android.huss.views.home;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
+
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import com.android.huss.R;
@@ -15,6 +23,7 @@ import com.android.huss.models.Category;
 import com.android.huss.viewModels.AdsViewModel;
 import com.android.huss.viewModels.CategoryViewModel;
 import com.android.huss.views.latestAds.LatestAds;
+import com.google.android.material.navigation.NavigationView;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 
 import java.util.List;
@@ -32,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
     LVCircularZoom progressBar;
     LVCircularZoom progressBarTop;
     LVCircularZoom progressBarLatestAds;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private NavigationView navigationView;
+    ImageView navButton;
 
 
     @Override
@@ -42,13 +55,54 @@ public class MainActivity extends AppCompatActivity {
         progressBarTop = findViewById(R.id.progressTop);
         progressBarLatestAds = findViewById(R.id.progressLatestAds);
         progressBar.setViewColor(getResources().getColor(R.color.gray));
-        progressBarTop.setViewColor(getResources().getColor(R.color.colorAccent));
-        progressBarLatestAds.setViewColor(getResources().getColor(R.color.colorAccent));
+        progressBarTop.setViewColor(getResources().getColor(R.color.gray));
+        progressBarLatestAds.setViewColor(getResources().getColor(R.color.gray));
         progressBar.startAnim(100);
         progressBarTop.startAnim(100);
         progressBarLatestAds.startAnim(100);
 
 
+
+        drawerLayout = findViewById(R.id.activity_main);
+        Toolbar toolbar = findViewById(R.id.homeToolBar) ;
+        setSupportActionBar(toolbar) ;
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        navigationView = findViewById(R.id.nv);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch(id)
+                {
+                    case R.id.account:
+                        Toast.makeText(MainActivity.this, "My Account",Toast.LENGTH_SHORT).show();break;
+                    case R.id.settings:
+                        Toast.makeText(MainActivity.this, "Settings",Toast.LENGTH_SHORT).show();break;
+                    case R.id.mycart:
+                        Toast.makeText(MainActivity.this, "My Cart",Toast.LENGTH_SHORT).show();break;
+                    default:
+                        return true;
+                }
+
+
+                return true;
+
+            }
+        });
+
+
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(actionBarDrawerToggle.onOptionsItemSelected(item))
+            return true;
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void moreLatest(View view){
