@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import userRoutes from './server/routes/user';
+import { userRouter, userDetails } from './server/routes/user';
 
 const app = express();
 
@@ -17,7 +17,8 @@ app.get('/', (req, res) => res.status(200).send({
   message: 'Welcome to the huss API.'
 }));
 
-app.use('/api/v1/auth', userRoutes)
+app.use('/api/v1/auth', userRouter);
+app.use('/api/v1/user', userDetails);
 
 app.use((req, res, next) => {
   const error = new Error('Route Does not Exist');

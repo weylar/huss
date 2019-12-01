@@ -68,6 +68,29 @@ class UserService {
       message: 'Authentication failed, invalid login details'
     };
   }
+
+  static async addUserDetails(req, res) {
+
+    const getAuser = await db.User.findOne({ where: {email: req.userEmail} });
+
+    if(!getAuser) {
+      return res.status(404).send({
+        status: 'error',
+        statusCode: 404,
+        message: "This email is not registered here"
+      })
+    }
+
+    await db.User.update(
+      { state: req.body.state, city: req.body.city, phoneNumber: req.body.phoneNumber },
+      { where: { email: req.userEmail } }
+    );
+    return {
+      statusCode: 202,
+      status: 'success',
+      message: 'User details added'
+    };
+  }
 }
 
 export default UserService;
