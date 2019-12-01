@@ -4,10 +4,9 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context=".views.Home.MainActivity">
-
+    tools:context=".views.home.MainActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -44,141 +43,160 @@
 
     </androidx.cardview.widget.CardView>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/custom_edittext"
-            android:drawableStart="@drawable/small_search"
-            android:drawablePadding="5dp"
-            android:elevation="2dp"
-            android:hint="@string/search_for_products"
-            android:inputType="text"
-            android:padding="15dp" />
-
-        <!--Category Section-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:paddingStart="15dp"
-            android:paddingTop="15dp"
-            android:paddingEnd="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/categories"
-                android:textSize="18sp" />
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:drawableEnd="@drawable/small_more"
-                android:drawablePadding="4dp"
-                android:gravity="center"
-                android:text="@string/see_more"
-                android:textColor="@color/colorAccent" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/custom_edittext"
+                    android:drawableStart="@drawable/small_search"
+                    android:drawablePadding="5dp"
+                    android:elevation="2dp"
+                    android:hint="@string/search_for_products"
+                    android:inputType="text"
+                    android:padding="15dp" />
 
+                <!--Category Section-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingStart="15dp"
+                    android:paddingTop="15dp"
+                    android:paddingEnd="15dp">
 
-        </RelativeLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/categories"
+                        android:textSize="18sp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_cat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <com.ldoublem.loadingviewlib.view.LVCircularZoom
-            android:id="@+id/progress"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_gravity="center"
-            android:layout_margin="5dp" />
-
-        <!--Top Ads Section-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:paddingStart="15dp"
-            android:paddingTop="15dp"
-            android:paddingEnd="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/top_ads"
-                android:textSize="18sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:drawableEnd="@drawable/small_more"
-                android:drawablePadding="4dp"
-                android:gravity="center"
-                android:text="@string/see_more"
-                android:textColor="@color/colorAccent" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:drawableEnd="@drawable/small_more"
+                        android:drawablePadding="4dp"
+                        android:gravity="center"
+                        android:text="@string/see_more"
+                        android:textColor="@color/colorAccent" />
 
 
-        </RelativeLayout>
+                </RelativeLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_top_ads"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_cat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-        <com.ldoublem.loadingviewlib.view.LVCircularZoom
-            android:id="@+id/progressTop"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_gravity="center"
-            android:layout_margin="5dp" />
+                <com.ldoublem.loadingviewlib.view.LVCircularZoom
+                    android:id="@+id/progress"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp" />
 
-        <!--Latest Ads Section-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:paddingStart="15dp"
-            android:paddingTop="15dp"
-            android:paddingEnd="15dp">
+                <!--Top Ads Section-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:paddingStart="15dp"
+                    android:paddingTop="15dp"
+                    android:paddingEnd="15dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/latest_ads"
-                android:textSize="18sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/top_ads"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:drawableEnd="@drawable/small_more"
+                        android:drawablePadding="4dp"
+                        android:gravity="center"
+                        android:text="@string/see_more"
+                        android:textColor="@color/colorAccent" />
 
 
-        </RelativeLayout>
+                </RelativeLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_latest_ads"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_top_ads"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-        <com.ldoublem.loadingviewlib.view.LVCircularZoom
-            android:id="@+id/progressLatestAds"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_gravity="center"
-            android:layout_margin="5dp" />
+                <com.ldoublem.loadingviewlib.view.LVCircularZoom
+                    android:id="@+id/progressTop"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp" />
 
-    </LinearLayout>
+                <!--Latest Ads Section-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:paddingStart="15dp"
+                    android:paddingTop="15dp"
+                    android:paddingEnd="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/latest_ads"
+                        android:textSize="18sp" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:drawableEnd="@drawable/small_more"
+                        android:drawablePadding="4dp"
+                        android:gravity="center"
+                        android:onClick="moreLatest"
+                        android:text="@string/see_more"
+                        android:textColor="@color/colorAccent" />
+
+
+                </RelativeLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_latest_ads"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+
+                <com.ldoublem.loadingviewlib.view.LVCircularZoom
+                    android:id="@+id/progressLatestAds"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp" />
+
+            </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
-

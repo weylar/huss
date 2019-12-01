@@ -8,5 +8,7 @@
     <string name="top_ads">Top Ads</string>
     <string name="latest_ads">Latest Ads</string>
     <string name="ads_image">ads image</string>
+    <string name="favorite">favorite</string>
+
 
 </resources>

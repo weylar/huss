@@ -1,10 +1,11 @@
-package com.android.huss.views.Home;
+package com.android.huss.views.home;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -13,8 +14,9 @@ import com.android.huss.models.Ads;
 import com.android.huss.models.Category;
 import com.android.huss.viewModels.AdsViewModel;
 import com.android.huss.viewModels.CategoryViewModel;
+import com.android.huss.views.latestAds.LatestAds;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
-import com.ldoublem.loadingviewlib.view.LVGearsTwo;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,10 +43,17 @@ public class MainActivity extends AppCompatActivity {
         progressBarLatestAds = findViewById(R.id.progressLatestAds);
         progressBar.setViewColor(getResources().getColor(R.color.gray));
         progressBarTop.setViewColor(getResources().getColor(R.color.colorAccent));
+        progressBarLatestAds.setViewColor(getResources().getColor(R.color.colorAccent));
         progressBar.startAnim(100);
         progressBarTop.startAnim(100);
+        progressBarLatestAds.startAnim(100);
 
 
+    }
+
+    public void moreLatest(View view){
+        Intent intent = new Intent(this, LatestAds.class);
+        startActivity(intent);
     }
 
     @Override
@@ -59,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.generateCategoryList(catResponse);
                 progressBar.stopAnim();
                 progressBar.setVisibility(View.GONE);
+                progressBar.stopAnim();
             }
         });
         /*Get top ads using view model*/
@@ -70,6 +80,20 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.generateTopAdsList(ads);
                 progressBarTop.stopAnim();
                 progressBarTop.setVisibility(View.GONE);
+                progressBarTop.stopAnim();
+            }
+        });
+
+        /*Get latest ads using view model*/
+        adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
+        adsViewModel.init();
+        adsViewModel.getAds().observe(this, new Observer<List<Ads>>() {
+            @Override
+            public void onChanged(List<Ads> ads) {
+                MainActivity.this.generateLatestAdsList(ads);
+                progressBarLatestAds.stopAnim();
+                progressBarLatestAds.setVisibility(View.GONE);
+                progressBarLatestAds.stopAnim();
             }
         });
 
@@ -97,9 +121,10 @@ public class MainActivity extends AppCompatActivity {
     private void generateLatestAdsList(List<Ads> ads){
         latestAdsRecyclerView = findViewById(R.id.recycler_latest_ads);
         latestAdsAdapter = new LatestAdsAdapter(this, ads);
-        layoutManagerLatestAds = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        latestAdsRecyclerView.setLayoutManager(layoutManagerTop);
+        layoutManagerLatestAds = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        latestAdsRecyclerView.setLayoutManager(layoutManagerLatestAds);
         latestAdsRecyclerView.setAdapter(latestAdsAdapter);
+
 
 
     }

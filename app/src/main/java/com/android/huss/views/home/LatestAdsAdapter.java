@@ -1,7 +1,6 @@
-package com.android.huss.views.Home;
+package com.android.huss.views.home;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,38 +16,59 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class TopAdsAdapter extends RecyclerView.Adapter<TopAdsAdapter.CustomViewHolder>{
+public class LatestAdsAdapter extends RecyclerView.Adapter<LatestAdsAdapter.CustomViewHolder>{
 
 
         private List<Ads> dataList;
         private Context context;
 
-        public TopAdsAdapter(Context context, List<Ads> dataList){
+        public LatestAdsAdapter(Context context, List<Ads> dataList){
             this.context = context;
             this.dataList = dataList;
 
         }
 
-        class CustomViewHolder extends RecyclerView.ViewHolder {
+//        class CustomViewHolder extends RecyclerView.ViewHolder {
+//
+//            public final View mView;
+//
+//            TextView txtTitle;
+//            TextView price;
+//            TextView description;
+//            ImageView favorite;
+//            private ImageView image;
+//
+//            CustomViewHolder(View itemView) {
+//                super(itemView);
+//                mView = itemView;
+//                txtTitle = mView.findViewById(R.id.title);
+//                image = mView.findViewById(R.id.image);
+//                price = mView.findViewById(R.id.price);
+//                favorite = mView.findViewById(R.id.favorite);
+//                description = mView.findViewById(R.id.description);
+//            }
+//        }
 
-            public final View mView;
+    class CustomViewHolder extends RecyclerView.ViewHolder {
 
-            TextView txtTitle;
-            TextView price;
-            TextView label;
-            ImageView favorite;
-            private ImageView image;
+        public final View mView;
 
-            CustomViewHolder(View itemView) {
-                super(itemView);
-                mView = itemView;
-                txtTitle = mView.findViewById(R.id.title);
-                image = mView.findViewById(R.id.image);
-                price = mView.findViewById(R.id.price);
-                favorite = mView.findViewById(R.id.favorite);
-                label = mView.findViewById(R.id.label);
-            }
+        TextView txtTitle;
+        TextView price;
+        TextView label;
+        ImageView favorite;
+        private ImageView image;
+
+        CustomViewHolder(View itemView) {
+            super(itemView);
+            mView = itemView;
+            txtTitle = mView.findViewById(R.id.title);
+            image = mView.findViewById(R.id.image);
+            price = mView.findViewById(R.id.price);
+            favorite = mView.findViewById(R.id.favorite);
+            label = mView.findViewById(R.id.label);
         }
+    }
 
         @Override
         public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -60,10 +80,13 @@ public class TopAdsAdapter extends RecyclerView.Adapter<TopAdsAdapter.CustomView
         @Override
         public void onBindViewHolder(CustomViewHolder holder, int position) {
             String adTitle = dataList.get(position).getTitle();
-            holder.txtTitle.setText( adTitle.length() > 14 ? adTitle.substring(0, 14).concat("...") : adTitle);
+            holder.label.setVisibility(View.GONE);
+            holder.txtTitle.setText( "iPhone X Max"/*adTitle.length() > 70 ? adTitle.substring(0, 67).concat("...") : adTitle*/);
             holder.price.setText("$35"/*dataList.get(position).getPrice()*/);
+//            holder.description.setText("Lorem ipsum dolor sit amet, minim veniam, ut aliquip ex ea commodo consequat");
           //  if (dataList.get(position).getFavorite().equals("Yes")){
                holder.favorite.setImageResource(R.drawable.favorite_yes);
+
           //  }else{
                 //holder.favorite.setImageResource(R.drawable.favorite_no);
            // }
