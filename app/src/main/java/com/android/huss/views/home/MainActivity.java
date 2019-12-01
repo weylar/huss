@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
 import com.android.huss.R;
 import com.android.huss.models.Ads;
 import com.android.huss.models.Category;
@@ -62,11 +63,10 @@ public class MainActivity extends AppCompatActivity {
         progressBarLatestAds.startAnim(100);
 
 
-
         drawerLayout = findViewById(R.id.activity_main);
-        Toolbar toolbar = findViewById(R.id.homeToolBar) ;
-        setSupportActionBar(toolbar) ;
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        Toolbar toolbar = findViewById(R.id.homeToolBar);
+        setSupportActionBar(toolbar);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         navigationView = findViewById(R.id.nv);
@@ -74,14 +74,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                switch(id)
-                {
-                    case R.id.account:
-                        Toast.makeText(MainActivity.this, "My Account",Toast.LENGTH_SHORT).show();break;
-                    case R.id.settings:
-                        Toast.makeText(MainActivity.this, "Settings",Toast.LENGTH_SHORT).show();break;
-                    case R.id.mycart:
-                        Toast.makeText(MainActivity.this, "My Cart",Toast.LENGTH_SHORT).show();break;
+                switch (id) {
+                    case R.id.home:
+                        startActivity(new Intent(MainActivity.this, MainActivity.class));
+                        break;
+                    case R.id.favorite:
+                        Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.messages:
+                        Toast.makeText(MainActivity.this, "My Cart", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.setting:
+                        Toast.makeText(MainActivity.this, "My Cart", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.share:
+                        Toast.makeText(MainActivity.this, "My Cart", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.send:
+                        Toast.makeText(MainActivity.this, "My Cart", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.developer:
+                        Toast.makeText(MainActivity.this, "My Cart", Toast.LENGTH_SHORT).show();
+                        break;
                     default:
                         return true;
                 }
@@ -99,13 +113,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(actionBarDrawerToggle.onOptionsItemSelected(item))
+        if (actionBarDrawerToggle.onOptionsItemSelected(item))
             return true;
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void moreLatest(View view){
+    public void moreLatest(View view) {
         Intent intent = new Intent(this, LatestAds.class);
         startActivity(intent);
     }
@@ -164,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void generateTopAdsList(List<Ads> ads){
+    private void generateTopAdsList(List<Ads> ads) {
         topAdsRecyclerView = findViewById(R.id.recycler_top_ads);
         topAdsAdapter = new TopAdsAdapter(this, ads);
         layoutManagerTop = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -173,13 +187,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void generateLatestAdsList(List<Ads> ads){
+    private void generateLatestAdsList(List<Ads> ads) {
         latestAdsRecyclerView = findViewById(R.id.recycler_latest_ads);
         latestAdsAdapter = new LatestAdsAdapter(this, ads);
         layoutManagerLatestAds = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         latestAdsRecyclerView.setLayoutManager(layoutManagerLatestAds);
         latestAdsRecyclerView.setAdapter(latestAdsAdapter);
-
 
 
     }

@@ -9,7 +9,7 @@
         android:id="@+id/profile_img"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_margin="15dp"
+        android:layout_margin="10dp"
         android:src="@drawable/sample"
         android:layout_centerInParent="true"
         android:contentDescription="@string/profile_image" />
@@ -24,15 +24,14 @@
         android:textSize="20sp"/>
 
     <TextView
-        android:layout_width="70dp"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:text="@string/logout"
+        android:padding="5dp"
         android:textAlignment="center"
         android:background="@drawable/radial_accent_bg"
         android:textColor="@color/colorPrimary"
-        android:padding="5dp"
-        android:textSize="15sp"
-        android:layout_margin="10dp"
         android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>
