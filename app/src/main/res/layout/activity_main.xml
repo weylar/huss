@@ -147,6 +147,36 @@
             android:layout_gravity="center"
             android:layout_margin="5dp" />
 
+        <!--Latest Ads Section-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingStart="15dp"
+            android:paddingTop="15dp"
+            android:paddingEnd="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/latest_ads"
+                android:textSize="18sp" />
+
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_latest_ads"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.ldoublem.loadingviewlib.view.LVCircularZoom
+            android:id="@+id/progressLatestAds"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp" />
 
     </LinearLayout>
 

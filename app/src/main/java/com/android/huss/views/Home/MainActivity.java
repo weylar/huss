@@ -19,14 +19,17 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView catRecyclerView;
+    RecyclerView latestAdsRecyclerView;
     RecyclerView topAdsRecyclerView;
     CategoryAdapter categoryAdapter;
     TopAdsAdapter topAdsAdapter;
-    RecyclerView.LayoutManager layoutManagerCat, layoutManagerTop;
+    LatestAdsAdapter latestAdsAdapter;
+    RecyclerView.LayoutManager layoutManagerCat, layoutManagerTop, layoutManagerLatestAds;
     CategoryViewModel categoryViewModel;
     AdsViewModel adsViewModel;
     LVCircularZoom progressBar;
     LVCircularZoom progressBarTop;
+    LVCircularZoom progressBarLatestAds;
 
 
     @Override
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         progressBar = findViewById(R.id.progress);
         progressBarTop = findViewById(R.id.progressTop);
+        progressBarLatestAds = findViewById(R.id.progressLatestAds);
         progressBar.setViewColor(getResources().getColor(R.color.gray));
         progressBarTop.setViewColor(getResources().getColor(R.color.colorAccent));
         progressBar.startAnim(100);
@@ -87,6 +91,16 @@ public class MainActivity extends AppCompatActivity {
         layoutManagerTop = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         topAdsRecyclerView.setLayoutManager(layoutManagerTop);
         topAdsRecyclerView.setAdapter(topAdsAdapter);
+
+    }
+
+    private void generateLatestAdsList(List<Ads> ads){
+        latestAdsRecyclerView = findViewById(R.id.recycler_latest_ads);
+        latestAdsAdapter = new LatestAdsAdapter(this, ads);
+        layoutManagerLatestAds = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        latestAdsRecyclerView.setLayoutManager(layoutManagerTop);
+        latestAdsRecyclerView.setAdapter(latestAdsAdapter);
+
 
     }
 }
