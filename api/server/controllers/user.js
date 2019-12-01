@@ -27,6 +27,15 @@ class UserController {
       return next(e);
     }
   }
+
+  static async userImage(req, res, next) {
+    try {
+      const response = await UserService.userImage(req, res);
+      return res.status(response.statusCode).send(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
 }
 
 export default UserController;

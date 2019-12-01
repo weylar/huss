@@ -69,16 +69,16 @@ class UserService {
     };
   }
 
-  static async addUserDetails(req, res) {
+  static async addUserDetails(req) {
 
     const getAuser = await db.User.findOne({ where: {email: req.userEmail} });
 
     if(!getAuser) {
-      return res.status(404).send({
+      return {
         status: 'error',
         statusCode: 404,
         message: "This email is not registered here"
-      })
+      }
     }
 
     await db.User.update(
@@ -89,6 +89,29 @@ class UserService {
       statusCode: 202,
       status: 'success',
       message: 'User details added'
+    };
+  }
+
+  static async userImage(req) {
+    
+    const getAuser = await db.User.findOne({ where: {email: req.userEmail} });
+
+    if(!getAuser) {
+      return {
+        status: 'error',
+        statusCode: 404,
+        message: "This email is not registered here"
+      }
+    }
+
+    await db.User.update(
+      { profileImgUrl: req.body.profileImgUrl }, { where: { email: req.userEmail } }
+    );
+
+    return {
+      statusCode: 202,
+      status: 'success',
+      message: 'Image successfully uploaded'
     };
   }
 }
