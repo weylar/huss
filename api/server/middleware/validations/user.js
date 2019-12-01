@@ -4,14 +4,13 @@ import Helper from '../utils/Helper';
 String.prototype.capitalize = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);
 }
-
 class UserValidation {
   static async signUpCheck(req, res, next) {
     let {
-      email, firstName, lastName, password, confirmPassword, state, city, phoneNumber
+      email, firstName, lastName, password, confirmPassword
     } = req.body;
 
-    const errors = UserValidation.inputCheck(email, firstName, lastName, password, confirmPassword, state, city, phoneNumber);
+    const errors = UserValidation.inputCheck(email, firstName, lastName, password, confirmPassword);
     if (errors.length > 0) return res.status(errors[0].statusCode).send(errors[0]);
 
     if (email) email = email.toLowerCase().trim();
@@ -19,9 +18,6 @@ class UserValidation {
     if (lastName) lastName = lastName.capitalize().trim();
     if (password) password = password;
     if (confirmPassword) confirmPassword = confirmPassword;
-    if (state) state = state.capitalize().trim();
-    if (city) city = city.capitalize().trim();
-    if (phoneNumber) phoneNumber = phoneNumber;
 
     const passwordPattern = /\w{6,}/g;
 
@@ -63,14 +59,11 @@ class UserValidation {
     req.body.firstName = firstName;
     req.body.lastName = lastName;
     req.body.password = password;
-    req.body.state = state;
-    req.body.city = city;
-    req.body.phoneNumber = phoneNumber;
 
     return next();
   }
 
-  static inputCheck(email, firstName, lastName, password, confirmPassword, state, city, phoneNumber) {
+  static inputCheck(email, firstName, lastName, password, confirmPassword) {
     const errors = [];
     let isEmpty;
     let hasWhiteSpace;
@@ -104,43 +97,32 @@ class UserValidation {
     isEmpty = Helper.checkFieldEmpty(password, 'password');
     if (isEmpty) errors.push(isEmpty);
 
-    hasWhiteSpace = Helper.checkFieldWhiteSpace(password, 'password');
-    if (hasWhiteSpace) errors.push(hasWhiteSpace);
-
     isEmpty = Helper.checkFieldEmpty(confirmPassword, 'confirmPassword');
     if (isEmpty) errors.push(isEmpty);
 
-    hasWhiteSpace = Helper.checkFieldWhiteSpace(confirmPassword, 'confirmPassword');
-    if (hasWhiteSpace) errors.push(hasWhiteSpace);
-
-    isEmpty = Helper.checkFieldEmpty(state, 'state');
-    if (isEmpty) errors.push(isEmpty);
-
-    hasWhiteSpace = Helper.checkFieldWhiteSpace(state, 'state');
-    if (hasWhiteSpace) errors.push(hasWhiteSpace);
-
-    hasAlpha = Helper.checkFieldAlpha(state, 'state');
-    if (hasAlpha) errors.push(hasAlpha);
-
-    isEmpty = Helper.checkFieldEmpty(city, 'city');
-    if (isEmpty) errors.push(isEmpty);
-
-    hasWhiteSpace = Helper.checkFieldWhiteSpace(city, 'city');
-    if (hasWhiteSpace) errors.push(hasWhiteSpace);
-
-    hasAlpha = Helper.checkFieldAlpha(city, 'city');
-    if (hasAlpha) errors.push(hasAlpha);
-
-    isEmpty = Helper.checkFieldEmpty(phoneNumber, 'phoneNumber');
-    if (isEmpty) errors.push(isEmpty);
-
-    hasWhiteSpace = Helper.checkFieldWhiteSpace(phoneNumber, 'phoneNumber');
-    if (hasWhiteSpace) errors.push(hasWhiteSpace);
-
-    hasNumber = Helper.checkFieldNumber(phoneNumber, 'phoneNumber');
-    if (hasNumber) errors.push(hasNumber);
-
     return errors;
+  }
+
+  static loginCheck(req, res, next) {
+    let { email, password } = req.body;
+
+    if (email) email = email.toLowerCase().trim();
+    if (password) password = password;
+
+    const errors = [];
+
+    let isEmpty;
+    isEmpty = Helper.checkFieldEmpty(email, 'email');
+    if (isEmpty) errors.push(isEmpty);
+
+    isEmpty = Helper.checkFieldEmpty(password, 'password');
+    if (isEmpty) errors.push(isEmpty);
+
+    if (errors.length > 0) return res.status(errors[0].statusCode).send(errors[0]);
+
+    req.body.email = email;
+    req.body.password = password;
+    return next();
   }
 }
 

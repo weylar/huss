@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    negotiable: {
+    isNegotiable: {
       type: DataTypes.STRING,
       allowNull: false
     }

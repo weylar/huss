@@ -23,11 +23,11 @@ module.exports = {
       },
       state: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       city: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       profileImgUrl: {
         type: Sequelize.STRING,
@@ -40,7 +40,7 @@ module.exports = {
       },
       phoneNumber: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       createdAt: {
         allowNull: false,
