@@ -124,6 +124,52 @@ class UserValidation {
     req.body.password = password;
     return next();
   }
+
+  static userDetailsCheck(req, res, next){
+    let { state, city, phoneNumber } = req.body;
+
+    if (state) state = state.capitalize().trim();
+    if (city) city = city.capitalize().trim();
+    if (phoneNumber) phoneNumber = phoneNumber.trim();
+
+    const errors = [];
+
+    let isEmpty;
+    let hasWhiteSpace;
+    let hasAlpha;
+    let hasNumber;
+
+    isEmpty = Helper.checkFieldEmpty(state, 'state');
+    if (isEmpty) errors.push(isEmpty);
+
+    hasWhiteSpace = Helper.checkFieldWhiteSpace(state, 'state');
+    if (hasWhiteSpace) errors.push(hasWhiteSpace);
+
+    hasAlpha = Helper.checkFieldAlpha(state, 'state');
+    if (hasAlpha) errors.push(hasAlpha);
+
+    isEmpty = Helper.checkFieldEmpty(city, 'city');
+    if (isEmpty) errors.push(isEmpty);
+
+    hasWhiteSpace = Helper.checkFieldWhiteSpace(city, 'city');
+    if (hasWhiteSpace) errors.push(hasWhiteSpace);
+
+    hasAlpha = Helper.checkFieldAlpha(city, 'city');
+    if (hasAlpha) errors.push(hasAlpha);
+
+    isEmpty = Helper.checkFieldEmpty(phoneNumber, 'phoneNumber');
+    if (isEmpty) errors.push(isEmpty);
+
+    hasNumber = Helper.checkFieldNumber(phoneNumber, 'phoneNumber');
+    if (hasNumber) errors.push(hasNumber);
+
+    if (errors.length > 0) return res.status(errors[0].statusCode).send(errors[0]);
+
+    req.body.state = state;
+    req.body.city = city;
+    req.body.phoneNumber = phoneNumber;
+    return next();
+  }
 }
 
 export default UserValidation;
