@@ -12,12 +12,12 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Favorite.associate = function(models) {
     // associations can be defined here
-    Favorite.belongsTo(model.User, {
+    Favorite.belongsTo(models.User, {
       foreignKey: 'id',
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     });
-    Favorite.belongsTo(model.Product, {
+    Favorite.belongsTo(models.Product, {
       foreignKey: 'id',
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
