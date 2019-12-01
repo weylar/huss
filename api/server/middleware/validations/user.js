@@ -170,6 +170,22 @@ class UserValidation {
     req.body.phoneNumber = phoneNumber;
     return next();
   }
+
+  static userImageCheck(req, res, next){
+    const { profileImgUrl } = req.body;
+
+    const errors = [];
+
+    let isEmpty;
+
+    isEmpty = Helper.checkFieldEmpty(profileImgUrl, 'profileImgUrl');
+    if (isEmpty) errors.push(isEmpty);
+
+    if (errors.length > 0) return res.status(errors[0].statusCode).send(errors[0]);
+
+    req.body.profileImgUrl = profileImgUrl;
+    return next();
+  }
 }
 
 export default UserValidation;
