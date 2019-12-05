@@ -7,7 +7,7 @@ const {
   signUpCheck, loginCheck, userDetailsCheck, userImageCheck
 } = UserValidation;
 const {
-  signUpUser, logInUser, addUserDetails, userImage
+  signUpUser, logInUser, addUserDetails, userImage, sendPasswordResetEmail, receiveNewPassword
 } = UserController;
 const { getUser } = Auth;
 
@@ -18,6 +18,9 @@ userRouter.post('/signup', signUpCheck, signUpUser);
 userRouter.post('/login', loginCheck, logInUser);
 userDetails.put('/profile', getUser, userDetailsCheck, addUserDetails);
 userDetails.put('/profile/image', getUser, userImageCheck, userImage)
+userDetails.get('/:email', sendPasswordResetEmail);
+userDetails.put('/new_password/:id/:token', receiveNewPassword);
+
 
 module.exports = {
   userRouter, userDetails
