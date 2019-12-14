@@ -13,21 +13,20 @@ import java.util.List;
 
 public class AdsViewModel extends ViewModel {
 
-    private MutableLiveData<List<Ads>> mutableLiveData;
+    private MutableLiveData<List<Ads>> mutableLiveDataAllAds;
     private AdsRepository adsRepository;
 
     public void init() {
-        if (mutableLiveData != null) {
-            return;
-        }
+        if (mutableLiveDataAllAds != null) return;
         adsRepository = AdsRepository.getInstance();
-        mutableLiveData = adsRepository.getAds();
+        mutableLiveDataAllAds = adsRepository.getAds();
 
     }
 
 
     public LiveData<List<Ads>> getAds() {
-        return mutableLiveData;
+        return mutableLiveDataAllAds;
     }
+
 
 }

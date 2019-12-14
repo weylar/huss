@@ -1,20 +1,26 @@
 package com.android.huss.views.latestAds;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.huss.R;
 import com.android.huss.models.Ads;
+import com.android.huss.views.home.MainActivity;
+import com.android.huss.views.singleAds.SingleAds;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import static com.android.huss.views.singleAds.SingleAds.ID;
 
 public class AllLatestAdsAdapter extends RecyclerView.Adapter<AllLatestAdsAdapter.CustomViewHolder>{
 
@@ -56,6 +62,15 @@ public class AllLatestAdsAdapter extends RecyclerView.Adapter<AllLatestAdsAdapte
         public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             View view = layoutInflater.inflate(R.layout.latest_ads_view, parent, false);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String id = String.valueOf(v.getId());
+                    Intent intent =  new Intent(context, SingleAds.class);
+                    intent.putExtra(ID, id);
+                    context.startActivity(intent);
+                }
+            });
             return new CustomViewHolder(view);
         }
 
@@ -68,6 +83,7 @@ public class AllLatestAdsAdapter extends RecyclerView.Adapter<AllLatestAdsAdapte
             holder.description.setText( description/*description.length() > 90 ? description.substring(0, 86).concat("..."): description*/);
           //  if (dataList.get(position).getFavorite().equals("Yes")){
                holder.favorite.setImageResource(R.drawable.favorite_yes);
+               holder.itemView.setId(dataList.get(position).getId());
 
           //  }else{
                 //holder.favorite.setImageResource(R.drawable.favorite_no);

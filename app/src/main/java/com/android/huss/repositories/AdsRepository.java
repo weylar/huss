@@ -48,6 +48,28 @@ public class AdsRepository {
         return adsData;
     }
 
+    public MutableLiveData<Ads>getSingleAds(String id){
+        final MutableLiveData<Ads> adsData = new MutableLiveData<>();
+        HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
+        Call<Ads> call = retrofit.getSingleAds(id);
+        call.enqueue(new Callback<Ads>() {
+            @Override
+            public void onResponse(Call<Ads> call, Response<Ads> response) {
+                if (response.isSuccessful()) {
+                    Log.e(TAG, "onResponse: SINGLE SUCCESS");
+                    adsData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Ads> call, Throwable t) {
+                Log.e(TAG, t.getMessage() + "Single Ads Failed");
+                // adsData.setValue(null);
+            }
+        });
+        return adsData;
+    }
+
 
 }
 
