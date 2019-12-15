@@ -130,6 +130,41 @@ class UserService {
     };
   }
 
+  static async getAnotherUser(req) {
+
+    const foundUser = await db.User.findOne({ where: { id: req.params.id}});
+
+    if(!foundUser) {
+      return {
+        status: 'error',
+        statusCode: 404,
+        message: "User not found on this platform"
+      }
+    }
+
+    const { id, firstName, lastName, email, state, city, profileImgUrl, lastSeen, phoneNumber } = foundUser
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: { id, firstName, lastName, email, state, city, profileImgUrl, lastSeen, phoneNumber},
+      message: 'User information retrieved successfully'
+    }
+  }
+
+  static async getOwnUser(req) {
+    const ownUser = await db.User.findOne({ where: { email: req.userEmail }});
+
+    const { id, firstName, lastName, email, state, isAdmin, city, profileImgUrl, phoneNumber } = ownUser
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: { id, firstName, lastName, email, state, isAdmin, city, profileImgUrl, phoneNumber },
+      message: 'User information retrieved successfully'
+    }
+  }
+
   static async userImage(req) {
     
     const getAuser = await db.User.findOne({ where: {email: req.userEmail} });
