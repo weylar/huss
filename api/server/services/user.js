@@ -152,6 +152,27 @@ class UserService {
       message: 'Image successfully uploaded'
     };
   }
+
+  static async deleteUser(req) {
+    const getAuser = await db.User.findOne({ where: {email: req.userEmail} });
+    if(!getAuser) {
+      return {
+        status: 'error',
+        statusCode: 404,
+        message: "This email is not registered here"
+      }
+    }
+
+    await db.User.update(
+      { isDeleted: true }, { where: { email: req.userEmail } }
+    );
+
+    return {
+      statusCode: 200,
+      status: 'success',
+      message: 'Your account on Huss.ng has been successfully deleted'
+    };
+  }
 }
 
 export default UserService;

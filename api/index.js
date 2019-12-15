@@ -30,7 +30,7 @@ app.use((error, req, res, next) => {
   res.status(error.status || 500);
   res.send({
     status: 'error',
-    statuscode: error.status || 500,
+    statusCode: error.status || 500,
     error: error.name,
     message: error.message,
   });
