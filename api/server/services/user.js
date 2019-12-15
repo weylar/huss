@@ -8,7 +8,7 @@ class UserService {
 
     const user = await db.User.create(newUser);
 
-    const { id, email, firstName, lastName, state, city, phoneNumber, profileImageUrl } = user;
+    const { id, email, firstName, lastName, state, city, phoneNumber, profileImgUrl, isAdmin } = user;
     const payLoad = { id, email };
     const token = Helper.getToken(payLoad);
     return {
@@ -22,10 +22,11 @@ class UserService {
         state,
         city,
         phoneNumber,
-        profileImageUrl,
+        isAdmin,
+        profileImageUrl: profileImgUrl,
         token,
       },
-      message: 'You have successfully signed up on Huss',
+      message: 'You have successfully signed up on Huss.ng',
     };
   }
 
@@ -45,6 +46,17 @@ class UserService {
     }
 
     const hash = foundUser.password;
+    const isDeleted = foundUser.isDeleted;
+    
+    const isAdmin = foundUser.isAdmin;
+
+    if(isDeleted === true) {
+      return {
+        status: 'error',
+        statusCode: 422,
+        message: 'User not found'
+      }
+    }
     if (Helper.comparePassword(password, hash) === true) {
       const { id, firstName, lastName } = foundUser;
       const payLoad = { id, email };
@@ -57,9 +69,10 @@ class UserService {
           email,
           firstName,
           lastName,
+          isAdmin,
           token
         },
-        message: `Wlecome, ${firstName} ${lastName}`
+        message: `Welecome, ${firstName} ${lastName}`
       };
     }
     return {
@@ -89,6 +102,31 @@ class UserService {
       statusCode: 202,
       status: 'success',
       message: 'User details added'
+    };
+  }
+
+  static async logOutUser(req) {
+    const getUser = await db.User.findOne({ where: {email : req.userEmail} });
+
+    if(!getUser) {
+      return {
+        status: 'error',
+        statusCode: 404,
+        message: "This email is not registered here"
+      }
+    }
+
+    const lastSeen = new Date();
+
+    await db.User.update(
+      { lastSeen: lastSeen },
+      { where: { email: req.userEmail } }
+    );
+
+    return {
+      statusCode: 200,
+      status: 'success',
+      message: 'User logged out successfully'
     };
   }
 

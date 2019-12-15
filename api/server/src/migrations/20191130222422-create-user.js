@@ -34,6 +34,20 @@ module.exports = {
         allowNull: true,
         defaultValue: 'https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/'
       },
+      isAdmin: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        defaultValue: false      
+      },
+      lastSeen: {
+        type: Sequelize.DATE,
+        allowNull: true
+      },
+      isDeleted: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        defaultValue: false 
+      },
       password: {
         type: Sequelize.STRING,
         allowNull: false
