@@ -23,6 +23,8 @@ public class Ads {
     private String isNegotiable;
     private String createdAt;
     private String updateAt;
+    private String views;
+    private String location;
 
     public int getId() {
         return id;
@@ -152,5 +154,21 @@ public class Ads {
 
     public void setAllImgUrl(ArrayList<String> allImgUrl) {
         this.allImgUrl = allImgUrl;
+    }
+
+    public String getViews() {
+        return views;
+    }
+
+    public void setViews(String views) {
+        this.views = views;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

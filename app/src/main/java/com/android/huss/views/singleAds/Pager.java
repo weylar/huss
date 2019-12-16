@@ -18,6 +18,7 @@ import com.github.chrisbanes.photoview.PhotoView;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,10 +50,9 @@ public class Pager extends PagerAdapter {
         View itemView = mLayoutInflater.inflate(R.layout.ads_image_view, container, false);
         PhotoView photoView = itemView.findViewById(R.id.image);
         Picasso.Builder builder = new Picasso.Builder(mContext);
-        builder.downloader(new OkHttp3Downloader(mContext));
         builder.build().load(allImagesUrl.get(position))
-                .placeholder((R.drawable.ic_launcher_background))
-                .error(R.drawable.ic_launcher_background)
+                .placeholder((R.drawable.sample))
+                .error(R.drawable.flag)
                 .into(photoView);
 
         container.addView(itemView);
