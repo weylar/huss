@@ -79,6 +79,24 @@ class UserController {
       return next(e);
     }
   }
+
+  static async getAnotherUser(req, res, next) {
+    try {
+      const response = await UserService.getAnotherUser(req, res);
+      return res.status(response.statusCode).send(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
+
+  static async getOwnUser(req, res, next) {
+    try {
+      const response = await UserService.getOwnUser(req, res);
+      return res.status(response.statusCode).send(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
 }
 
 export default UserController;
