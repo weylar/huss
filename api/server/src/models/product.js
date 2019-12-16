@@ -34,8 +34,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     isNegotiable: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.BOOLEAN,
+      allowNull: true
+    },
+    views: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     }
   }, {});
   Product.associate = function(models) {

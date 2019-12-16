@@ -26,6 +26,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true
     },
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
+    },
+    lastSeen: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    isDeleted: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false

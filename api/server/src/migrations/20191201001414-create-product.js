@@ -59,8 +59,14 @@ module.exports = {
         allowNull: false,
       },
       isNegotiable: {
-        type: Sequelize.STRING,
-        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        defaultValue: true
+      },
+      count: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        defaultValue: 0
       },
       createdAt: {
         allowNull: false,
