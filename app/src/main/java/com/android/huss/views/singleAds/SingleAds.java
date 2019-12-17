@@ -17,6 +17,7 @@ import com.android.huss.models.Ads;
 import com.android.huss.viewModels.AdsViewModel;
 import com.android.huss.viewModels.SimilarAdsViewModel;
 import com.android.huss.viewModels.SingleAdsViewModel;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 import com.squareup.picasso.Picasso;

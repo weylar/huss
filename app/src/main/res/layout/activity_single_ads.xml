@@ -225,11 +225,11 @@
                         android:layout_marginTop="25dp">
 
                         <Button
+                            android:id="@+id/makeOffer"
                             android:layout_width="150dp"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:background="@drawable/button_offer"
-                            android:padding="6dp"
                             android:onClick="bid"
                             android:text="@string/make_an_offer"
                             android:textColor="@color/colorPrimary"
@@ -241,12 +241,16 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_centerInParent="true"
+                            android:layout_toEndOf="@+id/makeOffer"
+                            android:gravity="end"
                             android:padding="15sp"
                             tools:text="$500"
                             android:inputType="number"
+                            android:maxLength="9"
                             android:background="@drawable/custom_edittext"
                             android:textColor="@color/colorAccent"
                             android:textStyle="bold"
+                            android:layout_marginStart="10sp"
                             android:textSize="25sp" />
 
                     </RelativeLayout>
@@ -254,7 +258,7 @@
                     <TextView
                         android:id="@+id/report"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="20dp"
                         android:layout_gravity="end"
                         android:layout_marginTop="10dp"
                         android:drawableStart="@drawable/small_flag"

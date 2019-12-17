@@ -1,6 +1,7 @@
 package com.android.huss.views.singleAds;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import static com.android.huss.views.singleAds.SingleAds.ID;
 
 public class SimilarAdsAdapter extends RecyclerView.Adapter<SimilarAdsAdapter.CustomViewHolder>{
 
@@ -54,6 +57,13 @@ public class SimilarAdsAdapter extends RecyclerView.Adapter<SimilarAdsAdapter.Cu
         public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             View view = layoutInflater.inflate(R.layout.top_ads_view, parent, false);
+            view.setOnClickListener(v -> {
+                String id = String.valueOf(v.getId());
+                Intent intent = new Intent(context, SingleAds.class);
+                intent.putExtra(ID, id);
+                context.startActivity(intent);
+            });
+
             return new CustomViewHolder(view);
         }
 
@@ -66,6 +76,7 @@ public class SimilarAdsAdapter extends RecyclerView.Adapter<SimilarAdsAdapter.Cu
 //            holder.description.setText("Lorem ipsum dolor sit amet, minim veniam, ut aliquip ex ea commodo consequat");
           //  if (dataList.get(position).getFavorite().equals("Yes")){
                holder.favorite.setImageResource(R.drawable.favorite_yes);
+               holder.itemView.setId(1);
 
           //  }else{
                 //holder.favorite.setImageResource(R.drawable.favorite_no);
