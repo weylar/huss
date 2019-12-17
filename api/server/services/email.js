@@ -42,7 +42,7 @@ class EmailService {
                     message: "Error sending email"
                 })
             } else {
-                return res.status(500).json({
+                return res.status(200).json({
                     status: 'success',
                     statusCode: 200,
                     message: 'A reset password link has been sent to your email'

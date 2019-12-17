@@ -47,6 +47,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
   }, {});
+
+  User.prototype.toJSON = function() {
+    const { password, isDeleted, createdAt, updatedAt, ...rest } = Object.assign({}, this.get());
+    return rest;
+  }
+  
   User.associate = (models) => {
     User.hasMany(models.Product, {
       foreignKey: 'userId',

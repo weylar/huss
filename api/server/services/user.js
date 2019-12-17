@@ -1,5 +1,10 @@
 import Helper from '../middleware/utils/Helper';
 import db from '../src/models';
+import Sequelize from 'sequelize';
+
+String.prototype.capitalize = function() {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+}
 
 class UserService {
   static async signUpUser(newUser) {
@@ -132,7 +137,7 @@ class UserService {
 
   static async getAnotherUser(req) {
 
-    const foundUser = await db.User.findOne({ where: { id: req.params.id}});
+    const foundUser = await db.User.findOne({ where: { id: req.params.id, isDeleted: false, isAdmin: false}});
 
     if(!foundUser) {
       return {
@@ -142,12 +147,32 @@ class UserService {
       }
     }
 
-    const { id, firstName, lastName, email, state, city, profileImgUrl, lastSeen, phoneNumber } = foundUser
+    const { id, firstName, lastName, email, state, city, profileImgUrl, lastSeen, phoneNumber } = foundUser;
 
     return {
       status: 'success',
       statusCode: 200,
       data: { id, firstName, lastName, email, state, city, profileImgUrl, lastSeen, phoneNumber},
+      message: 'User information retrieved successfully'
+    }
+  }
+
+  static async getAnotherUserByEmail(req) {
+    
+    const foundUser = await db.User.findOne({ where: { email: req.params.email, isDeleted: false, isAdmin: false}});
+
+    if(!foundUser) {
+      return {
+        status: 'error',
+        statusCode: 404,
+        message: "User not found on this platform"
+      }
+    }
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: foundUser,
       message: 'User information retrieved successfully'
     }
   }
@@ -162,6 +187,58 @@ class UserService {
       statusCode: 200,
       data: { id, firstName, lastName, email, state, isAdmin, city, profileImgUrl, phoneNumber },
       message: 'User information retrieved successfully'
+    }
+  }
+
+  static async getAllUsers() {
+    const allUsers = await db.User.findAll({ where: { isDeleted: false, isAdmin: false }}, { order: [ ['createdAt', 'DESC'] ]});
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: allUsers,
+      message: 'All users information retrieved successfully'
+    }
+  }
+
+  static async getAllUsersByLimit(req) {
+    const limit = req.params.limit;
+    const allUsers = await db.User.findAll({ limit, where: { isDeleted: false, isAdmin: false } });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: allUsers,
+      message: 'All users information retrieved successfully'
+    }
+  }
+
+  static async paginateUsers(req) {
+    const limit = req.params.limit;
+    const offset = req.params.offset;
+    const allUsers = await db.User.findAll({ offset, limit, where: { isDeleted: false, isAdmin: false } });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: allUsers,
+      message: 'All users information retrieved successfully'
+    }
+  }
+
+  static async getUsersLikeSuggest(req) {
+    const limit = req.params.limit;
+    const offset = req.params.offset;
+    let name = req.params.name;
+    name = name.capitalize()
+    const Op = Sequelize.Op;
+    const allUsers = await db.User.findAll({ offset, limit, where: { firstName: { [Op.startsWith]: `%${name}%` }, isDeleted: false, isAdmin: false } });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: allUsers,
+      message: 'All users information retrieved successfully'
     }
   }
 

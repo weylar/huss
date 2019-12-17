@@ -11,7 +11,7 @@ class UserValidation {
     } = req.body;
 
     const errors = UserValidation.inputCheck(email, firstName, lastName, password, confirmPassword);
-    if (errors.length > 0) return res.status(errors[0].statusCode).send(errors[0]);
+    if (errors.length > 0) return res.status(errors[0].statusCode).json(errors[0]);
 
     if (email) email = email.toLowerCase().trim();
     if (firstName) firstName = firstName.capitalize().trim();
@@ -40,14 +40,14 @@ class UserValidation {
     }
 
     const isInvalid = Helper.validateEmail(email);
-    if (isInvalid) return res.status(isInvalid.statusCode).send(isInvalid);
+    if (isInvalid) return res.status(isInvalid.statusCode).json(isInvalid);
 
     const result = await db.User.findOne({
       where: { email: req.body.email }
     });
 
     if (result) {
-      return res.status(409).send({
+      return res.status(409).json({
         status: 'error',
         statusCode: 409,
         error: 'Email already in use',
@@ -118,7 +118,7 @@ class UserValidation {
     isEmpty = Helper.checkFieldEmpty(password, 'password');
     if (isEmpty) errors.push(isEmpty);
 
-    if (errors.length > 0) return res.status(errors[0].statusCode).send(errors[0]);
+    if (errors.length > 0) return res.status(errors[0].statusCode).json(errors[0]);
 
     req.body.email = email;
     req.body.password = password;
@@ -163,7 +163,7 @@ class UserValidation {
     hasNumber = Helper.checkFieldNumber(phoneNumber, 'phoneNumber');
     if (hasNumber) errors.push(hasNumber);
 
-    if (errors.length > 0) return res.status(errors[0].statusCode).send(errors[0]);
+    if (errors.length > 0) return res.status(errors[0].statusCode).json(errors[0]);
 
     req.body.state = state;
     req.body.city = city;
@@ -181,7 +181,7 @@ class UserValidation {
     isEmpty = Helper.checkFieldEmpty(profileImgUrl, 'profileImgUrl');
     if (isEmpty) errors.push(isEmpty);
 
-    if (errors.length > 0) return res.status(errors[0].statusCode).send(errors[0]);
+    if (errors.length > 0) return res.status(errors[0].statusCode).json(errors[0]);
 
     req.body.profileImgUrl = profileImgUrl;
     return next();
