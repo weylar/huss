@@ -64,6 +64,19 @@
                 android:layout_marginEnd="15dp"
                 android:orientation="vertical">
 
+
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/custom_edittext"
+                    android:drawableStart="@drawable/small_search"
+                    android:drawablePadding="5dp"
+                    android:elevation="2dp"
+                    android:hint="@string/search_for_products"
+                    android:inputType="text"
+                    android:padding="15dp" />
                 <!--Category Section-->
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -94,18 +107,6 @@
 
 
                 </RelativeLayout>
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/custom_edittext"
-                    android:drawableStart="@drawable/small_search"
-                    android:drawablePadding="5dp"
-                    android:elevation="2dp"
-                    android:hint="@string/search_for_products"
-                    android:inputType="text"
-                    android:padding="15dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_cat"

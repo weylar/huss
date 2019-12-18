@@ -53,12 +53,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Custom
         public void onBindViewHolder(CustomViewHolder holder, int position) {
             holder.txtTitle.setText(dataList.get(position).getName());
 
-            Picasso.Builder builder = new Picasso.Builder(context);
-            builder.downloader(new OkHttp3Downloader(context));
-            builder.build().load(dataList.get(position).getIconUrl())
-                    .placeholder((R.drawable.ic_launcher_background))
-                    .error(R.drawable.ic_launcher_background)
-                    .into(holder.icon);
+//            Picasso.Builder builder = new Picasso.Builder(context);
+//            builder.downloader(new OkHttp3Downloader(context));
+//            builder.build().load(dataList.get(position).getIconUrl())
+//                    .placeholder((R.drawable.ic_launcher_background))
+//                    .error(R.drawable.ic_launcher_background)
+//                    .into(holder.icon);
 
         }
 

@@ -48,6 +48,49 @@ public class AdsRepository {
         return adsData;
     }
 
+    public MutableLiveData<Ads>getSingleAds(String id){
+        final MutableLiveData<Ads> adsData = new MutableLiveData<>();
+        HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
+        Call<Ads> call = retrofit.getSingleAds(id);
+        call.enqueue(new Callback<Ads>() {
+            @Override
+            public void onResponse(Call<Ads> call, Response<Ads> response) {
+                if (response.isSuccessful()) {
+                    Log.e(TAG, "onResponse: SINGLE SUCCESS");
+                    adsData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Ads> call, Throwable t) {
+                Log.e(TAG, t.getMessage() + "Single Ads Failed");
+                // adsData.setValue(null);
+            }
+        });
+        return adsData;
+    }
+
+    public MutableLiveData<List<Ads>>getSimilarAds(String name) {
+        final MutableLiveData<List<Ads>> adsData = new MutableLiveData<>();
+        HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
+        Call<List<Ads>> call = retrofit.getSimilarAds(name);
+        call.enqueue(new Callback<List<Ads>>() {
+            @Override
+            public void onResponse(Call<List<Ads>> call, Response<List<Ads>> response) {
+                if (response.isSuccessful()) {
+                    Log.e(TAG, "onResponse: SUCCESS");
+                    adsData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Ads>> call, Throwable t) {
+                Log.e(TAG, t.getMessage() + "Failed");
+                // adsData.setValue(null);
+            }
+        });
+        return adsData;
+    }
 
 }
 
