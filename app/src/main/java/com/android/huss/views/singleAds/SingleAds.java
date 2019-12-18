@@ -7,8 +7,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -151,6 +154,26 @@ public class SingleAds extends AppCompatActivity {
     public void bid(View view){
 //        TODO: Raise bids. Check if not less than half the original price
         Toast.makeText(this, offerPrice.getText().toString().replace("\u20A6", ""), Toast.LENGTH_SHORT).show();
+    }
+
+    public void text(View view){
+        Toast.makeText(this, "Message seller", Toast.LENGTH_SHORT).show();
+    }
+    public void makeCall(View view){
+        Uri u = Uri.parse("tel:" + "08138028915");
+        Intent i = new Intent(Intent.ACTION_DIAL, u);
+        try {
+            startActivity(i);
+        }
+        catch (SecurityException s) {
+            Toast.makeText(this, s.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void favoriteAds(View view){
+        ImageView imageView = (ImageView) view ;
+        /*TODO: Check for state and update appropriately*/
+        imageView.setImageResource(R.drawable.favorite_yes);
     }
     private String formatPrice(String price){
         String value = Integer.parseInt(price) > 1000000000 ? "\u20A6" + (Float.parseFloat(price) / 1000000000) + "B" :

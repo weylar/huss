@@ -204,6 +204,7 @@
                             android:paddingTop="15dp"
                             android:paddingEnd="20dp"
                             android:paddingBottom="15dp"
+                            android:onClick="makeCall"
                             android:src="@drawable/small_phone" />
 
                         <ImageView
@@ -214,6 +215,7 @@
                             android:layout_centerInParent="true"
                             android:contentDescription="@string/text_the_seller"
                             android:padding="15dp"
+                            android:onClick="text"
                             android:src="@drawable/small_message" />
 
 
@@ -330,6 +332,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:onClick="favoriteAds"
             android:src="@drawable/favorite_no" />
 
 
