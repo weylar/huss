@@ -17,9 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".views.singleAds.SingleAds"
+        <activity android:name=".views.adsImages.ImageFull"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity
+            android:name=".views.singleAds.SingleAds"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
         <activity
             android:name=".views.latestAds.LatestAds"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

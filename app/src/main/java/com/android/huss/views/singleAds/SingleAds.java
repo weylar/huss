@@ -20,6 +20,7 @@ import com.android.huss.models.Ads;
 import com.android.huss.viewModels.AdsViewModel;
 import com.android.huss.viewModels.SimilarAdsViewModel;
 import com.android.huss.viewModels.SingleAdsViewModel;
+import com.android.huss.views.adsImages.ImageFull;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
@@ -31,6 +32,8 @@ import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.android.huss.views.adsImages.ImageFull.PAGE;
 
 public class SingleAds extends AppCompatActivity {
 

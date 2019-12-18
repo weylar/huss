@@ -1,38 +1,29 @@
-package com.android.huss.views.singleAds;
+package com.android.huss.views.adsImages;
 
 import android.content.Context;
-
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.android.huss.R;
-import com.android.huss.models.Ads;
-import com.android.huss.views.adsImages.ImageFull;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.android.huss.views.adsImages.ImageFull.PAGE;
 
-public class Pager extends PagerAdapter {
+public class FullAdsPager extends PagerAdapter {
 
     Context mContext;
     LayoutInflater mLayoutInflater;
     private ArrayList<String> allImagesUrl;
 
-    public Pager(Context context, ArrayList<String> allImagesUrl) {
+    public FullAdsPager(Context context, ArrayList<String> allImagesUrl) {
         this.mContext = context;
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.allImagesUrl = allImagesUrl;
