@@ -32,7 +32,7 @@ public class Pager extends PagerAdapter {
     LayoutInflater mLayoutInflater;
     private ArrayList<String> allImagesUrl;
 
-    public Pager(Context context, ArrayList<String> allImagesUrl) {
+     Pager(Context context, ArrayList<String> allImagesUrl) {
         this.mContext = context;
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.allImagesUrl = allImagesUrl;

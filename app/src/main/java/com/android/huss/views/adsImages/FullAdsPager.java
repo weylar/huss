@@ -44,11 +44,6 @@ public class FullAdsPager extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.ads_image_view, container, false);
         PhotoView photoView = itemView.findViewById(R.id.image);
-        photoView.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, ImageFull.class);
-            intent.putExtra(PAGE, position);
-            mContext.startActivity(intent);
-        });
         Picasso.Builder builder = new Picasso.Builder(mContext);
         builder.build().load(allImagesUrl.get(position))
                 .placeholder((R.drawable.sample))
