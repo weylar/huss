@@ -20,6 +20,7 @@ import com.android.huss.models.Ads;
 import com.android.huss.viewModels.AdsViewModel;
 import com.android.huss.viewModels.SimilarAdsViewModel;
 import com.android.huss.viewModels.SingleAdsViewModel;
+import com.android.huss.views.adsImages.ImageFull;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
@@ -31,6 +32,8 @@ import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.android.huss.views.adsImages.ImageFull.PAGE;
 
 public class SingleAds extends AppCompatActivity {
 
@@ -59,6 +62,12 @@ public class SingleAds extends AppCompatActivity {
         id = getIntent().getStringExtra(ID);
         name = getIntent().getStringExtra(NAME);
 
+        pager = new Pager(this, getAllUrl() /*ads.getAllImgUrl()*/);
+        viewPager.setAdapter(pager);
+        TabLayout tabLayout = findViewById(R.id.tabDots);
+        tabLayout.setupWithViewPager(viewPager, true);
+
+
 
     }
 
@@ -79,7 +88,13 @@ public class SingleAds extends AppCompatActivity {
             ads.setLocation("Abuja");
             ads.setViews("2000000000");
             ads.setCreatedAt("2019-12-15T06:55:18.277Z");
-            ads.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.");
+            ads.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
+                    "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
+                    "when an unknown printer took a galley of type and scrambled it to make a type specimen book. " +
+                    "It has survived not only five centuries, but also the leap into electronic typesetting, " +
+                    "remaining essentially unchanged. It was popularised in the 1960s with the release of " +
+                    "Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing " +
+                    "software like Aldus PageMaker including versions of Lorem Ipsum.");
             SingleAds.this.generateAds(ads);
             progressBarLatestAds.stopAnim();
             progressBarLatestAds.setVisibility(View.GONE);
@@ -130,10 +145,7 @@ public class SingleAds extends AppCompatActivity {
                 .into(circleImageView);
 
 
-        pager = new Pager(this, getAllUrl() /*ads.getAllImgUrl()*/);
-        viewPager.setAdapter(pager);
-        TabLayout tabLayout = findViewById(R.id.tabDots);
-        tabLayout.setupWithViewPager(viewPager, true);
+
         report.setOnClickListener(v -> {
             /*TODO: Send to db report*/
             Toast.makeText(this, "Ad already reported, thanks for the feedback", Toast.LENGTH_LONG).show();
