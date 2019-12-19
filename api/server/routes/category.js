@@ -4,7 +4,7 @@ import { categoryCheck } from '../middleware/validations/category';
 import Auth from '../middleware/utils/Auth';
 
 const { createCategory, getACategory, getAllCategories, getAllCategoriesByLimit, paginateCategories,
-getCategoriesSuggest, editCategory
+getCategoriesSuggest, editCategory, deleteCategory
  } = CategoryController;
 const { getUser, adminCheck } = Auth;
 
@@ -17,5 +17,6 @@ categoryRouter.get('/getAllCategoriesByLimit/:limit', getUser, getAllCategoriesB
 categoryRouter.get('/paginateCategories/:offset/:limit', getUser, paginateCategories);
 categoryRouter.get('/getCategoriesSuggest/:offset/:name/:limit', getUser, getCategoriesSuggest);
 categoryRouter.put('/editCategory/:id', getUser, editCategory);
+categoryRouter.delete('/deleteCategory/:id', getUser, deleteCategory);
 
 export default categoryRouter;
