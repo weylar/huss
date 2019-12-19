@@ -28,6 +28,33 @@ class CategoryController {
       return next(e);
     }
   }
+
+  static async getAllCategoriesByLimit(req, res, next) {
+    try {
+      const response = await CategoryService.getAllCategoriesByLimit(req);
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
+
+  static async paginateCategories(req, res, next) {
+    try {
+      const response = await CategoryService.paginateCategories(req);
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
+
+  static async getCategoriesSuggest(req, res, next) {
+    try {
+      const response = await CategoryService.getCategoriesSuggest(req);
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
 }
 
 export default CategoryController;
