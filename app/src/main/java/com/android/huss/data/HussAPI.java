@@ -26,4 +26,7 @@ public interface HussAPI {
     @GET("photos")
     Call<List<Ads>> getSimilarAds(@Query("name") String adsName);
 
+    @GET("photos")
+    Call<List<Ads>> getFavoriteAds(@Query("userId") String userID);
+
 }

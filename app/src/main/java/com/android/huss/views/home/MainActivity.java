@@ -23,6 +23,7 @@ import com.android.huss.models.Ads;
 import com.android.huss.models.Category;
 import com.android.huss.viewModels.AdsViewModel;
 import com.android.huss.viewModels.CategoryViewModel;
+import com.android.huss.views.favorite.Favorite;
 import com.android.huss.views.latestAds.LatestAds;
 import com.google.android.material.navigation.NavigationView;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(MainActivity.this, MainActivity.class));
                         break;
                     case R.id.favorite:
-                        Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
+                       startActivity(new Intent(MainActivity.this, Favorite.class));
                         break;
                     case R.id.messages:
                         Toast.makeText(MainActivity.this, "My Cart", Toast.LENGTH_SHORT).show();
