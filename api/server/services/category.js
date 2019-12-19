@@ -117,6 +117,29 @@ class CategoryService {
     }
 
   }
+
+  static async editCategory(req) {
+    const id = req.params.id;
+
+    if(!req.body.categoryImageUrl) {
+      return {
+        status: 'error',
+        statusCode: 422,
+        message: `Please select an image`,
+      }
+    }
+
+    await db.Category.update({ categoryImageUrl: req.body.categoryImageUrl }, {where: {id: id} });
+
+    const newCategory = await db.Category.findOne({ where: { id: id }});
+
+    return {
+      status: 'error',
+      statusCode: 202,
+      data: newCategory,
+      message: 'This category has been successfully edited'
+    }
+  }
 }
 
 export default CategoryService;
