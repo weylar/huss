@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group
+        android:checkableBehavior= "single" >
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/home"
+        android:title="@string/home" />
+
+
+    <item
+        android:id="@+id/favorite"
+        android:icon="@drawable/favorite_yes"
+        android:title="@string/favorites" />
+
+    <item
+        android:id="@+id/messages"
+        android:icon="@drawable/messages"
+        android:title="@string/messages" />
+
+    <item
+        android:id="@+id/setting"
+        android:icon="@drawable/settings"
+        android:title="@string/settings" />
+    </group>
+
+    <item android:title= "@string/communicate" >
+        <menu>
+            <item
+                android:id= "@+id/share"
+                android:icon= "@drawable/share"
+                android:title= "@string/share" />
+            <item
+                android:id= "@+id/send"
+                android:icon= "@drawable/send"
+                android:title= "@string/send" />
+            <item
+                android:id= "@+id/developer"
+                android:icon= "@drawable/developer"
+                android:title= "@string/developer" />
+        </menu>
+    </item>
+
+</menu>

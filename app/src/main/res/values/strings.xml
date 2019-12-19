@@ -1,3 +1,33 @@
 <resources>
     <string name="app_name">Huss</string>
+    <string name="app_name_full">Huss.ng</string>
+    <string name="search_for_products">Search Products</string>
+    <string name="see_more">See more</string>
+    <string name="categories">Category</string>
+    <string name="cat_description">cat_description</string>
+    <string name="top_ads">Top Ads</string>
+    <string name="latest_ads">Latest Ads</string>
+    <string name="ads_image">ads image</string>
+    <string name="favorite">favorite</string>
+    <string name="navigation_drawer_open">Drawer Open</string>
+    <string name="navigation_drawer_close">Drawer Closed</string>
+    <string name="profile_image">profile image</string>
+    <string name="logout">Logout</string>
+    <string name="home">Home</string>
+    <string name="favorites">Favorite Ads</string>
+    <string name="messages">Messages</string>
+    <string name="settings">Settings</string>
+    <string name="communicate">Communicate</string>
+    <string name="send">Send</string>
+    <string name="share">Share</string>
+    <string name="developer">Developer</string>
+    <string name="adsimages">adsImages</string>
+    <string name="description">Description</string>
+    <string name="make_call">make call</string>
+    <string name="text_the_seller">Text the seller</string>
+    <string name="make_an_offer">Make an offer</string>
+    <string name="report_abuse">Report Abuse</string>
+    <string name="similar_ads">Similar Ads</string>
+
+
 </resources>
