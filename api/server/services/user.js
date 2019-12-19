@@ -14,7 +14,7 @@ class UserService {
     const user = await db.User.create(newUser);
 
     const { id, email, firstName, lastName, state, city, phoneNumber, profileImgUrl, isAdmin } = user;
-    const payLoad = { id, email };
+    const payLoad = { id, email, isAdmin };
     const token = Helper.getToken(payLoad);
     return {
       status: 'success',
@@ -52,8 +52,7 @@ class UserService {
 
     const hash = foundUser.password;
     const isDeleted = foundUser.isDeleted;
-    
-    const isAdmin = foundUser.isAdmin;
+  
 
     if(isDeleted === true) {
       return {
@@ -63,8 +62,8 @@ class UserService {
       }
     }
     if (Helper.comparePassword(password, hash) === true) {
-      const { id, firstName, lastName } = foundUser;
-      const payLoad = { id, email };
+      const { id, firstName, lastName, isAdmin } = foundUser;
+      const payLoad = { id, email, isAdmin };
       const token = Helper.getToken(payLoad);
       return {
         status: 'success',

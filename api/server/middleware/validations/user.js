@@ -68,7 +68,6 @@ class UserValidation {
     let isEmpty;
     let hasWhiteSpace;
     let hasAlpha;
-    let hasNumber
 
     isEmpty = Helper.checkFieldEmpty(email, 'email');
     if (isEmpty) errors.push(isEmpty);

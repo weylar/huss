@@ -11,7 +11,8 @@ class Auth {
       const decoded = jwt.verify(token, process.env.SECRET);
 
       req.userId = decoded.id;
-      req.userEmail = decoded.email
+      req.userEmail = decoded.email;
+      req.isAdmin = decoded.isAdmin;
 
       return next();
     } catch (e) {
@@ -21,6 +22,17 @@ class Auth {
         error: `${e.name}. ${e.message}`,
       });
     }
+  }
+
+  static adminCheck(req, res, next) {
+    if (req.isAdmin !== true) {
+      return res.status(401).json({
+        status: 401,
+        success: false,
+        error: `You are not Authorized to perform this Action`
+      });
+    }
+    return next();
   }
 }
 
