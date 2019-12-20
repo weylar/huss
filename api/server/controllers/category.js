@@ -64,6 +64,15 @@ class CategoryController {
       return next(e);
     }
   }
+
+  static async deleteCategory(req, res, next) {
+    try {
+      const response = await CategoryService.deleteCategory(req);
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
 }
 
 export default CategoryController;
