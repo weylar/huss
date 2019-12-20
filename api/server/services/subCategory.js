@@ -37,6 +37,26 @@ class subCategoryService {
       message: 'A new subCategory has been added'
     };
   }
+
+  static async getSubCategory(req) {
+    const category = await db.Category.findOne({ where: { id: req.params.categoryId } });
+    const foundSubCategory = await db.SubCategory.findOne({ where: { id: req.params.id } });
+
+    if (foundSubCategory.categoryId === category.id) {
+      return {
+        status: 'success',
+        statusCode: 200,
+        data: {foundSubCategory, category},
+        message: 'Sub category sucessfully retrieved'
+      }
+    }
+
+    return {
+      status: 'error',
+      statusCode: 404,
+      message: 'Such sub category does not exist'
+    }
+  }
 }
 
 export default subCategoryService;
