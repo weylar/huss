@@ -1,11 +1,14 @@
 package com.android.huss.views.favorite;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -17,6 +20,7 @@ import com.android.huss.viewModels.FavoriteViewModel;
 import com.android.huss.views.home.CategoryAdapter;
 import com.android.huss.views.home.MainActivity;
 import com.android.huss.views.latestAds.AllLatestAdsAdapter;
+import com.google.android.material.snackbar.Snackbar;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 
 import java.util.List;
@@ -25,7 +29,7 @@ public class Favorite extends AppCompatActivity {
 RecyclerView recyclerView;
 FavoriteViewModel favoriteViewModel;
 LVCircularZoom progressBar;
-AllLatestAdsAdapter allLatestAdsAdapter;
+FavoriteAdapter favoriteAdapter;
 LinearLayoutManager layoutManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +63,41 @@ LinearLayoutManager layoutManager;
 
     private void generateFavoriteAds(List<Ads> ads) {
         recyclerView = findViewById(R.id.favorite_recycler);
-        allLatestAdsAdapter = new AllLatestAdsAdapter(this, ads);
+        favoriteAdapter = new FavoriteAdapter(this, ads);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(allLatestAdsAdapter);
-        allLatestAdsAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(favoriteAdapter);
+        favoriteAdapter.notifyDataSetChanged();
+        enableSwipeToDeleteAndUndo();
 
     }
+
+
+    private void enableSwipeToDeleteAndUndo() {
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(this) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                final int position = viewHolder.getAdapterPosition();
+                final Ads item = favoriteAdapter.getData().get(position);
+                favoriteAdapter.removeItem(position);
+                /*TODO: Remove from db*/
+                Snackbar snackbar = Snackbar.make(progressBar, "Ad has been removed from favorites", Snackbar.LENGTH_LONG);
+                snackbar.setAction("UNDO", view -> {
+
+                    favoriteAdapter.restoreItem(item, position);
+                    recyclerView.scrollToPosition(position);
+                });
+
+                snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
+                snackbar.show();
+
+            }
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
+    }
+
+
+
 }
