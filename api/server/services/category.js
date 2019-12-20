@@ -7,14 +7,22 @@ String.prototype.capitalize = function() {
 
 class CategoryService {
   static async createCategory(req) {
-      const category = await db.Category.create(req.body);
-
+    const isExist = await db.Category.findOne({ where: { name: req.body.name } });
+    if(isExist) {
       return {
-        status: 'success',
-        statusCode: 200,
-        data: category,
-        message: 'A new category has been added'
+        status: 'error',
+        statusCode: 409,
+        message: 'This category exists already'
       }
+    }
+    const category = await db.Category.create(req.body);
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: category,
+      message: 'A new category has been added'
+    }
   }
 
   static async getACategory(req) {
