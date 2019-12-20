@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { userRouter, userDetails } from './server/routes/user';
 import categoryRouter from './server/routes/category';
+import subCategoryRouter from './server/routes/subCategory';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.get('/', (req, res) => res.status(200).send({
 app.use('/api/v1/auth', userRouter);
 app.use('/api/v1/user', userDetails);
 app.use('/api/v1/category', categoryRouter);
+app.use('/api/v1/subCategory', subCategoryRouter);
 
 app.use((req, res, next) => {
   const error = new Error('Route Does not Exist');
