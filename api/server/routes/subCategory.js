@@ -4,7 +4,7 @@ import { subCategoryCheck } from '../middleware/validations/subCategory';
 import Auth from '../middleware/utils/Auth';
 
 const { createSubCategory, getSubCategory, getAllSubCategories, getAllSubCategoriesByLimit,
-paginateSubCategories, getSubCategoriesSuggest, editSubCategory } = subCategoryController;
+paginateSubCategories, getSubCategoriesSuggest, editSubCategory,deleteSubCategory } = subCategoryController;
 const { getUser, adminCheck } = Auth;
 
 const subCategoryRouter = Router();
@@ -16,5 +16,6 @@ subCategoryRouter.get('/:categoryId/getAllSubCategoriesByLimit/:limit', getUser,
 subCategoryRouter.get('/:categoryId/paginateSubCategories/:offset/:limit', getUser, paginateSubCategories);
 subCategoryRouter.get('/:categoryId/getSubCategoriesSuggest/:offset/:name/:limit', getUser, getSubCategoriesSuggest);
 subCategoryRouter.put('/:categoryId/editSubCategory/:id', getUser, editSubCategory);
+subCategoryRouter.delete('/:categoryId/deleteSubCategory/:id', getUser, deleteSubCategory);
 
 export default subCategoryRouter;
