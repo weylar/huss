@@ -47,7 +47,7 @@ class CategoryService {
   static async getAllCategories() {
     const foundCategories = await db.Category.findAll({ order: [ ['name', 'ASC'] ]});
 
-    if (foundCategories.length > 1) {
+    if (foundCategories) {
       return {
         status: 'success',
         statusCode: 200,
@@ -55,30 +55,19 @@ class CategoryService {
         message: 'Categories have been sucessfully retrieved'
       }
     }
-
-    return {
-      status: 'error',
-      statusCode: 404,
-      message: 'No category exists'
-    }
   }
 
   static async getAllCategoriesByLimit(req) {
     const limit = req.params.limit;
     const allCategories = await db.Category.findAll({ limit,  order: [ ['name', 'ASC'] ] });
 
-    if(allCategories.length > 1) {
+    if(allCategories) {
       return {
         status: 'success',
         statusCode: 200,
         data: allCategories,
         message: 'All categories retrieved successfully'
       }
-    }
-    return {
-      status:'error',
-      statusCode: 404,
-      message: 'No such category'
     }
   }
 
@@ -87,18 +76,13 @@ class CategoryService {
     const offset = req.params.offset;
     const allCategories = await db.Category.findAll({ offset, limit, order: [ ['name', 'ASC'] ] });
 
-    if(allCategories.length > 1) {
+    if(allCategories) {
       return {
         status: 'success',
         statusCode: 200,
         data: allCategories,
         message: 'All categories retrieved successfully'
       }
-    }
-    return {
-      status:'error',
-      statusCode: 404,
-      message: 'No such category'
     }
   }
 
@@ -110,7 +94,7 @@ class CategoryService {
     const Op = Sequelize.Op;
     const allCategories = await db.Category.findAll({ offset, limit, where: { name: { [Op.startsWith]: `%${name}%` } } });
 
-    if(allCategories.length > 1) {
+    if(allCategories) {
       return {
         status: 'success',
         statusCode: 200,
@@ -118,12 +102,6 @@ class CategoryService {
         message: 'All categories retrieved successfully'
       }
     }
-    return {
-      status:'error',
-      statusCode: 404,
-      message: 'No such category'
-    }
-
   }
 
   static async editCategory(req) {

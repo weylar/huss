@@ -16,7 +16,7 @@ categoryRouter.get('/all/categories', getUser, getAllCategories);
 categoryRouter.get('/getAllCategoriesByLimit/:limit', getUser, getAllCategoriesByLimit);
 categoryRouter.get('/paginateCategories/:offset/:limit', getUser, paginateCategories);
 categoryRouter.get('/getCategoriesSuggest/:offset/:name/:limit', getUser, getCategoriesSuggest);
-categoryRouter.put('/editCategory/:id', getUser, adminCheck, editCategory);
-categoryRouter.delete('/deleteCategory/:id', getUser, adminCheck, deleteCategory);
+categoryRouter.put('/editCategory/:id', getUser, editCategory);
+categoryRouter.delete('/deleteCategory/:id', getUser, deleteCategory);
 
 export default categoryRouter;
