@@ -47,14 +47,11 @@ public class LatestAds extends AppCompatActivity {
         /*Get latest ads using view model*/
         adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
         adsViewModel.init();
-        adsViewModel.getAds().observe(this, new Observer<List<Ads>>() {
-            @Override
-            public void onChanged(List<Ads> ads) {
-                LatestAds.this.generateLatestAdsList(ads);
-                progressBarLatestAds.stopAnim();
-                progressBarLatestAds.setVisibility(View.GONE);
-                progressBarLatestAds.stopAnim();
-            }
+        adsViewModel.getAds().observe(this, ads -> {
+            LatestAds.this.generateLatestAdsList(ads);
+            progressBarLatestAds.stopAnim();
+            progressBarLatestAds.setVisibility(View.GONE);
+            progressBarLatestAds.stopAnim();
         });
 
     }

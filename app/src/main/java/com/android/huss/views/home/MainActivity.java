@@ -25,6 +25,7 @@ import com.android.huss.viewModels.AdsViewModel;
 import com.android.huss.viewModels.CategoryViewModel;
 import com.android.huss.views.favorite.Favorite;
 import com.android.huss.views.latestAds.LatestAds;
+import com.android.huss.views.profile.Profile;
 import com.google.android.material.navigation.NavigationView;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 
@@ -196,5 +197,9 @@ public class MainActivity extends AppCompatActivity {
         latestAdsRecyclerView.setAdapter(latestAdsAdapter);
 
 
+    }
+
+    public void openProfile (View view){
+        startActivity(new Intent(this, Profile.class));
     }
 }

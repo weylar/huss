@@ -29,4 +29,7 @@ public interface HussAPI {
     @GET("photos")
     Call<List<Ads>> getFavoriteAds(@Query("userId") String userID);
 
+    @GET("photos")
+    Call<List<Ads>> getUserAds(@Query("userId") String userID);
+
 }
