@@ -21,11 +21,12 @@ import com.android.huss.viewModels.AdsViewModel;
 import com.android.huss.viewModels.UserAdsViewModel;
 import com.android.huss.views.latestAds.AllLatestAdsAdapter;
 import com.android.huss.views.latestAds.LatestAds;
+import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 
 import java.util.List;
 
 public class ActiveAds extends Fragment {
-UserAdsViewModel userAdsViewModel;
+
     public ActiveAds() {
     }
 
@@ -43,11 +44,19 @@ UserAdsViewModel userAdsViewModel;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_active_ads, container, false);
+       LVCircularZoom progressBarLatestAds = view.findViewById(R.id.progress);
+        progressBarLatestAds.setViewColor(getResources().getColor(R.color.gray));
+        progressBarLatestAds.startAnim(100);
         RecyclerView recyclerView = view.findViewById(R.id.activeAds);
-        userAdsViewModel = ViewModelProviders.of(this).get(UserAdsViewModel.class);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        UserAdsViewModel userAdsViewModel = ViewModelProviders.of(this).get(UserAdsViewModel.class);
         userAdsViewModel.init("2");
         userAdsViewModel.getUserAds().observe(this, ads -> {
-            recyclerView.setAdapter(new AllLatestAdsAdapter(getContext(), ads ));
+            recyclerView.setAdapter(new AllLatestAdsAdapter(getContext(), ads));
+            progressBarLatestAds.stopAnim();
+            progressBarLatestAds.setVisibility(View.GONE);
+            progressBarLatestAds.stopAnim();
 
         });
 

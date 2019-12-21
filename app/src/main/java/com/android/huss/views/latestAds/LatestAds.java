@@ -31,7 +31,7 @@ public class LatestAds extends AppCompatActivity {
         setContentView(R.layout.activity_latest_ads);
         all_latest_ads = findViewById(R.id.all_latest_ads);
         progressBarLatestAds = findViewById(R.id.progress);
-        progressBarLatestAds.setViewColor(getResources().getColor(R.color.colorAccent));
+        progressBarLatestAds.setViewColor(getResources().getColor(R.color.gray));
         progressBarLatestAds.startAnim(100);
 
 

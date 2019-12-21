@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -44,16 +43,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="90dp"
+            android:layout_marginTop="30dp"
             android:background="@drawable/white_curve"
             android:orientation="vertical" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_img"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="0dp"
             android:src="@drawable/sample" />
 
         <LinearLayout
@@ -63,6 +62,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/profileName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -73,12 +73,14 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="08138028915"
+                tools:text="08138028915"
                 android:textAlignment="center" />
 
             <TextView
+                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="idrisaminu861@gmail.com"
@@ -97,15 +99,16 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/totalAdsCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="245K"
+                        tools:text="245K"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ads" />
+                        android:text="@string/ads_profile" />
 
                 </LinearLayout>
 
@@ -122,9 +125,10 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/activeAdsCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="245K"
+                        tools:text="245K"
                         android:textStyle="bold" />
 
                     <TextView
@@ -147,9 +151,10 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/inActiveAdsCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="245K"
+                        tools:text="245K"
                         android:textStyle="bold" />
 
                     <TextView
@@ -166,6 +171,8 @@
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPagerProfile"
                 android:layout_width="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_height="wrap_content">
 
                 <com.google.android.material.tabs.TabLayout
