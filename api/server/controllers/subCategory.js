@@ -70,6 +70,16 @@ class subCategoryController {
       return next(e);
     }
   }
+
+  static async deleteSubCategory(req, res, next) {
+    try {
+      const response = await subCategoryService.deleteSubCategory(req);
+      
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
 }
 
 export default subCategoryController;

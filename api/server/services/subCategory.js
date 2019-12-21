@@ -160,36 +160,36 @@ class subCategoryService {
     }
   }
 
-  // static async deleteCategory(req) {
-  //   const foundUser = await db.User.findOne({ where: { id: req.userId, isAdmin: true } });
+  static async deleteSubCategory(req) {
+    const foundUser = await db.User.findOne({ where: { id: req.userId, isAdmin: true } });
 
-  //   if (foundUser) {
-  //     const deletedSubCategory = await db.SubCategory.destroy({ where: {id: req.params.id} });
+    if (foundUser) {
+      const deletedSubCategory = await db.SubCategory.destroy({ where: {id: req.params.id} });
 
-  //     if(!deletedSubCategory) {
-  //       return {
-  //         status: 'error',
-  //         statusCode: 404,
-  //         message: 'Such category doesn\'t exist'
-  //       }
-  //     }
+      if(!deletedSubCategory) {
+        return {
+          status: 'error',
+          statusCode: 404,
+          message: 'Such category doesn\'t exist'
+        }
+      }
   
-  //     const newSubCategories = await db.SubCategory.findAll({ where: { categoryId: req.params.categoryId }});
+      const newSubCategories = await db.SubCategory.findAll({ where: { categoryId: req.params.categoryId }});
   
-  //     return {
-  //       status: 'success',
-  //       statusCode: 200,
-  //       data: newSubCategories,
-  //       message: 'Successfully deleted'
-  //     }
-  //   }
-  //   return {
-  //     status: 'error',
-  //     statusCode: 401,
-  //     message: 'This action can only be performed by an admin'
-  //   }
+      return {
+        status: 'success',
+        statusCode: 200,
+        data: newSubCategories,
+        message: 'Successfully deleted'
+      }
+    }
+    return {
+      status: 'error',
+      statusCode: 401,
+      message: 'This action can only be performed by an admin'
+    }
 
-  // }
+  }
 }
 
 export default subCategoryService;
