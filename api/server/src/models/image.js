@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    displayImage: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
+    }
   }, {});
   Image.associate = function(models) {
     Image.belongsTo(models.User, {
