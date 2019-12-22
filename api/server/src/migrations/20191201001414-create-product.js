@@ -49,10 +49,12 @@ module.exports = {
       type: {
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: 'free'
       },
       status: {
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: 'active'
       },
       price: {
         type: Sequelize.STRING,
