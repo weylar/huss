@@ -42,6 +42,57 @@ class AdService {
       message: 'A new ad has been added'
     };
   }
+
+  static async getAd(req) {
+    const oldAd = await db.Product.findOne({ where : { id: req.params.adId } });
+
+    if (!oldAd) {
+      return {
+        status: 'error',
+        statusCode: 404,
+        message: 'Such ad does not exist'
+      }
+    }
+    
+    const editViewCount = await db.Product.update({ count: oldAd.count + 1}, {where: { id: req.params.adId }});
+
+    if (editViewCount[0] === 1) {
+      
+      const foundAd = await db.Product.findOne({ where : { id: req.params.adId } });
+      const foundSubCategory = await db.SubCategory.findOne({ where: { id: foundAd.subCategoryId } });
+      const category = await db.Category.findOne({ where: { id: foundAd.categoryId } });
+
+      return {
+        status: 'success',
+        statusCode: 200,
+        data: {foundAd, foundSubCategory, category},
+        message: 'Ad sucessfully retrieved'
+      }
+    }
+  }
+
+  static async getOwnAd(req) {
+    const foundAd = await db.Product.findOne({ where : { userId: req.userId, id: req.params.adId } });
+
+    if (foundAd) {
+      
+      const foundSubCategory = await db.SubCategory.findOne({ where: { id: foundAd.subCategoryId } });
+      const category = await db.Category.findOne({ where: { id: foundAd.categoryId } });
+
+      return {
+        status: 'success',
+        statusCode: 200,
+        data: {foundAd, foundSubCategory, category},
+        message: 'Ad sucessfully retrieved'
+      }
+    }
+
+    return {
+      status: 'error',
+      statusCode: 404,
+      message: 'Such ad does not exist for you'
+    }
+  }
 }
 
 export default AdService;

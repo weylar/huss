@@ -10,12 +10,12 @@ const { getUser, adminCheck } = Auth;
 const subCategoryRouter = Router();
 
 subCategoryRouter.post('/:categoryId/create', getUser, adminCheck, subCategoryCheck, createSubCategory);
-subCategoryRouter.get('/:categoryId/getASubCategory/:id', getUser, getSubCategory);
+subCategoryRouter.get('/getASubCategory/:id', getUser, getSubCategory);
 subCategoryRouter.get('/:categoryId/getAllSubCategories', getUser, getAllSubCategories);
 subCategoryRouter.get('/:categoryId/getAllSubCategoriesByLimit/:limit', getUser, getAllSubCategoriesByLimit);
 subCategoryRouter.get('/:categoryId/paginateSubCategories/:offset/:limit', getUser, paginateSubCategories);
 subCategoryRouter.get('/:categoryId/getSubCategoriesSuggest/:offset/:name/:limit', getUser, getSubCategoriesSuggest);
-subCategoryRouter.put('/:categoryId/editSubCategory/:id', getUser, editSubCategory);
+subCategoryRouter.put('/editSubCategory/:id', getUser, editSubCategory);
 subCategoryRouter.delete('/:categoryId/deleteSubCategory/:id', getUser, deleteSubCategory);
 
 export default subCategoryRouter;
