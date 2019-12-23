@@ -80,6 +80,16 @@ class AdController {
       return next(e);
     }
   }
+
+  static async paginateOwnAds(req,res,next) {
+    try {
+      const response = await AdService.paginateOwnAds(req);
+      
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
 }
 
 export default AdController;

@@ -180,6 +180,26 @@ class AdService {
       message: 'All ads retrieved successfully'
     };
   }
+
+  static async paginateOwnAds(req) {
+    const limit = req.params.limit;
+    const offset = req.params.offset;
+    const allAds = await db.Product.findAll({
+      where: { userId: req.userId },
+      offset,
+      limit,
+      order: [['id', 'DESC']]
+    });
+
+    if (allAds) {
+      return {
+        status: 'success',
+        statusCode: 200,
+        data: allAds,
+        message: 'All ads retrieved successfully'
+      };
+    }
+  }
 }
 
 export default AdService;
