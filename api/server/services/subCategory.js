@@ -85,7 +85,7 @@ class subCategoryService {
         status: 'success',
         statusCode: 200,
         data: allSubCategories,
-        message: 'All categories retrieved successfully'
+        message: 'All sub categories retrieved successfully'
       };
     }
   }

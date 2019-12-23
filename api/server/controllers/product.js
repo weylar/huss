@@ -50,6 +50,16 @@ class AdController {
       return next(e);
     }
   }
+
+  static async getAllAdsByLimit(req,res,next) {
+    try {
+      const response = await AdService.getAllAdsByLimit(req);
+      
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
 }
 
 export default AdController;

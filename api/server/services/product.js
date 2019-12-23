@@ -3,7 +3,7 @@ import Sequelize from 'sequelize';
 
 String.prototype.capitalize = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);
-}
+};
 
 class AdService {
   static async createAd(req) {
@@ -44,83 +44,107 @@ class AdService {
   }
 
   static async getAd(req) {
-    const oldAd = await db.Product.findOne({ where : { id: req.params.adId } });
+    const oldAd = await db.Product.findOne({ where: { id: req.params.adId } });
 
     if (!oldAd) {
       return {
         status: 'error',
         statusCode: 404,
         message: 'Such ad does not exist'
-      }
+      };
     }
-    
-    const editViewCount = await db.Product.update({ count: oldAd.count + 1}, {where: { id: req.params.adId }});
+
+    const editViewCount = await db.Product.update(
+      { count: oldAd.count + 1 },
+      { where: { id: req.params.adId } }
+    );
 
     if (editViewCount[0] === 1) {
-      
-      const foundAd = await db.Product.findOne({ where : { id: req.params.adId } });
-      const foundSubCategory = await db.SubCategory.findOne({ where: { id: foundAd.subCategoryId } });
+      const foundAd = await db.Product.findOne({ where: { id: req.params.adId } });
+      const foundSubCategory = await db.SubCategory.findOne({
+        where: { id: foundAd.subCategoryId }
+      });
       const category = await db.Category.findOne({ where: { id: foundAd.categoryId } });
 
       return {
         status: 'success',
         statusCode: 200,
-        data: {foundAd, foundSubCategory, category},
+        data: { foundAd, foundSubCategory, category },
         message: 'Ad sucessfully retrieved'
-      }
+      };
     }
   }
 
   static async getOwnAd(req) {
-    const foundAd = await db.Product.findOne({ where : { userId: req.userId, id: req.params.adId } });
+    const foundAd = await db.Product.findOne({
+      where: { userId: req.userId, id: req.params.adId }
+    });
 
     if (foundAd) {
-      
-      const foundSubCategory = await db.SubCategory.findOne({ where: { id: foundAd.subCategoryId } });
+      const foundSubCategory = await db.SubCategory.findOne({
+        where: { id: foundAd.subCategoryId }
+      });
       const category = await db.Category.findOne({ where: { id: foundAd.categoryId } });
 
       return {
         status: 'success',
         statusCode: 200,
-        data: {foundAd, foundSubCategory, category},
+        data: { foundAd, foundSubCategory, category },
         message: 'Ad sucessfully retrieved'
-      }
+      };
     }
 
     return {
       status: 'error',
       statusCode: 404,
       message: 'Such ad does not exist for you'
-    }
+    };
   }
 
   static async getAllAds() {
-    const allAds = await db.Product.findAll({ order: [ ['createdAt', 'DESC'] ] });
+    const allAds = await db.Product.findAll({ order: [['id', 'DESC']] });
 
     return {
       status: 'success',
       statusCode: 200,
       data: allAds,
       message: 'All ads have been retrieved successfully'
-    }
+    };
+  }
+
+  static async getAllAdsByLimit(req) {
+    const allAds = await db.Product.findAll({
+      limit: req.params.limit,
+      order: [['id', 'DESC']]
+    });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: allAds,
+      message: 'All ads retrieved successfully'
+    };
   }
 
   static async getAllOwnAds(req) {
-    const allOwnAds = await db.Product.findAll({ where: { userId: req.userId } }, { order: [ ['createdAt', 'DESC'] ] });
+    const allOwnAds = await db.Product.findAll({
+      where: { userId: req.userId },
+      order: [['id', 'DESC']]
+    });
 
-    if(allOwnAds.length === 0) {
+    if (allOwnAds.length === 0) {
       return {
         status: 'error',
         statusCode: 404,
         message: 'You do not have any transactions'
-      }
+      };
     }
     return {
       status: 'success',
       statusCode: 200,
       data: allOwnAds,
       message: 'All your ads have been successfully retrieved'
-    }
+    };
   }
 }
 
