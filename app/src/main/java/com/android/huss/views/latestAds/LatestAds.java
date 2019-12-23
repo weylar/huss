@@ -31,7 +31,7 @@ public class LatestAds extends AppCompatActivity {
         setContentView(R.layout.activity_latest_ads);
         all_latest_ads = findViewById(R.id.all_latest_ads);
         progressBarLatestAds = findViewById(R.id.progress);
-        progressBarLatestAds.setViewColor(getResources().getColor(R.color.colorAccent));
+        progressBarLatestAds.setViewColor(getResources().getColor(R.color.gray));
         progressBarLatestAds.startAnim(100);
 
 
@@ -47,14 +47,11 @@ public class LatestAds extends AppCompatActivity {
         /*Get latest ads using view model*/
         adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
         adsViewModel.init();
-        adsViewModel.getAds().observe(this, new Observer<List<Ads>>() {
-            @Override
-            public void onChanged(List<Ads> ads) {
-                LatestAds.this.generateLatestAdsList(ads);
-                progressBarLatestAds.stopAnim();
-                progressBarLatestAds.setVisibility(View.GONE);
-                progressBarLatestAds.stopAnim();
-            }
+        adsViewModel.getAds().observe(this, ads -> {
+            LatestAds.this.generateLatestAdsList(ads);
+            progressBarLatestAds.stopAnim();
+            progressBarLatestAds.setVisibility(View.GONE);
+            progressBarLatestAds.stopAnim();
         });
 
     }

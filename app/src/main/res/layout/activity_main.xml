@@ -44,6 +44,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerInParent="true"
                         android:layout_margin="1dp"
+                        android:onClick="openProfile"
                         android:contentDescription="@string/profile_image"
                         android:src="@drawable/sample" />
 

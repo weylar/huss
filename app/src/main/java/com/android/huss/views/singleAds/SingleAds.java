@@ -195,7 +195,7 @@ public class SingleAds extends AppCompatActivity {
         return value.endsWith(".0B") || value.endsWith(".0M") || value.endsWith(".0K")
                 ? value.replace(".0", ""): value;
     }
-    private String formatViews(String views){
+    public static String formatViews(String views){
         String value = Integer.parseInt(views) > 1000000000 ? (Float.parseFloat(views) / 1000000000) + "B" :
                 Integer.parseInt(views) > 1000000 ? (Float.parseFloat(views) / 1000000) + "M" :
                         Integer.parseInt(views) > 1000 ? (Float.parseFloat(views) / 1000) + "K" :

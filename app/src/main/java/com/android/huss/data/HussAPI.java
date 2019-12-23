@@ -3,6 +3,7 @@ package com.android.huss.data;
 
 import com.android.huss.models.Ads;
 import com.android.huss.models.Category;
+import com.android.huss.models.Profile;
 
 import java.util.List;
 
@@ -17,6 +18,9 @@ public interface HussAPI {
     @GET("photos")
     Call<List<Category>> getCategory();
 
+    @GET("photos/{id}")
+    Call<Profile> getUserProfile(@Path("id") String id);
+
     @GET("photos")
     Call<List<Ads>> getAds();
 
@@ -28,5 +32,8 @@ public interface HussAPI {
 
     @GET("photos")
     Call<List<Ads>> getFavoriteAds(@Query("userId") String userID);
+
+    @GET("photos")
+    Call<List<Ads>> getUserAds(@Query("userId") String userID);
 
 }
