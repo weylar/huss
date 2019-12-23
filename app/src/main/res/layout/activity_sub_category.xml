@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".views.home.MainActivity">
+    tools:context=".views.subCategory.SubCategoryView">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -23,6 +23,7 @@
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="wrap_content"
                 android:onClick="goBack"
+                android:contentDescription="@string/go_backk"
                 android:src="@drawable/back" />
 
             <TextView
@@ -30,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="15dp"
-                tools:text="@string/latest_ads"
+                tools:text="Electronics"
                 android:layout_toEndOf="@+id/back"
                 android:textSize="20sp" />
 
@@ -41,7 +42,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/all_latest_ads"
+        android:id="@+id/sub_cat_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

@@ -31,6 +31,8 @@ import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 
 import java.util.List;
 
+import static com.android.huss.views.singleAds.SingleAds.NAME;
+
 public class MainActivity extends AppCompatActivity {
     RecyclerView catRecyclerView;
     RecyclerView latestAdsRecyclerView;
@@ -123,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void moreLatest(View view) {
         Intent intent = new Intent(this, LatestAds.class);
+        intent.putExtra(NAME, "Latest Ads");
         startActivity(intent);
     }
 
