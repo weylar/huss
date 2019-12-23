@@ -104,6 +104,24 @@ class AdService {
       message: 'All ads have been retrieved successfully'
     }
   }
+
+  static async getAllOwnAds(req) {
+    const allOwnAds = await db.Product.findAll({ where: { userId: req.userId } }, { order: [ ['createdAt', 'DESC'] ] });
+
+    if(allOwnAds.length === 0) {
+      return {
+        status: 'error',
+        statusCode: 404,
+        message: 'You do not have any transactions'
+      }
+    }
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: allOwnAds,
+      message: 'All your ads have been successfully retrieved'
+    }
+  }
 }
 
 export default AdService;
