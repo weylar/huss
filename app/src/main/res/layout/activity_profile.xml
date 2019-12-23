@@ -53,7 +53,7 @@
             android:layout_height="80dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="0dp"
-            android:src="@drawable/sample" />
+            tools:src="@drawable/sample" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -66,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Aminu Idris"
+                tools:text="Aminu Idris"
                 android:textAlignment="center"
                 android:textColor="@color/colorAccent"
                 android:textSize="22sp"
@@ -83,8 +83,15 @@
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="idrisaminu861@gmail.com"
+                tools:text="idrisaminu861@gmail.com"
                 android:textAlignment="center" />
+
+            <com.ldoublem.loadingviewlib.view.LVCircularZoom
+                android:id="@+id/progress2"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_gravity="center"
+                android:layout_margin="5dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"

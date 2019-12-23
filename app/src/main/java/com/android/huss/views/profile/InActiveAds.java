@@ -46,7 +46,7 @@ public class InActiveAds extends Fragment {
         UserAdsViewModel userAdsViewModel = ViewModelProviders.of(this).get(UserAdsViewModel.class);
         userAdsViewModel.init("2");
         userAdsViewModel.getUserAds().observe(this, ads -> {
-            recyclerView.setAdapter(new AllLatestAdsAdapter(getContext(), ads));
+            recyclerView.setAdapter(new InactiveAdsAdapter(getContext(), ads));
             progressBarLatestAds.stopAnim();
             progressBarLatestAds.setVisibility(View.GONE);
             progressBarLatestAds.stopAnim();

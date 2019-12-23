@@ -44,7 +44,7 @@ public class ActiveAds extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_active_ads, container, false);
-       LVCircularZoom progressBarLatestAds = view.findViewById(R.id.progress);
+        LVCircularZoom progressBarLatestAds = view.findViewById(R.id.progress);
         progressBarLatestAds.setViewColor(getResources().getColor(R.color.gray));
         progressBarLatestAds.startAnim(100);
         RecyclerView recyclerView = view.findViewById(R.id.activeAds);
@@ -53,7 +53,7 @@ public class ActiveAds extends Fragment {
         UserAdsViewModel userAdsViewModel = ViewModelProviders.of(this).get(UserAdsViewModel.class);
         userAdsViewModel.init("2");
         userAdsViewModel.getUserAds().observe(this, ads -> {
-            recyclerView.setAdapter(new AllLatestAdsAdapter(getContext(), ads));
+            recyclerView.setAdapter(new ActiveAdsAdapter(getContext(), ads));
             progressBarLatestAds.stopAnim();
             progressBarLatestAds.setVisibility(View.GONE);
             progressBarLatestAds.stopAnim();
