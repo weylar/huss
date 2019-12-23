@@ -110,6 +110,36 @@ class AdController {
       return next(e);
     }
   }
+
+  static async getAdsByStatus(req,res,next) {
+    try {
+      const response = await AdService.getAdsByStatus(req);
+      
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
+
+  static async getOwnAdsByStatus(req,res,next) {
+    try {
+      const response = await AdService.getOwnAdsByStatus(req);
+      
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
+
+  static async getOwnAdsByStatusSuggest(req,res,next) {
+    try {
+      const response = await AdService.getOwnAdsByStatusSuggest(req);
+      
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
 }
 
 export default AdController;
