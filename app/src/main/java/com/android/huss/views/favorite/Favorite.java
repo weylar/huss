@@ -2,24 +2,17 @@ package com.android.huss.views.favorite;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.android.huss.R;
 import com.android.huss.models.Ads;
-import com.android.huss.viewModels.CategoryViewModel;
 import com.android.huss.viewModels.FavoriteViewModel;
-import com.android.huss.views.home.CategoryAdapter;
-import com.android.huss.views.home.MainActivity;
-import com.android.huss.views.latestAds.AllLatestAdsAdapter;
 import com.google.android.material.snackbar.Snackbar;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 

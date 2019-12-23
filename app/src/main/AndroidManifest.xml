@@ -17,8 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".views.subCategory.SubCategoryView"
+        <activity android:name=".views.category.Category"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity
+            android:name=".views.subCategory.SubCategoryView"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".views.profile.Profile"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
