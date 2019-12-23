@@ -37,7 +37,7 @@ public interface HussAPI {
     @GET("photos")
     Call<List<Ads>> getUserAds(@Query("userId") String userID);
 
-    @GET("photos/{catName}")
-    Call<List<SubCategory>> getSubCategory(@Path("catName") String catName);
+    @GET("photos")
+    Call<List<SubCategory>> getSubCategory(@Query("catName") String catName);
 
 }

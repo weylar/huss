@@ -49,9 +49,9 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.sub_cat_view, parent, false);
         view.setOnClickListener(v -> {
-            String id = String.valueOf(v.getTag());
+            String name = String.valueOf(v.getTag());
             Intent intent =  new Intent(context, LatestAds.class);
-            intent.putExtra(NAME, id);
+            intent.putExtra(NAME, name);
             context.startActivity(intent);
         });
         return new CustomViewHolder(view);

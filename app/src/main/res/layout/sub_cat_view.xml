@@ -11,15 +11,16 @@
         android:layout_height="match_parent"
         tools:text="Vehicles"
         android:gravity="center_vertical"
-        android:padding="10dp"
-        android:textSize="20sp"/>
+        android:padding="15dp"
+        android:textSize="18sp"/>
 
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/more"
+        android:src="@drawable/small_more"
+        android:contentDescription="@string/see_more"
         android:layout_margin="10dp"/>
 
 

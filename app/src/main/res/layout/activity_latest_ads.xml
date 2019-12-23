@@ -26,10 +26,11 @@
                 android:src="@drawable/back" />
 
             <TextView
+                android:id="@+id/page_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="15dp"
-                android:text="@string/latest_ads"
+                tools:text="@string/latest_ads"
                 android:layout_toEndOf="@+id/back"
                 android:textSize="20sp" />
 

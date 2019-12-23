@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.android.huss.models.SubCategory;
-import com.android.huss.repositories.CategoryRepository;
 import com.android.huss.repositories.SubCategoryRepository;
 
 import java.util.List;

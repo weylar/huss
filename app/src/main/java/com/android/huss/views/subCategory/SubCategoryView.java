@@ -45,9 +45,9 @@ public class SubCategoryView extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         catName = getIntent().getStringExtra(NAME);
-        pageTitle.setText(/*catName*/ "1");
+        pageTitle.setText(catName);
         subCategoryViewModel = ViewModelProviders.of(this).get(SubCategoryViewModel.class);
-        subCategoryViewModel.init(catName);
+        subCategoryViewModel.init(/*catName*/ "1");
         subCategoryViewModel.getSubCategory().observe(this, ads -> {
             SubCategory subCategory = new SubCategory();
             subCategory.setName("Phones");
