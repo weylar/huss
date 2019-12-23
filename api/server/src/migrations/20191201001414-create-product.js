@@ -48,12 +48,12 @@ module.exports = {
       },
       type: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
         defaultValue: 'free'
       },
       status: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
         defaultValue: 'active'
       },
       price: {
