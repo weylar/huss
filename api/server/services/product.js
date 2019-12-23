@@ -39,7 +39,7 @@ class AdService {
       status: 'success',
       statusCode: 200,
       data: { category, subCategory, ad },
-      message: 'A new subCategory has been added'
+      message: 'A new ad has been added'
     };
   }
 }
