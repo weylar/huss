@@ -10,6 +10,6 @@ const { getUser, adminCheck } = Auth;
 const adRouter = Router();
 
 adRouter.post('/:categoryId/:subCategoryId/create', getUser, adCheck, createAd);
-adRouter.get('/:adId', getUser, getAd)
+adRouter.get('/getAd/:adId', getUser, getAd);
 
 export default adRouter;

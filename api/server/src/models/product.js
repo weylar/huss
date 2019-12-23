@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: true
     },
-    views: {
+    count: {
       type: DataTypes.INTEGER,
       allowNull: true
     }

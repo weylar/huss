@@ -44,11 +44,16 @@ class AdService {
   }
 
   static async getAd(req) {
-    const editViewCount = await db.Product.update({ count: count + 1, where: { id: req.params.id }});
+    const oldAd = await db.Product.findOne({ where : { id: req.params.adId } });
+    console.log('second');
+    
+    const editViewCount = await db.Product.update({ count: oldAd.count + 1}, {where: { id: req.params.adId }});
+    console.log('thuird');
+    
 
     if (editViewCount[0] === 1) {
       
-      const foundAd = await db.Product.findOne({ where : { id: req.params.id } })
+      const foundAd = await db.Product.findOne({ where : { id: req.params.adId } });
       const foundSubCategory = await db.SubCategory.findOne({ where: { id: foundAd.subCategoryId } });
       const category = await db.Category.findOne({ where: { id: foundAd.categoryId } });
 
