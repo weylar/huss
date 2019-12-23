@@ -3,7 +3,7 @@ import AdController from '../controllers/product';
 import { adCheck } from '../middleware/validations/product';
 import Auth from '../middleware/utils/Auth';
 
-const { createAd, getAd, getOwnAd, getAllAds, getAllOwnAds, getAllAdsByLimit
+const { createAd, getAd, getOwnAd, getAllAds, getAllOwnAds, getAllAdsByLimit, getAllOwnAdsByLimit
  } = AdController;
 const { getUser, adminCheck } = Auth;
 
@@ -15,5 +15,6 @@ adRouter.get('/getOwnAd/:adId', getUser, getOwnAd);
 adRouter.get('/getAllAds', getUser, getAllAds);
 adRouter.get('/getAllOwnAds', getUser, getAllOwnAds);
 adRouter.get('/getAllAdsByLimit/:limit', getUser, getAllAdsByLimit);
+adRouter.get('/getAllOwnAdsByLimit/:limit', getUser, getAllOwnAdsByLimit);
 
 export default adRouter;

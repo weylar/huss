@@ -126,6 +126,25 @@ class AdService {
     };
   }
 
+  static async paginateAds(req) {
+    const limit = req.params.limit;
+    const offset = req.params.offset;
+    const allAds = await db.Product.findAll({
+      offset,
+      limit,
+      order: [['id', 'DESC']]
+    });
+
+    if (allAds) {
+      return {
+        status: 'success',
+        statusCode: 200,
+        data: allAds,
+        message: 'All ads retrieved successfully'
+      };
+    }
+  }
+
   static async getAllOwnAds(req) {
     const allOwnAds = await db.Product.findAll({
       where: { userId: req.userId },
@@ -136,7 +155,7 @@ class AdService {
       return {
         status: 'error',
         statusCode: 404,
-        message: 'You do not have any transactions'
+        message: 'You do not have any ads'
       };
     }
     return {
@@ -144,6 +163,21 @@ class AdService {
       statusCode: 200,
       data: allOwnAds,
       message: 'All your ads have been successfully retrieved'
+    };
+  }
+
+  static async getAllOwnAdsByLimit(req) {
+    const allAds = await db.Product.findAll({
+      where: {userId: req.userId},
+      limit: req.params.limit,
+      order: [['id', 'DESC']]
+    });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: allAds,
+      message: 'All ads retrieved successfully'
     };
   }
 }
