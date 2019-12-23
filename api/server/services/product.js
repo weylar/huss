@@ -145,6 +145,28 @@ class AdService {
     }
   }
 
+  static async getAdsSuggest(req) {
+    const limit = req.params.limit;
+    const offset = req.params.offset;
+    let title = req.params.title;
+    title = title.capitalize();
+    const Op = Sequelize.Op;
+    const allAds = await db.Product.findAll({
+      offset,
+      limit,
+      where: { title: { [Op.startsWith]: `%${title}%` } }
+    });
+
+    if (allAds) {
+      return {
+        status: 'success',
+        statusCode: 200,
+        data: allAds,
+        message: 'All ads retrieved successfully'
+      };
+    }
+  }
+
   static async getAllOwnAds(req) {
     const allOwnAds = await db.Product.findAll({
       where: { userId: req.userId },
@@ -189,6 +211,28 @@ class AdService {
       offset,
       limit,
       order: [['id', 'DESC']]
+    });
+
+    if (allAds) {
+      return {
+        status: 'success',
+        statusCode: 200,
+        data: allAds,
+        message: 'All ads retrieved successfully'
+      };
+    }
+  }
+
+  static async getOwnAdsSuggest(req) {
+    const limit = req.params.limit;
+    const offset = req.params.offset;
+    let title = req.params.title;
+    title = title.capitalize();
+    const Op = Sequelize.Op;
+    const allAds = await db.Product.findAll({
+      offset,
+      limit,
+      where: { userId: req.userId, title: { [Op.startsWith]: `%${title}%` } }
     });
 
     if (allAds) {

@@ -90,6 +90,26 @@ class AdController {
       return next(e);
     }
   }
+
+  static async getAdsSuggest(req,res,next) {
+    try {
+      const response = await AdService.getAdsSuggest(req);
+      
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
+
+  static async getOwnAdsSuggest(req,res,next) {
+    try {
+      const response = await AdService.getOwnAdsSuggest(req);
+      
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
 }
 
 export default AdController;
