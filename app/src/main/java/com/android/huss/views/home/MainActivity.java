@@ -23,6 +23,7 @@ import com.android.huss.models.Ads;
 import com.android.huss.models.Category;
 import com.android.huss.viewModels.AdsViewModel;
 import com.android.huss.viewModels.CategoryViewModel;
+import com.android.huss.views.category.CategoryAdapter;
 import com.android.huss.views.favorite.Favorite;
 import com.android.huss.views.latestAds.LatestAds;
 import com.android.huss.views.profile.Profile;
@@ -136,39 +137,30 @@ public class MainActivity extends AppCompatActivity {
         /*Get all categories using view model*/
         categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
         categoryViewModel.init();
-        categoryViewModel.getCategory().observe(this, new Observer<List<Category>>() {
-            @Override
-            public void onChanged(List<Category> catResponse) {
-                MainActivity.this.generateCategoryList(catResponse);
-                progressBar.stopAnim();
-                progressBar.setVisibility(View.GONE);
-                progressBar.stopAnim();
-            }
+        categoryViewModel.getCategory().observe(this, catResponse -> {
+            MainActivity.this.generateCategoryList(catResponse);
+            progressBar.stopAnim();
+            progressBar.setVisibility(View.GONE);
+            progressBar.stopAnim();
         });
         /*Get top ads using view model*/
         adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
         adsViewModel.init();
-        adsViewModel.getAds().observe(this, new Observer<List<Ads>>() {
-            @Override
-            public void onChanged(List<Ads> ads) {
-                MainActivity.this.generateTopAdsList(ads);
-                progressBarTop.stopAnim();
-                progressBarTop.setVisibility(View.GONE);
-                progressBarTop.stopAnim();
-            }
+        adsViewModel.getAds().observe(this, ads -> {
+            MainActivity.this.generateTopAdsList(ads);
+            progressBarTop.stopAnim();
+            progressBarTop.setVisibility(View.GONE);
+            progressBarTop.stopAnim();
         });
 
         /*Get latest ads using view model*/
         adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
         adsViewModel.init();
-        adsViewModel.getAds().observe(this, new Observer<List<Ads>>() {
-            @Override
-            public void onChanged(List<Ads> ads) {
-                MainActivity.this.generateLatestAdsList(ads);
-                progressBarLatestAds.stopAnim();
-                progressBarLatestAds.setVisibility(View.GONE);
-                progressBarLatestAds.stopAnim();
-            }
+        adsViewModel.getAds().observe(this, ads -> {
+            MainActivity.this.generateLatestAdsList(ads);
+            progressBarLatestAds.stopAnim();
+            progressBarLatestAds.setVisibility(View.GONE);
+            progressBarLatestAds.stopAnim();
         });
 
     }
@@ -204,5 +196,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void openProfile (View view){
         startActivity(new Intent(this, Profile.class));
+    }
+
+    public void allCategory(View view) {
+        startActivity(new Intent(this, com.android.huss.views.category.Category.class));
     }
 }

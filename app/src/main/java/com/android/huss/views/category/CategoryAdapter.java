@@ -1,4 +1,4 @@
-package com.android.huss.views.home;
+package com.android.huss.views.category;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,15 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.huss.R;
 import com.android.huss.models.Category;
-import com.android.huss.models.SubCategory;
-import com.android.huss.views.singleAds.SingleAds;
 import com.android.huss.views.subCategory.SubCategoryView;
-import com.jakewharton.picasso.OkHttp3Downloader;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import static com.android.huss.views.singleAds.SingleAds.ID;
 import static com.android.huss.views.singleAds.SingleAds.NAME;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CustomViewHolder>{

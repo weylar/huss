@@ -3,7 +3,8 @@
     <string name="app_name_full">Huss.ng</string>
     <string name="search_for_products">Search Products</string>
     <string name="see_more">See more</string>
-    <string name="categories">Category</string>
+    <string name="all">All</string>
+    <string name="categories">Popular Categories</string>
     <string name="cat_description">cat_description</string>
     <string name="top_ads">Top Ads</string>
     <string name="latest_ads">Latest Ads</string>
@@ -34,6 +35,7 @@
     <string name="ads_profile">Ads</string>
     <string name="active">Active</string>
     <string name="go_backk">go back</string>
+    <string name="category">Categories</string>
 
 
 </resources>

@@ -103,7 +103,8 @@
                         android:drawableEnd="@drawable/small_more"
                         android:drawablePadding="4dp"
                         android:gravity="center"
-                        android:text="@string/see_more"
+                        android:text="@string/all"
+                        android:onClick="allCategory"
                         android:textColor="@color/colorAccent" />
 
 
