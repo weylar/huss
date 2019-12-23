@@ -4,6 +4,7 @@ package com.android.huss.data;
 import com.android.huss.models.Ads;
 import com.android.huss.models.Category;
 import com.android.huss.models.Profile;
+import com.android.huss.models.SubCategory;
 
 import java.util.List;
 
@@ -35,5 +36,8 @@ public interface HussAPI {
 
     @GET("photos")
     Call<List<Ads>> getUserAds(@Query("userId") String userID);
+
+    @GET("photos/{catName}")
+    Call<List<SubCategory>> getSubCategory(@Path("catName") String catName);
 
 }

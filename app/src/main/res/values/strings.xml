@@ -33,6 +33,7 @@
     <string name="inactive">Inactive</string>
     <string name="ads_profile">Ads</string>
     <string name="active">Active</string>
+    <string name="go_backk">go back</string>
 
 
 </resources>
