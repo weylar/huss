@@ -26,11 +26,10 @@
                 android:src="@drawable/back" />
 
             <TextView
-                android:id="@+id/page_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="15dp"
-                tools:text="@string/latest_ads"
+                android:text="@string/favorites"
                 android:layout_toEndOf="@+id/back"
                 android:textSize="20sp" />
 
@@ -41,7 +40,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/all_latest_ads"
+        android:id="@+id/favorite_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
@@ -51,5 +50,7 @@
         android:layout_height="75dp"
         android:layout_gravity="center"
         android:layout_margin="5dp" />
+
+
 
 </LinearLayout>

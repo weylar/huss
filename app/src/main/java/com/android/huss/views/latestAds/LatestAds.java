@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.huss.R;
 import com.android.huss.models.Ads;
@@ -18,20 +19,24 @@ import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 
 import java.util.List;
 
+import static com.android.huss.views.singleAds.SingleAds.NAME;
+
 public class LatestAds extends AppCompatActivity {
     RecyclerView all_latest_ads;
     RecyclerView.LayoutManager layoutManagerAllLatestAds;
     AllLatestAdsAdapter latestAdsAdapter;
     AdsViewModel adsViewModel;
     LVCircularZoom progressBarLatestAds;
+    TextView pageTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_latest_ads);
+        pageTitle = findViewById(R.id.page_title);
         all_latest_ads = findViewById(R.id.all_latest_ads);
         progressBarLatestAds = findViewById(R.id.progress);
-        progressBarLatestAds.setViewColor(getResources().getColor(R.color.colorAccent));
+        progressBarLatestAds.setViewColor(getResources().getColor(R.color.gray));
         progressBarLatestAds.startAnim(100);
 
 
@@ -45,16 +50,14 @@ public class LatestAds extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         /*Get latest ads using view model*/
+        pageTitle.setText(getIntent().getStringExtra(NAME));
         adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
         adsViewModel.init();
-        adsViewModel.getAds().observe(this, new Observer<List<Ads>>() {
-            @Override
-            public void onChanged(List<Ads> ads) {
-                LatestAds.this.generateLatestAdsList(ads);
-                progressBarLatestAds.stopAnim();
-                progressBarLatestAds.setVisibility(View.GONE);
-                progressBarLatestAds.stopAnim();
-            }
+        adsViewModel.getAds().observe(this, ads -> {
+            LatestAds.this.generateLatestAdsList(ads);
+            progressBarLatestAds.stopAnim();
+            progressBarLatestAds.setVisibility(View.GONE);
+            progressBarLatestAds.stopAnim();
         });
 
     }

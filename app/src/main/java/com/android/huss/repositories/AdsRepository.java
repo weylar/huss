@@ -48,6 +48,50 @@ public class AdsRepository {
         return adsData;
     }
 
+    public MutableLiveData<List<Ads>>getUserAds(String id) {
+        final MutableLiveData<List<Ads>> adsData = new MutableLiveData<>();
+        HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
+        Call<List<Ads>> call = retrofit.getUserAds(id);
+        call.enqueue(new Callback<List<Ads>>() {
+            @Override
+            public void onResponse(Call<List<Ads>> call, Response<List<Ads>> response) {
+                if (response.isSuccessful()) {
+                    Log.e(TAG, "onResponse: SUCCESS");
+                    adsData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Ads>> call, Throwable t) {
+                Log.e(TAG, t.getMessage() + "Failed");
+              // adsData.setValue(null);
+            }
+        });
+        return adsData;
+    }
+
+    public MutableLiveData<List<Ads>>getFavoriteAds(String userId) {
+        final MutableLiveData<List<Ads>> adsData = new MutableLiveData<>();
+        HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
+        Call<List<Ads>> call = retrofit.getFavoriteAds(userId);
+        call.enqueue(new Callback<List<Ads>>() {
+            @Override
+            public void onResponse(Call<List<Ads>> call, Response<List<Ads>> response) {
+                if (response.isSuccessful()) {
+                    Log.e(TAG, "onResponseFav: SUCCESS");
+                    adsData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Ads>> call, Throwable t) {
+                Log.e(TAG, t.getMessage() + "Fav Failed");
+              // adsData.setValue(null);
+            }
+        });
+        return adsData;
+    }
+
     public MutableLiveData<Ads>getSingleAds(String id){
         final MutableLiveData<Ads> adsData = new MutableLiveData<>();
         HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);

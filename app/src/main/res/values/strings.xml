@@ -28,6 +28,12 @@
     <string name="make_an_offer">Make an offer</string>
     <string name="report_abuse">Report Abuse</string>
     <string name="similar_ads">Similar Ads</string>
+    <string name="settings_icon">settings icon</string>
+    <string name="navigate_back">navigate back</string>
+    <string name="inactive">Inactive</string>
+    <string name="ads_profile">Ads</string>
+    <string name="active">Active</string>
+    <string name="go_backk">go back</string>
 
 
 </resources>
