@@ -42,6 +42,30 @@ class AdService {
       message: 'A new ad has been added'
     };
   }
+
+  static async getAd(req) {
+    const editViewCount = await db.Product.update({ count: count + 1, where: { id: req.params.id }});
+
+    if (editViewCount[0] === 1) {
+      
+      const foundAd = await db.Product.findOne({ where : { id: req.params.id } })
+      const foundSubCategory = await db.SubCategory.findOne({ where: { id: foundAd.subCategoryId } });
+      const category = await db.Category.findOne({ where: { id: foundAd.categoryId } });
+
+      return {
+        status: 'success',
+        statusCode: 200,
+        data: {foundAd, foundSubCategory, category},
+        message: 'Ad sucessfully retrieved'
+      }
+    }
+
+    return {
+      status: 'error',
+      statusCode: 404,
+      message: 'Such ad does not exist'
+    }
+  }
 }
 
 export default AdService;
