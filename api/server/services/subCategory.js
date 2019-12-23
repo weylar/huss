@@ -39,10 +39,10 @@ class subCategoryService {
   }
 
   static async getSubCategory(req) {
-    const category = await db.Category.findOne({ where: { id: req.params.categoryId } });
-    const foundSubCategory = await db.SubCategory.findOne({ where: { id: req.params.id, categoryId: req.params.categoryId } });
+    const foundSubCategory = await db.SubCategory.findOne({ where: { id: req.params.id } });
 
     if (foundSubCategory) {
+      const category = await db.Category.findOne({ where: { id: foundSubCategory.categoryId } });
       return {
         status: 'success',
         statusCode: 200,
@@ -140,7 +140,7 @@ class subCategoryService {
       }
     }
 
-    const editedCategory = await db.SubCategory.update({ name: req.body.name }, {where: {categoryId: req.params.categoryId, id: req.params.id} });
+    const editedCategory = await db.SubCategory.update({ name: req.body.name }, {where: {id: req.params.id} });
     
     if(editedCategory[0] === 0) {
       return {
