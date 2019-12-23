@@ -4,7 +4,8 @@ import { adCheck } from '../middleware/validations/product';
 import Auth from '../middleware/utils/Auth';
 
 const { createAd, getAd, getOwnAd, getAllAds, getAllOwnAds, getAllAdsByLimit, getAllOwnAdsByLimit, paginateAds, paginateOwnAds,
-  getAdsSuggest, getOwnAdsSuggest, getAdsByStatus, getOwnAdsByStatus, getOwnAdsByStatusSuggest, getAdsByStatusSuggest
+  getAdsSuggest, getOwnAdsSuggest, getAdsByStatus, getOwnAdsByStatus, getOwnAdsByStatusSuggest, getAdsByStatusSuggest,
+  makeAdInactive
  } = AdController;
 const { getUser, adminCheck } = Auth;
 
@@ -25,5 +26,6 @@ adRouter.get('/getAdsByStatus/:offset/:limit/:status', getUser, getAdsByStatus);
 adRouter.get('/getOwnAdsByStatus/:offset/:limit/:status', getUser, getOwnAdsByStatus);
 adRouter.get('/getOwnAdsByStatusSuggest/:offset/:limit/:status/:title', getUser, getOwnAdsByStatusSuggest);
 adRouter.get('/getAdsByStatusSuggest/:offset/:limit/:status/:title', getUser, getAdsByStatusSuggest);
+adRouter.put('/makeAdInactive/:adId', getUser, makeAdInactive);
 
 export default adRouter;
