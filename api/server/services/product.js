@@ -93,6 +93,17 @@ class AdService {
       message: 'Such ad does not exist for you'
     }
   }
+
+  static async getAllAds() {
+    const allAds = await db.Product.findAll({ order: [ ['createdAt', 'DESC'] ] });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: allAds,
+      message: 'All ads have been retrieved successfully'
+    }
+  }
 }
 
 export default AdService;

@@ -30,6 +30,16 @@ class AdController {
       return next(e);
     }
   }
+
+  static async getAllAds(req,res,next) {
+    try {
+      const response = await AdService.getAllAds(req);
+      
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
 }
 
 export default AdController;
