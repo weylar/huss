@@ -366,6 +366,27 @@ class AdService {
       data: newAd,
     }
   }
+
+  static async makePayment(req) {
+    const paid = await db.Product.update({ type: 'Top', payDate: new Date(), status: 'active' }, {where: { userId: req.userId, id: req.params.adId}});
+
+    if (paid[0] === 0) {
+      return {
+        status: 'error',
+        statusCode: 403,
+        message: 'You cannot make payment for this ad'
+      }
+    }
+
+    const newAd = await db.Product.findOne({ where: {id: req.params.adId}});
+
+    return {
+      status:'success',
+      statusCode: 200,
+      data: newAd,
+      message: 'Payment was made successfully'
+    }
+  }
 }
 
 export default AdService;

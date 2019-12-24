@@ -160,6 +160,16 @@ class AdController {
       return next(e);
     }
   }
+
+  static async makePayment(req,res,next) {
+    try {
+      const response = await AdService.makePayment(req);
+      
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
 }
 
 export default AdController;
