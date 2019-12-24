@@ -5,6 +5,7 @@
     package="com.android.huss">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <dist:module dist:instant="true" />
 
@@ -17,8 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".views.category.Category"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".views.ads.createAds.CreateAds"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".views.category.Category"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".views.subCategory.SubCategoryView"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -32,10 +36,10 @@
             android:name=".views.adsImages.ImageFull"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".views.singleAds.SingleAds"
+            android:name=".views.ads.singleAds.SingleAds"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".views.latestAds.LatestAds"
+            android:name=".views.ads.latestAds.LatestAds"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".views.home.MainActivity"

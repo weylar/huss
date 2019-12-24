@@ -36,6 +36,25 @@
     <string name="active">Active</string>
     <string name="go_backk">go back</string>
     <string name="category">Categories</string>
+    <string name="help_icon">help icon</string>
+    <string name="select_category_and_sub_category">Select category and sub category</string>
+    <string name="categorys">Category</string>
+    <string name="sub_category">Sub Category</string>
+    <string name="name">Name</string>
+    <string name="write_a_clear_title_for_your_ad">Write a clear title for your ad</string>
+    <string name="description_detail">Provide a well detailed description of your ad</string>
+    <string name="price">Price</string>
+    <string name="negotiable">Negotiable</string>
+    <string name="title">Title</string>
+    <string name="location_description">Where are you selling your item from</string>
+    <string name="location">Location</string>
+    <string name="ads_type_description">Please select Advert type</string>
+    <string name="ads_imagess">Ads Images</string>
+    <string name="create_ad">Create a new Ad</string>
+    <string name="add">Add</string>
+    <string name="add_image">add image</string>
+    <string name="images">Images</string>
+    <string name="naira">₦</string>
 
 
 </resources>

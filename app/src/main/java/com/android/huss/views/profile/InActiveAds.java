@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 
 import com.android.huss.R;
 import com.android.huss.viewModels.UserAdsViewModel;
-import com.android.huss.views.latestAds.AllLatestAdsAdapter;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 
 public class InActiveAds extends Fragment {

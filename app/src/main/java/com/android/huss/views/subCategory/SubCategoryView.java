@@ -17,7 +17,7 @@ import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 
 import java.util.List;
 
-import static com.android.huss.views.singleAds.SingleAds.NAME;
+import static com.android.huss.views.ads.singleAds.SingleAds.NAME;
 
 public class SubCategoryView extends AppCompatActivity {
     RecyclerView subCategoryRecycler;

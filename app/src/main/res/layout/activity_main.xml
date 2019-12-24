@@ -6,6 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context="info.androidhive.fab.MainActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -147,6 +153,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
+
+
                 <com.ldoublem.loadingviewlib.view.LVCircularZoom
                     android:id="@+id/progressTop"
                     android:layout_width="75dp"
@@ -190,7 +198,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_latest_ads"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="139dp"
+                    android:layout_marginBottom="50dp" />
 
 
                 <com.ldoublem.loadingviewlib.view.LVCircularZoom
@@ -205,6 +214,17 @@
         </ScrollView>
 
     </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="12dp"
+            app:backgroundTint="@color/colorPrimary"
+            android:src="@drawable/add" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nv"

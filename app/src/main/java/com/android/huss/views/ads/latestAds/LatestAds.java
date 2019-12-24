@@ -1,7 +1,6 @@
-package com.android.huss.views.latestAds;
+package com.android.huss.views.ads.latestAds;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,13 +12,11 @@ import android.widget.TextView;
 import com.android.huss.R;
 import com.android.huss.models.Ads;
 import com.android.huss.viewModels.AdsViewModel;
-import com.android.huss.views.home.LatestAdsAdapter;
-import com.android.huss.views.home.MainActivity;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 
 import java.util.List;
 
-import static com.android.huss.views.singleAds.SingleAds.NAME;
+import static com.android.huss.views.ads.singleAds.SingleAds.NAME;
 
 public class LatestAds extends AppCompatActivity {
     RecyclerView all_latest_ads;

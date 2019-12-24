@@ -1,12 +1,9 @@
 package com.android.huss.views.profile;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,14 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.huss.R;
-import com.android.huss.models.Ads;
-import com.android.huss.viewModels.AdsViewModel;
 import com.android.huss.viewModels.UserAdsViewModel;
-import com.android.huss.views.latestAds.AllLatestAdsAdapter;
-import com.android.huss.views.latestAds.LatestAds;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
-
-import java.util.List;
 
 public class ActiveAds extends Fragment {
 

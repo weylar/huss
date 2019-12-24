@@ -8,24 +8,21 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.huss.R;
 import com.android.huss.models.Ads;
 import com.android.huss.viewModels.ProfileViewModel;
 import com.android.huss.viewModels.UserAdsViewModel;
 import com.google.android.material.tabs.TabLayout;
-import com.jakewharton.picasso.OkHttp3Downloader;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 import com.squareup.picasso.Picasso;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.android.huss.views.singleAds.SingleAds.formatViews;
+import static com.android.huss.views.ads.singleAds.SingleAds.formatViews;
 
 public class Profile extends AppCompatActivity {
     ViewPager vpPager;
@@ -72,8 +69,6 @@ public class Profile extends AppCompatActivity {
             Ads ade = new Ads();
             ade.setStatus("Active");
             ade.setStatus("Inactive");
-            re.add(ade);
-            re.add(ade);
             re.add(ade);
             int activeCount = 0;
             int inactiveCount = 0;

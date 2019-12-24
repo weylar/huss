@@ -5,23 +5,17 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.huss.R;
-import com.android.huss.models.Ads;
 import com.android.huss.models.SubCategory;
-import com.android.huss.views.latestAds.AllLatestAdsAdapter;
-import com.android.huss.views.latestAds.LatestAds;
-import com.android.huss.views.singleAds.SingleAds;
-import com.squareup.picasso.Picasso;
+import com.android.huss.views.ads.latestAds.LatestAds;
 
 import java.util.List;
 
-import static com.android.huss.views.singleAds.SingleAds.ID;
-import static com.android.huss.views.singleAds.SingleAds.NAME;
+import static com.android.huss.views.ads.singleAds.SingleAds.NAME;
 
 public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.CustomViewHolder>{
 

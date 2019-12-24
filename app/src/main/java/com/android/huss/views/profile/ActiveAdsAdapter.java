@@ -12,15 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.huss.R;
 import com.android.huss.models.Ads;
-import com.android.huss.views.singleAds.SingleAds;
+import com.android.huss.views.ads.singleAds.SingleAds;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.android.huss.views.singleAds.SingleAds.ID;
-import static com.android.huss.views.singleAds.SingleAds.NAME;
+import static com.android.huss.views.ads.singleAds.SingleAds.ID;
+import static com.android.huss.views.ads.singleAds.SingleAds.NAME;
 
 public class ActiveAdsAdapter extends RecyclerView.Adapter<ActiveAdsAdapter.CustomViewHolder>{
 

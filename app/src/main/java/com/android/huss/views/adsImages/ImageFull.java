@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.android.huss.R;
-import com.android.huss.views.singleAds.Pager;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;

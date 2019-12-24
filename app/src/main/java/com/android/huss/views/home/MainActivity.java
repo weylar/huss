@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.android.huss.R;
@@ -23,16 +22,18 @@ import com.android.huss.models.Ads;
 import com.android.huss.models.Category;
 import com.android.huss.viewModels.AdsViewModel;
 import com.android.huss.viewModels.CategoryViewModel;
+import com.android.huss.views.ads.createAds.CreateAds;
 import com.android.huss.views.category.CategoryAdapter;
 import com.android.huss.views.favorite.Favorite;
-import com.android.huss.views.latestAds.LatestAds;
+import com.android.huss.views.ads.latestAds.LatestAds;
 import com.android.huss.views.profile.Profile;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 
 import java.util.List;
 
-import static com.android.huss.views.singleAds.SingleAds.NAME;
+import static com.android.huss.views.ads.singleAds.SingleAds.NAME;
 
 public class MainActivity extends AppCompatActivity {
     RecyclerView catRecyclerView;
@@ -50,13 +51,14 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
-    ImageView navButton;
+    FloatingActionButton fab;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        fab = findViewById(R.id.fab);
         progressBar = findViewById(R.id.progress);
         progressBarTop = findViewById(R.id.progressTop);
         progressBarLatestAds = findViewById(R.id.progressLatestAds);
@@ -66,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
         progressBar.startAnim(100);
         progressBarTop.startAnim(100);
         progressBarLatestAds.startAnim(100);
+        fab.setOnClickListener(v -> {
+            startActivity(new Intent(this, CreateAds.class));
+        });
 
 
         drawerLayout = findViewById(R.id.activity_main);

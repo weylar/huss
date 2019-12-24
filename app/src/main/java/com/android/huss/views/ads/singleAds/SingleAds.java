@@ -1,7 +1,6 @@
-package com.android.huss.views.singleAds;
+package com.android.huss.views.ads.singleAds;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,11 +16,8 @@ import android.widget.Toast;
 
 import com.android.huss.R;
 import com.android.huss.models.Ads;
-import com.android.huss.viewModels.AdsViewModel;
 import com.android.huss.viewModels.SimilarAdsViewModel;
 import com.android.huss.viewModels.SingleAdsViewModel;
-import com.android.huss.views.adsImages.ImageFull;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 import com.squareup.picasso.Picasso;
@@ -32,8 +28,6 @@ import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static com.android.huss.views.adsImages.ImageFull.PAGE;
 
 public class SingleAds extends AppCompatActivity {
 
