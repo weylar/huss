@@ -5,7 +5,7 @@ import Auth from '../middleware/utils/Auth';
 
 const { createAd, getAd, getOwnAd, getAllAds, getAllOwnAds, getAllAdsByLimit, getAllOwnAdsByLimit, paginateAds, paginateOwnAds,
   getAdsSuggest, getOwnAdsSuggest, getAdsByStatus, getOwnAdsByStatus, getOwnAdsByStatusSuggest, getAdsByStatusSuggest,
-  makeAdInactive, makePayment, deactivatePayment, editAd
+  makeAdInactive, makePayment, deactivatePayment, editAd, deleteAd
  } = AdController;
 const { getUser, adminCheck } = Auth;
 
@@ -30,5 +30,6 @@ adRouter.put('/makeAdInactive/:adId', getUser, makeAdInactive);
 adRouter.put('/makePayment/:adId', getUser, makePayment);
 adRouter.put('/deactivatePayment/:adId', getUser, deactivatePayment);
 adRouter.put('/editAd/:adId', getUser, editAd);
+adRouter.delete('/deleteAd/:adId', getUser, deleteAd);
 
 export default adRouter;
