@@ -451,6 +451,26 @@ class AdService {
       message: 'Ad has been successfully edited'
     }
   }
+
+  static async deleteAd(req) {
+    const deletedAd = await db.Product.destroy(
+      { where: { userId: req.userId, id: req.params.adId } }
+    );
+
+    if(!deletedAd) {
+      return {
+        status: 'error',
+        statusCode: 403,
+        message: 'You cannot delete this ad, there\'s no ad as such for you'
+      }
+    }
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      message: 'Ad has been successfully deleted'
+    }
+  }
 }
 
 export default AdService;
