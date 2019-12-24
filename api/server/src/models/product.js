@@ -40,6 +40,10 @@ module.exports = (sequelize, DataTypes) => {
     count: {
       type: DataTypes.INTEGER,
       allowNull: true
+    },
+    payDate: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
   }, {});
   Product.associate = function(models) {

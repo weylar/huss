@@ -33,6 +33,12 @@ class AdService {
     req.body.subCategoryId = subCategoryId;
     req.body.userId = req.userId;
 
+    if (req.body.type === 'Top') {
+      req.body.payDate = new Date();
+    } else {
+      req.body.payDate = null;
+    }
+    
     const ad = await db.Product.create(req.body);
 
     return {
