@@ -356,14 +356,19 @@ class AdService {
 
     if (ad.type === 'free' && diffInDays > 7) {
       await db.Product.update({ status: 'inactive' }, { where: { id: req.params.adId } });
+      const newAd = await db.Product.findOne({ where: { id: req.params.adId } });
+  
+      return {
+        status: 'success',
+        statusCode: 200,
+        data: newAd,
+      }
     }
 
-    const newAd = await db.Product.findOne({ where: { id: req.params.adId } });
-
     return {
-      status: 'success',
-      statusCode: 200,
-      data: newAd,
+      status: 'error',
+      statusCode: 403,
+      message: `It remains ${Math.round(7 - diffInDays)} days to make ad status inactive`
     }
   }
 
@@ -385,6 +390,37 @@ class AdService {
       statusCode: 200,
       data: newAd,
       message: 'Payment was made successfully'
+    }
+  }
+
+  static async deactivatePayment(req) {
+    const ad = await db.Product.findOne({ where: { id: req.params.adId } });
+
+    if (!ad) {
+      return {
+        status: 'error',
+        statusCode: 404,
+        message: ' Such ad was not found'
+      };
+    }
+
+    const today = new Date();
+    const diffInTime = today.getTime() - ad.payDate.getTime();
+    const diffInDays = diffInTime/(1000 * 3600 * 24);
+
+    if (diffInDays > 30) {
+      await db.Product.update({ status: 'inactive' }, { where: { id: req.params.adId } });
+      return {
+        status: 'success',
+        statusCode: 202,
+        message: 'Payment is no longer valid'
+      }
+    }
+
+    return {
+      status: 'error',
+      statusCode: 403,
+      message: `It remains ${Math.round(30 - diffInDays)} days to make ad status inactive`
     }
   }
 }
