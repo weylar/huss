@@ -232,7 +232,7 @@ class AdService {
 
   static async getAllOwnAdsByLimit(req) {
     const allAds = await db.Product.findAll({
-      where: {userId: req.userId},
+      where: { userId: req.userId },
       limit: req.params.limit,
       order: [['id', 'DESC']]
     });
@@ -316,7 +316,11 @@ class AdService {
     const allAds = await db.Product.findAll({
       offset,
       limit,
-      where: { userId: req.userId, status: req.params.status, title: { [Op.startsWith]: `%${title}%` } }
+      where: {
+        userId: req.userId,
+        status: req.params.status,
+        title: { [Op.startsWith]: `%${title}%` }
+      }
     });
 
     if (allAds) {
@@ -326,6 +330,32 @@ class AdService {
         data: allAds,
         message: 'All ads retrieved successfully'
       };
+    }
+  }
+
+  static async makeAdInactive(req) {
+    const ad = await db.Product.findOne({ where: { id: req.params.adId } });
+
+    if (!ad) {
+      return {
+        status: 'error',
+        statusCode: 404,
+        message: ' Such ad was not found'
+      };
+    }
+
+    const today = new Date();
+
+    if (today.getDate() - ad.createdAt.getDate() > 7) {
+      await db.Product.update({ status: 'inactive' }, { where: { id: req.params.adId } });
+    }
+
+    const newAd = await db.Product.findOne({ where: { id: req.params.adId } });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: newAd,
     }
   }
 }
