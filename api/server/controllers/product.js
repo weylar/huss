@@ -180,6 +180,16 @@ class AdController {
       return next(e);
     }
   }
+
+  static async editAd(req,res,next) {
+    try {
+      const response = await AdService.editAd(req);
+      
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
 }
 
 export default AdController;
