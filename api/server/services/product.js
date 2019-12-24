@@ -345,8 +345,10 @@ class AdService {
     }
 
     const today = new Date();
+    const diffInTime = today.getTime() - ad.createdAt.getTime();
+    const diffInDays = diffInTime/(1000 * 3600 * 24);
 
-    if (today.getDate() - ad.createdAt.getDate() > 7) {
+    if (ad.type === 'free' && diffInDays > 7) {
       await db.Product.update({ status: 'inactive' }, { where: { id: req.params.adId } });
     }
 
