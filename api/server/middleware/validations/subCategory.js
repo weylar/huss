@@ -6,7 +6,6 @@ String.prototype.capitalize = function() {
 
 export  const subCategoryCheck = (req, res, next) => {
   let { name } = req.body;
-  let { categoryId } = req.params;
 
   if (name) name = name.capitalize().trim();
 

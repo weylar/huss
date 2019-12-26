@@ -4,7 +4,8 @@ import cors from 'cors';
 import { userRouter, userDetails } from './server/routes/user';
 import categoryRouter from './server/routes/category';
 import subCategoryRouter from './server/routes/subCategory';
-import adRouter from './server/routes/product'
+import adRouter from './server/routes/product';
+import adImageRouter from './server/routes/image';
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/api/v1/user', userDetails);
 app.use('/api/v1/category', categoryRouter);
 app.use('/api/v1/subCategory', subCategoryRouter);
 app.use('/api/v1/ad', adRouter);
+app.use('/api/v1/adImage', adImageRouter);
 
 app.use((req, res, next) => {
   const error = new Error('Route Does not Exist');

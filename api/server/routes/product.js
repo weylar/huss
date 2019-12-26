@@ -7,7 +7,7 @@ const { createAd, getAd, getOwnAd, getAllAds, getAllOwnAds, getAllAdsByLimit, ge
   getAdsSuggest, getOwnAdsSuggest, getAdsByStatus, getOwnAdsByStatus, getOwnAdsByStatusSuggest, getAdsByStatusSuggest,
   makeAdInactive, makePayment, deactivatePayment, editAd, deleteAd
  } = AdController;
-const { getUser, adminCheck } = Auth;
+const { getUser } = Auth;
 
 const adRouter = Router();
 
