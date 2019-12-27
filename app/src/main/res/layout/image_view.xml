@@ -14,6 +14,7 @@
     />
 
     <ProgressBar
+        android:visibility="gone"
         android:id="@+id/uploadProgress"
         android:progress="10"
         android:layout_width="70dp"

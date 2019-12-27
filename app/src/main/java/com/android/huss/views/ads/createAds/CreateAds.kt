@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -34,6 +35,24 @@ class CreateAds : AppCompatActivity() {
                 askForPermission()
             } else {
                 showChooser()
+            }
+            terms.setOnClickListener {
+                val browserIntent = Intent(Intent.ACTION_VIEW)
+                browserIntent.data = Uri.parse("https://huss.ng/terms_and_conditions")
+                startActivity(browserIntent)
+
+            }
+            typeInfo.setOnClickListener{
+                val alertDialog: AlertDialog = AlertDialog.Builder(this).create()
+                alertDialog.setTitle("What is Ad Type?")
+                alertDialog.setMessage("This is used to define the type pf ad you want to run on Huss.ng." +
+                        "Standard ad is a free ad that runs for seven 7 and gets into inactive mode automatically " +
+                        "until you.....bla bla bla" +
+                        "explicilty\n" +
+                        "Alternatively Top ads(Paid) ....bla bla bla")
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK"
+                ) { dialog, _ -> dialog.dismiss() }
+                alertDialog.show()
             }
 
         }
@@ -157,6 +176,7 @@ class CreateAds : AppCompatActivity() {
                                         LinearLayoutManager.HORIZONTAL, false)
                                 itemTouchHelper.attachToRecyclerView(imagesRecycler)
                                 if (adapter.itemCount > 1) dragDescription.visibility = View.VISIBLE
+                                else dragDescription.visibility = View.GONE
 
 
                             } catch (e: Exception) {
@@ -173,6 +193,7 @@ class CreateAds : AppCompatActivity() {
                                     LinearLayoutManager.HORIZONTAL, false)
                             itemTouchHelper.attachToRecyclerView(imagesRecycler)
                             if ( adapter.itemCount > 1) dragDescription.visibility = View.VISIBLE
+                            else dragDescription.visibility = View.GONE
 
 
 

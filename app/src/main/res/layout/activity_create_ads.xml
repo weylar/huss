@@ -271,8 +271,8 @@
 
 
                 <View
-                    android:layout_width="100dp"
-                    android:layout_height="90dp"
+                    android:layout_width="90dp"
+                    android:layout_height="80dp"
                     android:layout_margin="10dp"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/fake_radius_image"/>
@@ -286,7 +286,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
                 android:drawableEnd="@drawable/small_info"
-
+                android:id="@+id/typeInfo"
                 android:drawablePadding="10dp"
                 android:text="@string/ads_type_description" />
 
@@ -305,7 +305,8 @@
                     android:layout_margin="5dp"
                     android:layout_weight="1"
                     android:padding="10dp"
-                    android:text="Standard Ad" />
+                    android:buttonTint="@color/colorAccent"
+                    android:text="@string/standard_ad" />
 
                 <RadioButton
                     android:layout_width="0dp"
@@ -314,11 +315,30 @@
                     android:layout_weight="1"
                     android:background="@drawable/button_offer"
                     android:padding="10dp"
-                    android:text="Top Ad (30 days)"
+                    android:buttonTint="@color/colorPrimaryDark"
+                    android:text="@string/top_ad_30_days"
                     android:textColor="@color/colorPrimary"
                     android:textStyle="bold" />
 
             </RadioGroup>
+
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/post_ad"
+                android:textColor="@color/colorPrimary"
+                android:background="@drawable/button_offer"
+                android:layout_margin="20dp"/>
+
+            <TextView
+                android:id="@+id/terms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:text="@string/terms_and_condition"/>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

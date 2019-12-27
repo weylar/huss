@@ -64,6 +64,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="remove_item">remove item</string>
+    <string name="standard_ad">Standard Ad</string>
+    <string name="top_ad_30_days">Top Ad (30 days)</string>
+    <string name="post_ad">Post Ad</string>
+    <string name="terms_and_condition">By posting ad, you agree and accept Huss.ng <font color="#ff69b4">terms and conditions</font></string>
 
 
 </resources>

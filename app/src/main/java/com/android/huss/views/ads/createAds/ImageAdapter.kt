@@ -42,8 +42,6 @@ class ImageAdapter(private val context: Context, private val dataList: ArrayList
         val builder = Picasso.Builder(context)
         holder.image.clipToOutline = true
         builder.build().load(dataList!![position])
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
                 .into(holder.image)
 
         holder.image.setOnClickListener {
@@ -57,47 +55,47 @@ class ImageAdapter(private val context: Context, private val dataList: ArrayList
         }
 
 
-        /*Upload Image*/
-        val uploadCallBack = object : UploadCallback {
-            override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
-                holder.progress.visibility = View.GONE
-                holder.image.alpha = 1f
-            }
-
-            override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {
-                holder.progress.progress = (bytes / totalBytes).toInt().times(100)
-
-            }
-
-            override fun onReschedule(requestId: String?, error: ErrorInfo?) {
-
-            }
-
-            override fun onError(requestId: String?, error: ErrorInfo?) {
-                holder.retry.visibility = View.VISIBLE
-            }
-
-            override fun onStart(requestId: String?) {
-                holder.image.alpha = 0.5f
-                holder.progress.max = 100
-            }
-        }
-        val time = Calendar.getInstance().timeInMillis
-        val requestId = MediaManager.get().upload(dataList[position])
-                .unsigned(context.getString(R.string.preset))
-                .callback(uploadCallBack)
-                .option("public_id", time.toString())
-                .dispatch()
+//        /*Upload Image*/
+//        val uploadCallBack = object : UploadCallback {
+//            override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
+//                holder.progress.visibility = View.GONE
+//                holder.image.alpha = 1f
+//            }
+//
+//            override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {
+//                holder.progress.progress = (bytes / totalBytes).toInt().times(100)
+//
+//            }
+//
+//            override fun onReschedule(requestId: String?, error: ErrorInfo?) {
+//
+//            }
+//
+//            override fun onError(requestId: String?, error: ErrorInfo?) {
+//                holder.retry.visibility = View.VISIBLE
+//            }
+//
+//            override fun onStart(requestId: String?) {
+//                holder.image.alpha = 0.5f
+//                holder.progress.max = 100
+//            }
+//        }
+//        val time = Calendar.getInstance().timeInMillis
+//          MediaManager.get().upload(dataList[position])
+//                .unsigned(context.getString(R.string.preset))
+//                .callback(uploadCallBack)
+//                .option("public_id", time.toString())
+//                .dispatch()
 
         holder.remove.setOnClickListener {
             /*Cancel upload*/
-            MediaManager.get().cancelRequest(requestId)
+
             dataList.removeAt(position)
             notifyDataSetChanged()
 
-            val cloudinary = Cloudinary("https://cloudinary.com")
-            val deleteParams = ObjectUtils.asMap("invalidate", true )
-            cloudinary.uploader().destroy(time.toString(), deleteParams )
+//            val cloudinary = Cloudinary("https://cloudinary.com")
+//            val deleteParams = ObjectUtils.asMap("invalidate", true )
+//            cloudinary.uploader().destroy(time.toString(), deleteParams )
         }
 
     }
