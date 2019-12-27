@@ -82,6 +82,26 @@ class AdImageService {
       message: 'All ad images retrieved successfully'
     }
   }
+
+  static async deleteImage(req) {
+    const deletedAdImage = await db.Image.destroy(
+      { where: { userId: req.userId, id: req.params.imageId } }
+    );
+
+    if(!deletedAdImage) {
+      return {
+        status: 'error',
+        statusCode: 403,
+        message: 'You cannot delete this image, there\'s no image as such for you'
+      }
+    }
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      message: 'Ad image has been successfully deleted'
+    }
+  }
 }
 
 export default AdImageService;
