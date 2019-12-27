@@ -68,7 +68,12 @@ class CreateAds : AppCompatActivity() {
                 REQUEST_CODE_READ_STORAGE)
     }
 
+    override fun onResume() {
+        super.onResume()
 
+
+
+    }
 
 
 
@@ -146,6 +151,7 @@ class CreateAds : AppCompatActivity() {
                                 imageUri?.let { arrayList.add(it) }
                                 imagesRecycler.visibility = View.VISIBLE
                                 val adapter = ImageAdapter(this, arrayList)
+
                                 imagesRecycler.adapter = adapter
                                 imagesRecycler.layoutManager = LinearLayoutManager(this,
                                         LinearLayoutManager.HORIZONTAL, false)
@@ -161,7 +167,7 @@ class CreateAds : AppCompatActivity() {
                         try {
                             uri?.let { arrayList.add(it) }
                             imagesRecycler.visibility = View.VISIBLE
-                            val adapter = ImageAdapter(this, arrayList )
+                             val adapter = ImageAdapter(this, arrayList )
                             imagesRecycler.adapter = adapter
                             imagesRecycler.layoutManager = LinearLayoutManager(this,
                                     LinearLayoutManager.HORIZONTAL, false)

@@ -9,25 +9,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.android.huss.R
+import com.cloudinary.Cloudinary
 import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.ErrorInfo
 import com.cloudinary.android.callback.UploadCallback
+import com.cloudinary.utils.ObjectUtils
 import com.squareup.picasso.Picasso
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ImageAdapter(private val context: Context, private val dataList: ArrayList<Uri>?)
-    : RecyclerView.Adapter<ImageAdapter.CustomViewHolder>(){
-
-
+    : RecyclerView.Adapter<ImageAdapter.CustomViewHolder>() {
 
 
     inner class CustomViewHolder(mView: View) : RecyclerView.ViewHolder(mView) {
         val image: ImageView = mView.findViewById(R.id.image)
         var progress: ProgressBar = mView.findViewById(R.id.uploadProgress)
         var retry: ImageView = mView.findViewById(R.id.retry)
+        var remove: ImageView = mView.findViewById(R.id.removeItem)
     }
 
 
@@ -48,6 +50,7 @@ class ImageAdapter(private val context: Context, private val dataList: ArrayList
             val fragment = BottomNav()
             val bundle = Bundle()
             bundle.putString("uri", dataList[position].toString())
+            bundle.putInt("pos", position)
             fragment.arguments = bundle
             fragment.show((context as CreateAds).supportFragmentManager, "TAG")
 
@@ -55,14 +58,14 @@ class ImageAdapter(private val context: Context, private val dataList: ArrayList
 
 
         /*Upload Image*/
-        val uploadCallBack = object: UploadCallback {
+        val uploadCallBack = object : UploadCallback {
             override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
                 holder.progress.visibility = View.GONE
                 holder.image.alpha = 1f
             }
 
             override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {
-                holder.progress.progress = (bytes/totalBytes).toInt().times(100)
+                holder.progress.progress = (bytes / totalBytes).toInt().times(100)
 
             }
 
@@ -79,15 +82,27 @@ class ImageAdapter(private val context: Context, private val dataList: ArrayList
                 holder.progress.max = 100
             }
         }
-
-       MediaManager.get().upload(dataList[position])
+        val time = Calendar.getInstance().timeInMillis
+        val requestId = MediaManager.get().upload(dataList[position])
                 .unsigned(context.getString(R.string.preset))
                 .callback(uploadCallBack)
+                .option("public_id", time.toString())
                 .dispatch()
+
+        holder.remove.setOnClickListener {
+            /*Cancel upload*/
+            MediaManager.get().cancelRequest(requestId)
+            dataList.removeAt(position)
+            notifyDataSetChanged()
+
+            val cloudinary = Cloudinary("https://cloudinary.com")
+            val deleteParams = ObjectUtils.asMap("invalidate", true )
+            cloudinary.uploader().destroy(time.toString(), deleteParams )
+        }
 
     }
 
-    fun moveItem(from: Int, to: Int){
+    fun moveItem(from: Int, to: Int) {
         val fromImage = dataList?.get(from)
         dataList?.removeAt(from)
         if (to < from) {
@@ -100,6 +115,8 @@ class ImageAdapter(private val context: Context, private val dataList: ArrayList
     override fun getItemCount(): Int {
         return dataList?.size ?: 0
     }
+
+
 }
 
 

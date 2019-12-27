@@ -30,4 +30,13 @@
         android:layout_height="20dp"
         android:src="@drawable/retry"
         android:layout_centerInParent="true"/>
+
+    <ImageView
+        android:id="@+id/removeItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/small_red"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/remove_item" />
 </RelativeLayout>

@@ -21,11 +21,15 @@ class FullAdImagePreview : AppCompatActivity() {
 
         val builder = Picasso.Builder(this)
         builder.build().load(intent?.getStringExtra("uri"))
-                .placeholder(R.drawable.sample)
                 .error(R.drawable.sample)
                 .into(image)
 
-        }
+    }
+
+
+
+
+
 
     fun goBack (view: View){
         finish()
