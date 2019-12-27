@@ -25,6 +25,25 @@ class AdImageService {
       message: 'Ad image has been added successfully'
     }
   } 
+
+  static async getAnImage(req) {
+    const adImage = await db.Image.findOne({ where: { id: req.params.imageId } });
+
+    if(!adImage) {
+      return {
+        status: 'error',
+        statusCode: 404,
+        message: 'No ad with such image'
+      }
+    }
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: adImage,
+      message: 'Image retrieved successfully'
+    }
+  }
 }
 
 export default AdImageService;
