@@ -44,6 +44,44 @@ class AdImageService {
       message: 'Image retrieved successfully'
     }
   }
+
+  static async getAnAdImages(req) {
+    const adImages = await db.Image.findAll({ where: { productId: req.params.adId } });
+
+    if (!adImages) {
+      return {
+        status: 'error',
+        statusCode: 404,
+        message: 'There are no images for this ad'
+      }
+    }
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: adImages,
+      message: 'All ad images retrieved successfully'
+    }
+  }
+
+  static async getAllImages() {
+    const adImages = await db.Image.findAll();
+
+    if (!adImages) {
+      return {
+        status: 'error',
+        statusCode: 404,
+        message: 'There are no images'
+      }
+    }
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: adImages,
+      message: 'All ad images retrieved successfully'
+    }
+  }
 }
 
 export default AdImageService;
