@@ -10,6 +10,7 @@
     <dist:module dist:instant="true" />
 
     <application
+        android:name=".Init"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,8 +18,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity android:name=".views.ads.createAds.CreateAds"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".views.ads.createAds.FullAdImagePreview"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".views.category.Category"

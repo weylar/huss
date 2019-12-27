@@ -1,30 +1,23 @@
 package com.android.huss.views.ads.createAds
 
 import android.Manifest
-import android.app.Activity
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_create_ads.*
-import androidx.core.app.ActivityCompat.startActivityForResult
 import android.content.Intent
-
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
+import android.os.Bundle
 import android.util.Log
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.android.huss.views.home.MainActivity
-import com.google.android.material.snackbar.Snackbar
-import java.lang.Exception
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.android.huss.R
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_create_ads.*
 
 
 class CreateAds : AppCompatActivity() {
@@ -35,19 +28,23 @@ class CreateAds : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.android.huss.R.layout.activity_create_ads)
+        setContentView(R.layout.activity_create_ads)
         add.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 askForPermission()
             } else {
                 showChooser()
             }
+
         }
 
 
 
 
+
+
     }
+
 
     private fun showChooser() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
@@ -144,15 +141,16 @@ class CreateAds : AppCompatActivity() {
                         var currentItem = 0
                         while (currentItem < count) {
                             val imageUri = resultData.clipData?.getItemAt(currentItem)?.uri
-                            currentItem ++
+                            currentItem++
                             try {
                                 imageUri?.let { arrayList.add(it) }
                                 imagesRecycler.visibility = View.VISIBLE
-                                val adapter = ImageAdapter(this, arrayList )
+                                val adapter = ImageAdapter(this, arrayList)
                                 imagesRecycler.adapter = adapter
                                 imagesRecycler.layoutManager = LinearLayoutManager(this,
                                         LinearLayoutManager.HORIZONTAL, false)
                                 itemTouchHelper.attachToRecyclerView(imagesRecycler)
+                                if (adapter.itemCount > 1) dragDescription.visibility = View.VISIBLE
 
 
                             } catch (e: Exception) {
@@ -167,6 +165,9 @@ class CreateAds : AppCompatActivity() {
                             imagesRecycler.adapter = adapter
                             imagesRecycler.layoutManager = LinearLayoutManager(this,
                                     LinearLayoutManager.HORIZONTAL, false)
+                            itemTouchHelper.attachToRecyclerView(imagesRecycler)
+                            if ( adapter.itemCount > 1) dragDescription.visibility = View.VISIBLE
+
 
 
                         } catch (e: Exception ) {

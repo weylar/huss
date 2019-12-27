@@ -9,8 +9,7 @@
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:src="@drawable/sample"
-        android:scaleType="fitXY"
+        tools:src="@drawable/sample"
         android:layout_height="match_parent"/>
 
 

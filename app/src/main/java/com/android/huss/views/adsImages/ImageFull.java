@@ -21,8 +21,8 @@ public class ImageFull extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_full);
         viewPager = findViewById(R.id.viewPagerFull);
-
         pager = new FullAdsPager(this, getAllUrl() /*ads.getAllImgUrl()*/);
+
         viewPager.setCurrentItem(getIntent().getIntExtra(PAGE, 0));
         viewPager.setAdapter(pager);
         TabLayout tabLayout = findViewById(R.id.tabDotsFull);

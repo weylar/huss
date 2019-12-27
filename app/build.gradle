@@ -28,7 +28,7 @@ android {
 
 }
 configurations {
-    compile.exclude group : 'org.jetbrains' , module : 'annotations'
+    compile.exclude group: 'org.jetbrains', module: 'annotations'
 }
 
 dependencies {
@@ -38,6 +38,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
+    /*Dependency for cloudinary image processing library*/
+    implementation group: 'com.cloudinary', name: 'cloudinary-android', version: '1.24.0'
     /*Navigation menu dependency*/
     def nav_version = "2.1.0"
 

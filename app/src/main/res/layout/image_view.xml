@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100dp"
+    android:layout_height="90dp">
 
 <ImageView android:id="@+id/image"
-    android:layout_width="100dp"
-    android:layout_height="90dp"
-    tools:src="@drawable/sample"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:contentDescription="@string/ads_imagess"
     android:layout_margin="5dp"
     android:scaleType="fitXY"
     android:background="@drawable/radius_image"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" />
+    />
 
+    <ProgressBar
+        android:id="@+id/uploadProgress"
+        android:progress="10"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:progressTint="@color/colorAccent"
+        android:progressDrawable="@drawable/circular_progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_centerInParent="true" />
+
+    <ImageView
+        android:id="@+id/retry"
+        android:visibility="gone"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/retry"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>

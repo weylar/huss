@@ -2,10 +2,12 @@ package com.android.huss.views.adsImages;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.viewpager.widget.PagerAdapter;
 
@@ -22,8 +24,9 @@ public class FullAdsPager extends PagerAdapter {
     Context mContext;
     LayoutInflater mLayoutInflater;
     private ArrayList<String> allImagesUrl;
+    private String uri;
 
-    public FullAdsPager(Context context, ArrayList<String> allImagesUrl) {
+     FullAdsPager(Context context, ArrayList<String> allImagesUrl) {
         this.mContext = context;
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.allImagesUrl = allImagesUrl;
@@ -44,11 +47,14 @@ public class FullAdsPager extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.ads_image_view, container, false);
         PhotoView photoView = itemView.findViewById(R.id.image);
-        Picasso.Builder builder = new Picasso.Builder(mContext);
-        builder.build().load(allImagesUrl.get(position))
-                .placeholder((R.drawable.sample))
-                .error(R.drawable.flag)
-                .into(photoView);
+
+
+            Picasso.Builder builder = new Picasso.Builder(mContext);
+            builder.build().load(allImagesUrl.get(position))
+                    .placeholder((R.drawable.sample))
+                    .error(R.drawable.flag)
+                    .into(photoView);
+
 
         container.addView(itemView);
 

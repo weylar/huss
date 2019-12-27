@@ -53,7 +53,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -231,27 +231,36 @@
                 android:drawableStart="@drawable/small_image"
                 android:text="@string/images" />
 
+            <TextView
+                android:id="@+id/dragDescription"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textSize="13sp"
+                android:text="@string/drag_image_description"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_gravity="center_vertical"
-                    android:orientation="vertical">
+
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:backgroundTint="@color/colorPrimary"
-                    android:src="@drawable/add"
+                    app:backgroundTint="@color/colorAccent"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/add_white"
                     app:fabSize="mini"/>
 
-                </LinearLayout>
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:visibility="gone"
