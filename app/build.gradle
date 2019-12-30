@@ -38,6 +38,10 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
+    /*Paystack dependency*/
+    implementation 'co.paystack.android:paystack:3.0.10'
+    implementation 'app.ephod.pentecost:pentecost:1.1.12'
+
     /*Dependency for cloudinary image processing library*/
     implementation group: 'com.cloudinary', name: 'cloudinary-android', version: '1.24.0'
     /*Navigation menu dependency*/

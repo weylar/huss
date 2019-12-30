@@ -11,14 +11,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.android.huss.R
-import com.cloudinary.Cloudinary
-import com.cloudinary.android.MediaManager
-import com.cloudinary.android.callback.ErrorInfo
-import com.cloudinary.android.callback.UploadCallback
-import com.cloudinary.utils.ObjectUtils
 import com.squareup.picasso.Picasso
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class ImageAdapter(private val context: Context, private val dataList: ArrayList<Uri>?)
@@ -91,7 +84,9 @@ class ImageAdapter(private val context: Context, private val dataList: ArrayList
             /*Cancel upload*/
 
             dataList.removeAt(position)
-            notifyDataSetChanged()
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position,dataList.size)
+
 
 //            val cloudinary = Cloudinary("https://cloudinary.com")
 //            val deleteParams = ObjectUtils.asMap("invalidate", true )
@@ -103,11 +98,9 @@ class ImageAdapter(private val context: Context, private val dataList: ArrayList
     fun moveItem(from: Int, to: Int) {
         val fromImage = dataList?.get(from)
         dataList?.removeAt(from)
-        if (to < from) {
-            fromImage?.let { dataList?.add(to, it) }
-        } else {
-            fromImage?.let { dataList?.add(to - 1, it) }
-        }
+        fromImage?.let { dataList?.add(to, it) }
+        notifyDataSetChanged()
+
     }
 
     override fun getItemCount(): Int {

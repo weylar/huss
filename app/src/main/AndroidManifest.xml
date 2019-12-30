@@ -19,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <meta-data
+            android:name="co.paystack.android.PublicKey"
+            android:value="pk_test_91f5670d53cff8162b4df5bc8009ab9a305ca267"/>
         <activity android:name=".views.ads.createAds.CreateAds"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".views.ads.createAds.FullAdImagePreview"
