@@ -6,6 +6,7 @@ import categoryRouter from './server/routes/category';
 import subCategoryRouter from './server/routes/subCategory';
 import adRouter from './server/routes/product';
 import adImageRouter from './server/routes/image';
+import favoriteRouter from './server/routes/favorite';
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use('/api/v1/category', categoryRouter);
 app.use('/api/v1/subCategory', subCategoryRouter);
 app.use('/api/v1/ad', adRouter);
 app.use('/api/v1/adImage', adImageRouter);
+app.use('/api/v1/favorite', favoriteRouter);
 
 app.use((req, res, next) => {
   const error = new Error('Route Does not Exist');
