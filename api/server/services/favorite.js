@@ -91,6 +91,39 @@ class FavoriteService {
       message: 'Here are your favorite ads'
     }
   }
+
+  static async getAllFavoritesByLimit(req) {
+    const favorites = await db.Favorite.findAll({
+      where: { userId: req.userId },
+      limit: req.params.limit,
+      order: [['id', 'DESC']]
+    });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: favorites,
+      message: 'All ads retrieved successfully'
+    };
+  }
+
+  static async paginateAllFavorites(req) {
+    const limit = req.params.limit;
+    const offset = req.params.offset;
+    const favorites = await db.Favorite.findAll({
+      where: { userId: req.userId },
+      offset,
+      limit,
+      order: [['id', 'DESC']]
+    });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: favorites,
+      message: 'All ads retrieved successfully'
+    };
+  }
 }
 
 export default FavoriteService;

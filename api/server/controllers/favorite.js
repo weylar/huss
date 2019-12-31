@@ -40,6 +40,26 @@ class FavoriteController {
       return next(e);
     }
   }
+
+  static async getAllFavoritesByLimit(req, res, next) {
+    try {
+      const response = await FavoriteService.getAllFavoritesByLimit(req);
+      
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
+
+  static async paginateAllFavorites(req, res, next) {
+    try {
+      const response = await FavoriteService.paginateAllFavorites(req);
+      
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
 }
 
 export default FavoriteController;
