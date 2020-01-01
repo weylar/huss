@@ -36,7 +36,7 @@ class FavoriteService {
   }
 
   static async getAFavorite(req) {
-    const favorite = await db.Favorite.findOne({ where: { id: req.params.id } });
+    const favorite = await db.Favorite.findOne({ where: { id: req.params.favoriteId } });
 
     if(!favorite) {
       return {
@@ -123,6 +123,26 @@ class FavoriteService {
       data: favorites,
       message: 'All ads retrieved successfully'
     };
+  }
+
+  static async deleteFavorite(req) {
+    const deletedFavorite = await db.Favorite.destroy(
+      { where: { userId: req.userId, id: req.params.favoriteId } }
+    );
+
+    if(!deletedFavorite) {
+      return {
+        status: 'error',
+        statusCode: 403,
+        message: 'You cannot delete this favorite, there\'s no favorite as such for you'
+      }
+    }
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      message: 'Ad has been successfully removed from favorites'
+    }
   }
 }
 

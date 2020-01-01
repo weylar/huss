@@ -60,6 +60,16 @@ class FavoriteController {
       return next(e);
     }
   }
+
+  static async deleteFavorite(req, res, next) {
+    try {
+      const response = await FavoriteService.deleteFavorite(req);
+      
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
 }
 
 export default FavoriteController;
