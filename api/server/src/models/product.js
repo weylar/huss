@@ -44,6 +44,10 @@ module.exports = (sequelize, DataTypes) => {
     payDate: {
       type: DataTypes.DATE,
       allowNull: true
+    },
+    location: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
   }, {});
   Product.associate = function(models) {

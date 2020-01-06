@@ -7,18 +7,19 @@ String.prototype.capitalize = function() {
 
 class subCategoryService {
   static async createSubCategory(req) {
-    const categoryId = req.params.categoryId;
-    const category = await db.Category.findOne({ where: { id: categoryId } });
+    const categoryName = req.params.categoryName.capitalize();
+    const category = await db.Category.findOne({ where: { name: categoryName } });
 
     if (!category) {
       return {
         status: 'error',
         statusCode: 404,
-        message: 'No category with such id'
+        message: 'No category with such name'
       };
     }
 
-    req.body.categoryId = categoryId;
+    req.body.categoryId = category.id;
+    req.body.categoryName = categoryName;
     const isExist = await db.SubCategory.findOne({ where: { name: req.body.name } });
 
     if (isExist) {
@@ -59,7 +60,7 @@ class subCategoryService {
 
   static async getAllSubCategories(req) {
     const subCategories = await db.SubCategory.findAll({
-      where: { categoryId: req.params.categoryId },
+      where: { categoryName: req.params.categoryName.capitalize() },
       order: [['name', 'ASC']]
     });
 
@@ -75,7 +76,7 @@ class subCategoryService {
 
   static async getAllSubCategoriesByLimit(req) {
     const allSubCategories = await db.SubCategory.findAll({
-      where: { categoryId: req.params.categoryId },
+      where: { categoryName: req.params.categoryName.capitalize() },
       limit: req.params.limit,
       order: [['name', 'ASC']]
     });
@@ -94,7 +95,7 @@ class subCategoryService {
     const limit = req.params.limit;
     const offset = req.params.offset;
     const allSubCategories = await db.SubCategory.findAll({
-      where: { categoryId: req.params.categoryId },
+      where: { categoryName: req.params.categoryName },
       offset,
       limit,
       order: [['name', 'ASC']]
@@ -119,7 +120,7 @@ class subCategoryService {
     const allSubCategories = await db.SubCategory.findAll({
       offset,
       limit,
-      where: { categoryId: req.params.categoryId, name: { [Op.startsWith]: `%${name}%` } }
+      where: { categoryName: req.params.categoryName, name: { [Op.startsWith]: `%${name}%` } }
     });
 
     if (allSubCategories) {
@@ -188,14 +189,10 @@ class subCategoryService {
         };
       }
 
-      const newSubCategories = await db.SubCategory.findAll({
-        where: { categoryId: req.params.categoryId }
-      });
-
       return {
         status: 'success',
         statusCode: 200,
-        data: newSubCategories,
+        data: deletedSubCategory,
         message: 'Successfully deleted'
       };
     }

@@ -10,6 +10,7 @@ export  const adCheck = (req, res, next) => {
   if (title) title = title.capitalize().trim();
   if (description) description = description.capitalize().trim();
   if (type) type = type.capitalize().trim();
+  if (location) location = location.capitalize().trim();
   if (price) price = price;
   if (isNegotiable) isNegotiable = isNegotiable;
 
@@ -32,5 +33,6 @@ export  const adCheck = (req, res, next) => {
   req.body.price = price;
   req.body.type = type;
   req.body.isNegotiable = isNegotiable;
+  req.body.location = location;
   return next();
 }
