@@ -46,7 +46,7 @@
     <string name="price">Price</string>
     <string name="negotiable">Negotiable</string>
     <string name="title">Title</string>
-    <string name="location_description">Where are you selling your item from</string>
+    <string name="location_description">Where are you selling your item from E.g Ikeja, Lagos</string>
     <string name="location">Location</string>
     <string name="ads_type_description">Please select Advert type</string>
     <string name="ads_imagess">Ads Images</string>
@@ -65,10 +65,13 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="remove_item">remove item</string>
     <string name="standard_ad">Standard Ad</string>
-    <string name="top_ad_30_days">Top Ad (30 days)</string>
+    <string name="top_ad_30_days">Premium Ad</string>
     <string name="post_ad">Post Ad</string>
     <string name="terms_and_condition">By posting ad, you agree and accept Huss.ng <font color="#ff69b4">terms and conditions</font></string>
     <string name="card_number">Card number</string>
+    <string name="image_size_warning">Image shouldn\'t be more than 4MB</string>
+    <string name="_0_70">(0/70)</string>
+    <string name="_1_1200">(0/1200)</string>
 
 
 </resources>

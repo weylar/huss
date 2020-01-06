@@ -3,42 +3,64 @@ package com.android.huss.views.ads.createAds
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.SimpleAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.huss.R
+import com.android.huss.models.Category
+import com.android.huss.models.Location
+import com.android.huss.models.SubCategory
+import com.android.huss.viewModels.CategoryViewModel
+import com.android.huss.viewModels.LocationViewModel
+import com.android.huss.viewModels.SubCategoryViewModel
+import com.cloudinary.android.MediaManager
+import com.cloudinary.android.callback.ErrorInfo
+import com.cloudinary.android.callback.UploadCallback
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_create_ads.*
-import java.io.ByteArrayOutputStream
 import java.io.File
+import java.lang.NumberFormatException
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
+class CreateAds : AppCompatActivity(), BottomNavPay.PayState, UploadCallback {
 
     private val REQUEST_CODE_READ_STORAGE = 100
     private val arrayList = ArrayList<Uri>()
-
+    var isValid = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_ads)
         setUpAdType(false)
+        popSpinnerCatAndSub()
+        validateEntry()
+        setUpLocation()
+        disableButtonPost()
+
         add.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 askForPermission()
@@ -55,16 +77,19 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
 
         }
 
-        payCheck.setOnClickListener{
-            val fragment = BottomNavPay()
-                fragment.show(supportFragmentManager, "TAG")
+        postAd.setOnClickListener {
+            publishAd()
+        }
+        payCheck.setOnClickListener {
+            /*TODO: Check if user has paid, if true don't show this again*/
+//            val fragment = BottomNavPay()
+//                fragment.show(supportFragmentManager, "TAG")
         }
 
     }
 
 
-
-    private fun setUpAdType(state: Boolean){
+    private fun setUpAdType(state: Boolean) {
         if (state) radioGroup.check(R.id.payCheck)
         else radioGroup.check(R.id.freeCheck)
     }
@@ -190,6 +215,7 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
                             val imageUri = resultData.clipData?.getItemAt(currentItem)?.uri
                             currentItem++
                             try {
+
                                 if (arrayList.size < 4) {
                                     imageUri?.let { arrayList.add(it) }
                                 } else Snackbar.make(add, "You have reached the maximum number of image upload",
@@ -210,8 +236,7 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
                         }
                     } else if (resultData.data != null) {
                         val uri = resultData.data
-                        val file  = File(getRealPathFromURI(uri.toString()))
-                        Log.e("Size", file.length().toString())
+                        val file = File(getRealPathFromURI(uri.toString()))
                         try {
                             if (arrayList.size > 3) {
                                 Snackbar.make(add, "You have reached the maximum number of image upload", Snackbar.LENGTH_LONG).show()
@@ -253,20 +278,268 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
 
     fun getRealPathFromURI(contentURI: String): String {
         val contentUri = Uri.parse(contentURI)
-        val projection = arrayOf( MediaStore.Images.Media.DATA )
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
 
-            val cursor = contentResolver.query(contentUri, projection, null, null, null)
+        val cursor = contentResolver.query(contentUri, projection, null, null, null)
 
-            val columnIndex = cursor?.getColumnIndex(MediaStore.Images.Media.DATA)
-            cursor?.moveToFirst()
-            val path = cursor?.getString(columnIndex!!).toString()
-            cursor?.close()
-            Log.e("Path", path)
+        val columnIndex = cursor?.getColumnIndex(MediaStore.Images.Media.DATA)
+        cursor?.moveToFirst()
+        val path = cursor?.getString(columnIndex!!).toString()
+        cursor?.close()
+        Log.e("Path", path)
         return path
     }
 
     override fun hasPaid(state: Boolean) {
-            setUpAdType(state)
+        setUpAdType(state)
+
+    }
+
+    fun popSpinnerCatAndSub() {
+        val list = arrayListOf<String>()
+        val categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel::class.java)
+        categoryViewModel.init()
+        categoryViewModel.category.observe(this, Observer<List<Category?>> { catResponse: List<Category?>? ->
+            for (item in catResponse!!) {
+//                list += item!!.name
+            }
+
+        })
+        list += "Mobile"
+        list += "Auto"
+        list += "Housing"
+        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
+                list)
+        categories.adapter = adapter
+        categories?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val sublist = arrayListOf<String>()
+                val subCategoryViewModel = ViewModelProviders.of(this@CreateAds).get(SubCategoryViewModel::class.java)
+                subCategoryViewModel.init(categories.getItemAtPosition(position).toString())
+                subCategoryViewModel.subCategory.observe(this@CreateAds, Observer<List<SubCategory?>> { subCatResponse: List<SubCategory?>? ->
+                    for (item in subCatResponse!!) {
+//                sublist += item!!.name
+                    }
+
+                })
+                sublist += "Mobile"
+                sublist += "Auto"
+                sublist += "Housing"
+                val subAdapter = ArrayAdapter<String>(this@CreateAds, android.R.layout.simple_list_item_1,
+                        sublist)
+                sub_category.adapter = subAdapter
+            }
+
+        }
+
+
+    }
+
+    fun disableButtonPost() {
+        postAd.background = resources.getDrawable(R.drawable.button_offer_disable)
+        postAd.setTextColor(Color.LTGRAY)
+    }
+
+    private fun unDisableButtonPost() {
+        postAd.background = resources.getDrawable(R.drawable.button_offer)
+        postAd.setTextColor(Color.WHITE)
+    }
+
+    private fun setUpLocation() {
+        val list = arrayListOf<String>()
+        val locationViewModel = ViewModelProviders.of(this).get(LocationViewModel::class.java)
+        locationViewModel.init()
+        locationViewModel.locations.observe(this, Observer<List<Location?>> { locationRes: List<Location?>? ->
+            for (item in locationRes!!) {
+//                list += item!!.location
+
+            }
+
+        })
+        list += "Ikeja, Lagos"
+        list += "Ikorodu, Lagos"
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, list)
+        adLocation.setAdapter(adapter)
+        adLocation.threshold = 1
+    }
+
+    private fun validateEntry() {
+        val textWatcherTitle = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val title = s.toString()
+                if (title.length > 70) {
+                    titleCount.text = "(${70 - title.length}/70)"
+                    titleCount.setTextColor(Color.RED)
+
+                } else {
+                    titleCount.text = "(${title.length}/70)"
+                    titleCount.setTextColor(Color.GRAY)
+
+                }
+                if (adTitle.text.isNotEmpty() && adTitle.text.length <= 70
+                        && categories.selectedItem != null
+                        && adDescription.text.isNotEmpty() && adDescription.text.length <= 1200
+                        && adLocation.text.isNotEmpty() && adPrice.text.isNotEmpty()) {
+                    isValid = true
+                }
+
+                if (isValid) unDisableButtonPost() else disableButtonPost()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        }
+        val textWatcherDesc = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val desc = s.toString()
+                if (desc.length > 1200) {
+                    descCount.text = "(${1200 - desc.length}/1200)"
+                    descCount.setTextColor(Color.RED)
+                } else {
+                    descCount.text = "(${desc.length}/1200)"
+                    descCount.setTextColor(Color.GRAY)
+
+                }
+                if (adTitle.text.isNotEmpty() && adTitle.text.length <= 70
+                        && categories.selectedItem != null
+                        && adDescription.text.isNotEmpty() && adDescription.text.length <= 1200
+                        && adLocation.text.isNotEmpty() && adPrice.text.isNotEmpty()) {
+                    isValid = true
+                }
+                if (isValid) unDisableButtonPost() else disableButtonPost()
+
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        }
+        val textWatcherLocation = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val desc = s.toString()
+                if (adTitle.text.isNotEmpty() && adTitle.text.length <= 70
+                        && categories.selectedItem != null
+                        && adDescription.text.isNotEmpty() && adDescription.text.length <= 1200
+                        && adLocation.text.isNotEmpty() && adPrice.text.isNotEmpty()) {
+                    isValid = true
+                }
+                if (isValid) unDisableButtonPost() else disableButtonPost()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        }
+        val textWatcherPrice = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                adPrice.removeTextChangedListener(this)
+
+                try {
+                    var originalString = s.toString()
+                    originalString = originalString.replace(",", "")
+                    val longval = Integer.parseInt(originalString)
+                    val formattedString = String.format("%,d", longval)
+                    adPrice.setText(formattedString)
+                    adPrice.setSelection(adPrice.text.length)
+                } catch (nfe: NumberFormatException) {
+                    nfe.printStackTrace()
+                }
+
+                if (adTitle.text.isNotEmpty() && adTitle.text.length <= 70
+                        && categories.selectedItem != null
+                        && adDescription.text.isNotEmpty() && adDescription.text.length <= 1200
+                        && adLocation.text.isNotEmpty() && adPrice.text.isNotEmpty()) {
+                    isValid = true
+                }
+                if (isValid) unDisableButtonPost() else disableButtonPost()
+                adPrice.addTextChangedListener(this)
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        }
+
+        adTitle.addTextChangedListener(textWatcherTitle)
+        adDescription.addTextChangedListener(textWatcherDesc)
+        adPrice.addTextChangedListener(textWatcherPrice)
+        adLocation.addTextChangedListener(textWatcherLocation)
+
+
+    }
+
+    private fun publishAd() {
+        if (isValid) {
+            if (arrayList.isEmpty()) {
+                val snackbar = Snackbar.make(postAd, "Select at least one(1) image before publishing Ad", Snackbar.LENGTH_LONG);
+                snackbar.setAction("Ok") {
+                    snackbar.dismiss()
+                }
+                snackbar.setActionTextColor(resources.getColor(R.color.colorAccent))
+                snackbar.show()
+                return
+            }
+            val category = categories.selectedItem.toString()
+            val subCat = sub_category.selectedItem.toString()
+            val title = adTitle.text.toString()
+            val description = adDescription.text.toString()
+            val locale = adLocation.text.toString()
+            val price = adPrice.text.toString().replace(",", "")
+            val isNegotiable = isNegotiable.isChecked
+            val adType = "Standard Ad"
+
+            /*TODO: Upload image*/
+            for (image in arrayList) {
+                Log.e("ArrayList", image.toString())
+//                MediaManager.get().upload(image)
+//                        .unsigned(this.getString(R.string.preset))
+//                        .callback(this)
+//                        .option("public_id", Calendar.getInstance().timeInMillis.toString())
+//                        .dispatch()
+            }
+
+        }
+    }
+
+    override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
+    }
+
+    override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {
+
+    }
+
+    override fun onReschedule(requestId: String?, error: ErrorInfo?) {
+
+    }
+
+    override fun onError(requestId: String?, error: ErrorInfo?) {
+
+    }
+
+    override fun onStart(requestId: String?) {
 
     }
 

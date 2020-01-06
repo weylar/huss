@@ -3,6 +3,7 @@ package com.android.huss.data;
 
 import com.android.huss.models.Ads;
 import com.android.huss.models.Category;
+import com.android.huss.models.Location;
 import com.android.huss.models.Profile;
 import com.android.huss.models.SubCategory;
 
@@ -39,5 +40,8 @@ public interface HussAPI {
 
     @GET("photos")
     Call<List<SubCategory>> getSubCategory(@Query("catName") String catName);
+
+    @GET("locations")
+    Call<List<Location>> getLocation();
 
 }
