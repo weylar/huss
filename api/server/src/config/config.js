@@ -3,7 +3,7 @@ require('dotenv').config();
 module.exports = {
 
   development: {
-    database: 'husss',
+    database: 'hussdb',
     username: 'postgres',
     password: 'modupeola1960',
     host: '127.0.0.1',

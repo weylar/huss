@@ -2,14 +2,24 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.addColumn(
-      'Products',
-      'payDate',
-      {
-        type: Sequelize.DATE,
-        allowNull: true
-      }
-    )
+    return Promise.all([
+      queryInterface.addColumn(
+        'Products',
+        'payDate',
+        {
+          type: Sequelize.DATE,
+          allowNull: true
+        }
+      ),
+      queryInterface.addColumn(
+        'Products',
+        'location',
+        {
+          type: Sequelize.STRING,
+          allowNull: true
+        }
+      )
+    ])
     /*
       Add altering commands here.
       Return a promise to correctly handle asynchronicity.
@@ -20,10 +30,16 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.removeColumn(
-      'Products',
-      'payDate'
-    );
+    return Promise.all([
+      queryInterface.removeColumn(
+        'Products',
+        'payDate'
+      ),
+      queryInterface.removeColumn(
+        'Products',
+        'location'
+      )
+    ]);
     /*
       Add reverting commands here.
       Return a promise to correctly handle asynchronicity.
