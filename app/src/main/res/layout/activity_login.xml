@@ -56,7 +56,6 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:background="@drawable/custom_edittext_sign_in"
-            android:textColor="@color/colorAccent"
             android:hint="@string/email"
             android:textColorHint="@color/colorAccent"
             android:inputType="textEmailAddress"/>
@@ -83,7 +82,6 @@
             android:padding="15dp"
             app:passwordToggleEnabled="true"
             android:background="@drawable/custom_edittext_sign_in"
-            android:textColor="@color/colorAccent"
             android:textColorHint="@color/colorAccent"
             android:hint="@string/password"
             android:inputType="textPassword"/>

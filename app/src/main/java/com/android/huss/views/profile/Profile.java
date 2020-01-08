@@ -90,16 +90,16 @@ public class Profile extends AppCompatActivity {
         profileViewModel.init("2");
         profileViewModel.getProfile().observe(this, profile -> {
 
-            profile.setFirstName("Aminu");
-            profile.setLastName("Idris");
-            profile.setPhoneNumber("08138028915");
-            profile.setEmail("idrisaminu861@gmail.com");
-            name.setText(profile.getFirstName() + " " + profile.getLastName());
-            phone.setText(profile.getPhoneNumber());
-            email.setText(profile.getEmail());
+            profile.getData().setFirstName("Aminu");
+            profile.getData().setLastName("Idris");
+            profile.getData().setPhoneNumber("08138028915");
+            profile.getData().setEmail("idrisaminu861@gmail.com");
+            name.setText(profile.getData().getFirstName() + " " + profile.getData().getLastName());
+            phone.setText(profile.getData().getPhoneNumber());
+            email.setText(profile.getData().getEmail());
 
             Picasso.Builder builder = new Picasso.Builder(this);
-            builder.build().load(profile.getProfileImgUrl())
+            builder.build().load(profile.getData().getProfileImgUrl())
                     .placeholder((R.drawable.sample))
                     .error(R.drawable.sample)
                     .into(profileImage);

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.android.huss.R
+import com.android.huss.utility.Utility.PASSWORD_LIMITATION
 import com.ldoublem.loadingviewlib.view.LVCircularZoom
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.emailLayout
@@ -38,7 +39,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun validatePassword(password: String): Boolean {
-        return password.length > 6
+        return password.length > PASSWORD_LIMITATION
 
     }
 

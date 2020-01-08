@@ -62,4 +62,8 @@ public interface HussAPI {
     @POST("images")
     Call<String> createImage(@Body AdImage ad);
 
+    @POST("auth/login")
+    @FormUrlEncoded
+    Call<Profile> login(@Body Profile.Data profile);
+
 }

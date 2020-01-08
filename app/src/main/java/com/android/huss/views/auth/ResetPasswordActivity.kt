@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.android.huss.R
+import com.android.huss.utility.Utility.PASSWORD_LIMITATION
 import kotlinx.android.synthetic.main.activity_reset_password.*
 
 class ResetPasswordActivity : AppCompatActivity() {
@@ -40,8 +41,8 @@ class ResetPasswordActivity : AppCompatActivity() {
 
     }
 
-    fun validatePassword(password: String): Boolean {
-        return password.length > 6
+    private fun validatePassword(password: String): Boolean {
+        return password.length > PASSWORD_LIMITATION
 
     }
 }

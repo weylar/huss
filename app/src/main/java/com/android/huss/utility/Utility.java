@@ -8,4 +8,9 @@ public class Utility {
     public static final String TOP_ADS_PAYMENT_AMOUNT = "₦1000";
     public static final String SUCCESS = "success";
     public static final String FAILED = "failed";
+    public static final String TOKEN = "token";
+    public static final String EMAIL = "email";
+    public static final String USER_ID = "user_id";
+    public static final int PASSWORD_LIMITATION = 5;
+    public static final int STATUS_CODE_OK = 200;
 }
