@@ -7,11 +7,11 @@ String.prototype.capitalize = function() {
 
 class AdService {
   static async createAd(req) {
-    const categoryId = req.params.categoryId;
-    const subCategoryId = req.params.subCategoryId;
+    const categoryName = req.params.categoryName;
+    const subCategoryName = req.params.subCategoryName;
 
-    const category = await db.Category.findOne({ where: { id: categoryId } });
-    const subCategory = await db.SubCategory.findOne({ where: { id: subCategoryId } });
+    const category = await db.Category.findOne({ where: { name: categoryName } });
+    const subCategory = await db.SubCategory.findOne({ where: { name: subCategoryName } });
 
     if (!category) {
       return {
@@ -29,8 +29,8 @@ class AdService {
       };
     }
 
-    req.body.categoryId = categoryId;
-    req.body.subCategoryId = subCategoryId;
+    req.body.categoryName = categoryName;
+    req.body.subCategoryName = subCategoryName;
     req.body.userId = req.userId;
 
     if (req.body.type === 'Top') {

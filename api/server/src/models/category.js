@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Category.associate = function(models) {
     Category.hasMany(models.Product,{
-      foreignKey: 'categoryId',
+      foreignKey: 'categoryName',
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     });

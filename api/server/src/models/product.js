@@ -5,12 +5,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    categoryId: {
-      type: DataTypes.INTEGER,
+    categoryName: {
+      type: DataTypes.STRING,
       allowNull: true
     },
-    subCategoryId: {
-      type: DataTypes.INTEGER,
+    subCategoryName: {
+      type: DataTypes.STRING,
       allowNull: true
     },
     title: {
@@ -67,12 +67,12 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     });
     Product.belongsTo(models.Category, {
-      foreignKey: 'id',
+      foreignKey: 'name',
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     });
     Product.belongsTo(models.SubCategory, {
-      foreignKey: 'id',
+      foreignKey: 'name',
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     });

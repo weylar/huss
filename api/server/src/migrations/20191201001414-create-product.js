@@ -18,24 +18,24 @@ module.exports = {
           key: 'id'
         }
       },
-      categoryId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+      categoryName: {
+        type: Sequelize.STRING,
+        allowNull: true,
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
         references: {
           model: 'Categories',
-          key: 'id'
+          key: 'name'
         }
       },
-      subCategoryId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+      subCategoryName: {
+        type: Sequelize.STRING,
+        allowNull: true,
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
         references: {
           model: 'SubCategories',
-          key: 'id'
+          key: 'name'
         }
       },
       title: {

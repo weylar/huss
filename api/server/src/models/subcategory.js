@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   SubCategory.associate = function(models) {
     // associations can be defined here
     SubCategory.hasMany(models.Product, {
-      foreignKey: 'subCategoryId',
+      foreignKey: 'subCategoryName',
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     })
