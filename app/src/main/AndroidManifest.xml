@@ -5,7 +5,9 @@
     package="com.android.huss">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <dist:module dist:instant="true" />
 
@@ -19,12 +21,36 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <activity
+            android:name=".views.auth.ResetPasswordActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".views.auth.ForgotPassword"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".views.auth.SignUpActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".views.auth.LoginActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+
+        </activity>
+
         <meta-data
             android:name="co.paystack.android.PublicKey"
-            android:value="pk_test_91f5670d53cff8162b4df5bc8009ab9a305ca267"/>
-        <activity android:name=".views.ads.createAds.CreateAds"
+            android:value="pk_test_91f5670d53cff8162b4df5bc8009ab9a305ca267" />
+
+        <activity
+            android:name=".views.ads.createAds.CreateAds"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".views.ads.createAds.FullAdImagePreview"
+        <activity
+            android:name=".views.ads.createAds.FullAdImagePreview"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".views.category.Category"
@@ -50,12 +76,15 @@
         <activity
             android:name=".views.home.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
+
+        <receiver android:name=".utility.NetworkReceiverUtil">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

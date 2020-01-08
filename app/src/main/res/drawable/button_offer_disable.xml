@@ -9,8 +9,5 @@
         android:endColor="@color/gray"
         android:angle="360" />
     <corners
-        android:bottomRightRadius="25dp"
-        android:bottomLeftRadius="25dp"
-        android:topLeftRadius="25dp"
-        android:topRightRadius="25dp"/>
+        android:radius="25dp" />
 </shape>

@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +22,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.android.huss.R;
 import com.android.huss.models.Ads;
 import com.android.huss.models.Category;
+import com.android.huss.utility.NetworkReceiverUtil;
 import com.android.huss.viewModels.AdsViewModel;
 import com.android.huss.viewModels.CategoryViewModel;
 import com.android.huss.views.ads.createAds.CreateAds;
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar.startAnim(100);
         progressBarTop.startAnim(100);
         progressBarLatestAds.startAnim(100);
+
         fab.setOnClickListener(v -> {
             startActivity(new Intent(this, CreateAds.class));
         });

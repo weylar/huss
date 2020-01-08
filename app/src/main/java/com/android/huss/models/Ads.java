@@ -20,7 +20,7 @@ public class Ads {
     private String type;
     private String status;
     private String price;
-    private String isNegotiable;
+    private boolean isNegotiable;
     private String createdAt;
     private String updateAt;
     private String views;
@@ -123,11 +123,11 @@ public class Ads {
         this.price = price;
     }
 
-    public String getIsNegotiable() {
+    public boolean getIsNegotiable() {
         return isNegotiable;
     }
 
-    public void setIsNegotiable(String isNegotiable) {
+    public void setIsNegotiable(boolean isNegotiable) {
         this.isNegotiable = isNegotiable;
     }
 

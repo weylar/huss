@@ -1,9 +1,14 @@
 package com.android.huss.views.ads.createAds
 
 import android.Manifest
+import android.app.ProgressDialog
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -27,17 +32,16 @@ import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.huss.R
-import com.android.huss.models.Category
-import com.android.huss.models.Location
-import com.android.huss.models.SubCategory
-import com.android.huss.viewModels.CategoryViewModel
-import com.android.huss.viewModels.LocationViewModel
-import com.android.huss.viewModels.SubCategoryViewModel
+import com.android.huss.models.*
+import com.android.huss.utility.NetworkReceiverUtil
+import com.android.huss.viewModels.*
 import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.ErrorInfo
 import com.cloudinary.android.callback.UploadCallback
 import com.google.android.material.snackbar.Snackbar
+import com.ldoublem.loadingviewlib.view.LVCircularZoom
 import kotlinx.android.synthetic.main.activity_create_ads.*
+import kotlinx.android.synthetic.main.custom_progress_add_ad.*
 import java.io.File
 import java.lang.NumberFormatException
 import java.text.DecimalFormat
@@ -46,7 +50,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class CreateAds : AppCompatActivity(), BottomNavPay.PayState, UploadCallback {
+class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
 
     private val REQUEST_CODE_READ_STORAGE = 100
     private val arrayList = ArrayList<Uri>()
@@ -60,6 +64,7 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState, UploadCallback {
         validateEntry()
         setUpLocation()
         disableButtonPost()
+
 
         add.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -308,7 +313,7 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState, UploadCallback {
         list += "Mobile"
         list += "Auto"
         list += "Housing"
-        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
+        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
                 list)
         categories.adapter = adapter
         categories?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -329,7 +334,7 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState, UploadCallback {
                 sublist += "Mobile"
                 sublist += "Auto"
                 sublist += "Housing"
-                val subAdapter = ArrayAdapter<String>(this@CreateAds, android.R.layout.simple_list_item_1,
+                val subAdapter = ArrayAdapter<String>(this@CreateAds, android.R.layout.simple_spinner_item,
                         sublist)
                 sub_category.adapter = subAdapter
             }
@@ -506,41 +511,104 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState, UploadCallback {
             val subCat = sub_category.selectedItem.toString()
             val title = adTitle.text.toString()
             val description = adDescription.text.toString()
-            val locale = adLocation.text.toString()
+            val location = adLocation.text.toString()
             val price = adPrice.text.toString().replace(",", "")
             val isNegotiable = isNegotiable.isChecked
             val adType = "Standard Ad"
+            val ads = Ads()
+            ads.title = title
+            ads.description = description
+            ads.location = location
+            ads.price = price
+            ads.isNegotiable = isNegotiable
+            ads.type = adType
 
-            /*TODO: Upload image*/
-            for (image in arrayList) {
-                Log.e("ArrayList", image.toString())
-//                MediaManager.get().upload(image)
-//                        .unsigned(this.getString(R.string.preset))
-//                        .callback(this)
-//                        .option("public_id", Calendar.getInstance().timeInMillis.toString())
-//                        .dispatch()
+
+            val progress = AlertDialog.Builder(this).create()
+            progress.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val viewCustom = View.inflate(this, R.layout.custom_progress, null)
+            progress.setView(viewCustom)
+            progress.setCancelable(true)
+            progress.show()
+            val progressBar = viewCustom.findViewById<LVCircularZoom>(R.id.progress)
+            progressBar.setViewColor(resources.getColor(R.color.colorAccent))
+            progressBar.startAnim(100)
+
+            fun uploadImages(productId: Int) {
+                for (image in arrayList) {
+                    val uploadCallBack = object : UploadCallback {
+                        override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
+                            val createImageViewModel = ViewModelProviders.of(this@CreateAds).get(CreateImageViewModel::class.java)
+                            val adImage = AdImage()
+                            adImage.imageUrl = resultData!!["url"].toString()
+                            adImage.productId = productId
+                            createImageViewModel.init(adImage)
+                            createImageViewModel.createImageResponse.observe(this@CreateAds, Observer<String> { imageId: String ->
+                              progress.dismiss()
+
+                            })
+
+                        }
+
+                        override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {
+
+                        }
+
+                        override fun onReschedule(requestId: String?, error: ErrorInfo?) {
+
+                        }
+
+                        override fun onError(requestId: String?, error: ErrorInfo?) {
+                            val snackBar = Snackbar.make(postAd, " ${error.toString()}", Snackbar.LENGTH_LONG)
+                            snackBar.setActionTextColor(resources.getColor(R.color.colorAccent))
+                            snackBar.setAction("Ok") { snackBar.dismiss() }
+                            snackBar.show()
+                            progressUpload.visibility = View.GONE
+                        }
+
+                        override fun onStart(requestId: String?) {
+
+
+                        }
+                    }
+
+                    val time = Calendar.getInstance().timeInMillis
+                    MediaManager.get().upload(image)
+                            .unsigned(this.getString(R.string.preset))
+                            .callback(uploadCallBack)
+                            .option("public_id", time.toString())
+                            .dispatch()
+                }
             }
 
+            fun showSnack(text: String) {
+                val snackbar = Snackbar.make(postAd, text, Snackbar.LENGTH_LONG);
+                snackbar.setAction("Ok") { snackbar.dismiss() }
+                snackbar.setActionTextColor(postAd.resources.getColor(R.color.colorAccent))
+                snackbar.show()
+            }
+
+            val network = object : NetworkReceiverUtil() {
+                override fun onNetworkChange(state: Boolean) {
+                    if (!state) {
+                        showSnack("You not connected to the internet, connect and retry")
+                    } else {
+
+                        val createAdViewModel = ViewModelProviders.of(this@CreateAds).get(CreateAdViewModel::class.java)
+                        createAdViewModel.init(ads, category, subCat, "Bearer" + ""/*TODO: Token from shared*/)
+                        createAdViewModel.createResponse.observe(this@CreateAds, Observer<Int> { catId: Int ->
+                            uploadImages(catId)
+
+                        })
+
+                    }
+                }
+
+
+            }
+            val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+            registerReceiver(network, filter)
         }
-    }
-
-    override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
-    }
-
-    override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {
-
-    }
-
-    override fun onReschedule(requestId: String?, error: ErrorInfo?) {
-
-    }
-
-    override fun onError(requestId: String?, error: ErrorInfo?) {
-
-    }
-
-    override fun onStart(requestId: String?) {
-
     }
 
 

@@ -1,6 +1,7 @@
 package com.android.huss.data;
 
 
+import com.android.huss.models.AdImage;
 import com.android.huss.models.Ads;
 import com.android.huss.models.Category;
 import com.android.huss.models.Location;
@@ -10,7 +11,13 @@ import com.android.huss.models.SubCategory;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -43,5 +50,16 @@ public interface HussAPI {
 
     @GET("locations")
     Call<List<Location>> getLocation();
+
+
+    @POST("ad/{categoryName}/{subCategoryName}create")
+    Call<Integer> createAd(@Body Ads ad,
+                          @Path("categoryName") String categoryName,
+                          @Path("subCategoryName") String subCategoryName,
+                          @Header("Authorization") String name
+    );
+
+    @POST("images")
+    Call<String> createImage(@Body AdImage ad);
 
 }

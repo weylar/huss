@@ -2,7 +2,7 @@ package com.android.huss.utility;
 
 public class Utility {
 
-    public static final String BASE_URL = "https://jsonplaceholder.typicode.com/";
+    public static final String BASE_URL = "https://huss-ng.herokuapp.com/api/v1/";
     public static final String BASE_URL_PAYSTACK = "https://api.paystack.co/";
     public static final String BASE_URL_LOCATION = "https://gist.githubusercontent.com/";
     public static final String TOP_ADS_PAYMENT_AMOUNT = "₦1000";
