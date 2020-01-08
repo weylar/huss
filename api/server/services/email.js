@@ -13,8 +13,7 @@ class EmailService {
         const token = jwt.sign({ id }, secret, {
           expiresIn: 3600 // 1 hour
         })
-        console.log(typeof(token))
-        return token
+        return token;
       }
 
     static async sendPasswordResetEmail(res, email) {
