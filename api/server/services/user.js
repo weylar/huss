@@ -82,6 +82,7 @@ class UserService {
     return {
       status: 'error',
       statusCode: 401,
+      data: {},
       message: 'Authentication failed, invalid login details'
     };
   }
