@@ -38,6 +38,7 @@ class EmailService {
                 return res.status(500).json({
                     status: 'error',
                     statusCode: 500,
+                    error: err.message,
                     message: "Error sending email"
                 })
             } else {
