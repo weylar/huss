@@ -1,11 +1,18 @@
 package com.android.huss.models;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+
 public class Profile {
 
     private String status;
     private int statusCode;
     private String message;
     private Data data;
+
+
+    private Profile value;
 
     public String getStatus() {
         return status;
@@ -40,6 +47,7 @@ public class Profile {
 
 
     public class Data {
+        @SerializedName("userId")
         private String id;
         private String token;
         private String firstName;
@@ -52,6 +60,10 @@ public class Profile {
         private String lastSeen;
         private String isDeleted;
         private String password;
+
+
+
+        private String confirmPassword;
         private String phoneNumber;
         private String createdAt;
         private String updatedAt;
@@ -175,6 +187,13 @@ public class Profile {
 
         public void setId(String id) {
             this.id = id;
+        }
+        public String getConfirmPassword() {
+            return confirmPassword;
+        }
+
+        public void setConfirmPassword(String confirmPassword) {
+            this.confirmPassword = confirmPassword;
         }
 
     }

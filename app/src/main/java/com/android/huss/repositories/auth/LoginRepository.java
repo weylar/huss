@@ -1,12 +1,11 @@
-package com.android.huss.repositories;
-
-import android.util.Log;
+package com.android.huss.repositories.auth;
 
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.huss.data.HussAPI;
 import com.android.huss.data.RetrofitClientInstance;
 import com.android.huss.models.Profile;
+import com.android.huss.utility.ErrorUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,21 +26,22 @@ public class LoginRepository {
 
 
     public MutableLiveData<Profile> login(Profile.Data profile) {
-        final MutableLiveData<Profile> profileData = new MutableLiveData<>();
+        MutableLiveData<Profile> profileData = new MutableLiveData<>();
         HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
-        Call<Profile> call = retrofit.login(profile);
+        Call<Profile> call = retrofit.login(profile.getEmail(), profile.getPassword());
         call.enqueue(new Callback<Profile>() {
             @Override
             public void onResponse(Call<Profile> call, Response<Profile> response) {
                 if (response.isSuccessful()) {
-                    Log.e(TAG, "onResponseUserProfile: SUCCESS");
                     profileData.setValue(response.body());
+                }else{
+                   profileData.setValue(ErrorUtils.parseError(response));
                 }
             }
 
             @Override
             public void onFailure(Call<Profile> call, Throwable t) {
-                Log.e(TAG, t.getMessage() + "FailedUserProfile");
+
             }
         });
         return profileData;

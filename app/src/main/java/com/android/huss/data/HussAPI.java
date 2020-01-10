@@ -18,6 +18,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -64,6 +65,25 @@ public interface HussAPI {
 
     @POST("auth/login")
     @FormUrlEncoded
-    Call<Profile> login(@Body Profile.Data profile);
+    Call<Profile> login(@Field("email") String email,
+                        @Field("password") String password);
+
+    @POST("auth/signup")
+    @FormUrlEncoded
+    Call<Profile> signUp(@Field("firstName") String firstName,
+                        @Field("lastName") String lastName,
+                         @Field("email") String email,
+                         @Field("password") String password,
+                         @Field("confirmPassword") String confirmPassword);
+
+    @GET("user/{email}")
+    Call<Profile> forgotPassword(@Path("email") String email);
+
+    @PUT("user/new_password/{id}/{token}")
+    @FormUrlEncoded
+    Call<Profile> resetPassword(@Path("id") String email,
+                                @Path("token") String token,
+                                @Field("password") String password,
+                                @Field("confirmPassword") String confirmPassword);
 
 }

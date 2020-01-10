@@ -45,6 +45,7 @@
                         android:textStyle="bold" />
 
                     <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profileImage"
                         android:layout_width="30dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -52,7 +53,7 @@
                         android:layout_margin="1dp"
                         android:onClick="openProfile"
                         android:contentDescription="@string/profile_image"
-                        android:src="@drawable/sample" />
+                        tools:src="@drawable/sample" />
 
                 </RelativeLayout>
             </androidx.appcompat.widget.Toolbar>

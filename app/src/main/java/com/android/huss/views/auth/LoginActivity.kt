@@ -13,11 +13,10 @@ import androidx.lifecycle.ViewModelProviders
 import com.android.huss.R
 import com.android.huss.models.Profile
 import com.android.huss.utility.Utility.*
-import com.android.huss.viewModels.LoginViewModel
+import com.android.huss.viewModels.auth.LoginViewModel
 import com.android.huss.views.home.MainActivity
 import com.google.android.material.snackbar.Snackbar
 import com.ldoublem.loadingviewlib.view.LVCircularZoom
-import kotlinx.android.synthetic.main.activity_create_ads.*
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -28,7 +27,8 @@ class LoginActivity : AppCompatActivity() {
     private val EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$"
     private val pattern: Pattern = Pattern.compile(EMAIL_PATTERN)
     private var matcher: Matcher? = null
-    private val MyPREFERENCES = "MyPrefs"
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +41,7 @@ class LoginActivity : AppCompatActivity() {
     }
     fun gotoSignUp(view: View) {
         startActivity(Intent(this, SignUpActivity::class.java))
+        finish()
     }
 
     fun signIn(view: View) {
@@ -79,34 +80,47 @@ class LoginActivity : AppCompatActivity() {
         progressBar.setViewColor(resources.getColor(R.color.colorAccent))
         progressBar.startAnim(100)
 
-        val loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+
         val profile = Profile().Data()
         profile.email = email
         profile.password = password
+        val loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         loginViewModel.init(profile)
-        loginViewModel.loginProfile.observe(this, Observer<Profile> { profileData->
-           progress.dismiss()
-            if (profileData.statusCode == STATUS_CODE_OK) {
-                saveData(profileData)
-                startActivity(Intent(this, MainActivity::class.java))
+        loginViewModel.login().observe(this, Observer<Profile> { loginResponse  ->
+            progress.dismiss()
+            if (loginResponse.statusCode == STATUS_CODE_OK) {
+                saveData(loginResponse)
+                val intent = Intent(this, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                this.finish()
             }else{
-                showSnack(profileData.message)
+               showSnack(loginResponse.message)
             }
-
         })
 
-    }
+        }
+
+
+
+
 
     private fun saveData(profileData: Profile) {
-        val sharedPref = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE)
+        val sharedPref = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE)
         val editor: SharedPreferences.Editor = sharedPref.edit()
         editor.putString(TOKEN, profileData.data.token)
         editor.putString(USER_ID, profileData.data.id)
+        editor.putString(USER_NAME, profileData.data.firstName + " " + profileData.data.lastName)
+        editor.putString(EMAIL, profileData.data.email)
+        editor.putString(PROFILE_IMAGE_URL, profileData.data.profileImgUrl)
         editor.apply()
+
     }
 
+
     private fun showSnack(message: String) {
-        val snackbar = Snackbar.make(postAd, message, Snackbar.LENGTH_LONG)
+        val snackbar = Snackbar.make(email, message, Snackbar.LENGTH_LONG)
         snackbar.setAction("Ok") {
             snackbar.dismiss()
         }

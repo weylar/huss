@@ -1,16 +1,24 @@
 package com.android.huss.views.auth
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.android.huss.R
+import com.android.huss.models.Profile
+import com.android.huss.utility.Utility
+import com.android.huss.utility.Utility.MY_PREFERENCES
 import com.android.huss.utility.Utility.PASSWORD_LIMITATION
+import com.android.huss.viewModels.auth.SignUpViewModel
+import com.android.huss.views.home.MainActivity
+import com.google.android.material.snackbar.Snackbar
 import com.ldoublem.loadingviewlib.view.LVCircularZoom
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.emailLayout
 import kotlinx.android.synthetic.main.activity_login.passwordLayout
 import kotlinx.android.synthetic.main.activity_sign_up.*
@@ -73,7 +81,7 @@ class SignUpActivity : AppCompatActivity() {
         if (validateEmail(email) and validatePassword(password)
                 and firstName.isNotEmpty() and lastName.isNotEmpty() and
                 (confirmPassword == password)) {
-            doSignUp()
+            doSignUp(firstName, lastName, email, password, confirmPassword)
         }
 
         if (validateEmail(email)){
@@ -93,7 +101,7 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun doSignUp() {
+    private fun doSignUp(firstName: String, lastName: String, email: String, password: String, confirmPassword: String ) {
         val progress = AlertDialog.Builder(this).create()
         progress.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val viewCustom = View.inflate(this, R.layout.custom_progress, null)
@@ -103,6 +111,44 @@ class SignUpActivity : AppCompatActivity() {
         val progressBar = viewCustom.findViewById<LVCircularZoom>(R.id.progress)
         progressBar.setViewColor(resources.getColor(R.color.colorAccent))
         progressBar.startAnim(100)
+
+        val profile = Profile().Data()
+        profile.email = email
+        profile.password = password
+        profile.firstName = firstName
+        profile.lastName = lastName
+        profile.confirmPassword = confirmPassword
+        val loginViewModel = ViewModelProviders.of(this).get(SignUpViewModel::class.java)
+        loginViewModel.init(profile)
+        loginViewModel.signup().observe(this, Observer<Profile> { loginResponse  ->
+            progress.dismiss()
+            if (loginResponse.statusCode == Utility.STATUS_CREATED_SUCCESS) {
+                saveData(loginResponse)
+                val intent = Intent(this, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                this.finish()
+            }else{
+                showSnack(loginResponse.message)
+            }
+        })
+    }
+
+    private fun saveData(profileData: Profile) {
+        val sharedPref = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = sharedPref.edit()
+        editor.putString(Utility.TOKEN, profileData.data.token)
+        editor.putString(Utility.USER_ID, profileData.data.id)
+        editor.apply()
+    }
+    private fun showSnack(message: String) {
+        val snackbar = Snackbar.make(password, message, Snackbar.LENGTH_LONG)
+        snackbar.setAction("Ok") {
+            snackbar.dismiss()
+        }
+        snackbar.setActionTextColor(resources.getColor(R.color.colorAccent))
+        snackbar.show()
     }
 
 }
