@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
     categoryImageUrl: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    belongedAd: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     }
   }, {});
   Category.associate = function(models) {

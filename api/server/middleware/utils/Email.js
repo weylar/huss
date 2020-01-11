@@ -1,10 +1,12 @@
 import nodemailer from 'nodemailer';
 
 export const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.sendgrid.net',
+  port: 25,
+
   auth: {
-    user: process.env.EMAIL_LOGIN,
-    pass: process.env.EMAIL_PASSWORD
+    user: 'apikey', //"ilkVFfq7SfyRgnc4BfPjgA", //process.env.EMAIL_LOGIN,
+    pass: process.env.API_KEY
   }
 });
 

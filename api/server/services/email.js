@@ -30,8 +30,9 @@ class EmailService {
 
     const emailTemplate = resetPasswordTemplate(user, url);
 
-    if (process.env.NODE_ENV === 'development') {
+    // if (process.env.NODE_ENV === 'development') {
       transporter.sendMail(emailTemplate, (err, info) => {
+          console.log("error" , err, info)
         if (err) {
           return res.status(500).json({
             status: 'error',
@@ -47,26 +48,27 @@ class EmailService {
           });
         }
       });
-    }
+    // }
 
-    if (process.env.NODE_ENV === 'production') {
-      sendgrid.setApiKey(process.env.API_KEY);
-      try {
-        await sendgrid.send(emailTemplate);
-        return res.status(200).json({
-          status: 'success',
-          statusCode: 200,
-          message: 'A reset password link has been sent to your email'
-        });
-      } catch (error) {
-        return res.status(500).json({
-          status: 'error',
-          statusCode: 500,
-          error: err.message,
-          message: 'Error sending email'
-        });
-      }
-    }
+    // if (process.env.NODE_ENV === 'production') {
+    //   sendgrid.setApiKey(process.env.API_KEY);
+    //   try {
+    //     const response = await sendgrid.send(emailTemplate);
+    //     console.log(response);
+    //     return res.status(200).json({
+    //       status: 'success',
+    //       statusCode: 200,
+    //       message: 'A reset password link has been sent to your email'
+    //     });
+    //   } catch (error) {
+    //     return res.status(500).json({
+    //       status: 'error',
+    //       statusCode: 500,
+    //       error: error.message,
+    //       message: 'Error sending email'
+    //     });
+    //   }
+    // }
   }
 
   static async receiveNewPassword(req) {

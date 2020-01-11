@@ -7,8 +7,8 @@ String.prototype.capitalize = function() {
 
 class AdService {
   static async createAd(req) {
-    const categoryName = req.params.categoryName;
-    const subCategoryName = req.params.subCategoryName;
+    const categoryName = req.params.categoryName.capitalize();
+    const subCategoryName = req.params.subCategoryName.capitalize();
 
     const category = await db.Category.findOne({ where: { name: categoryName } });
     const subCategory = await db.SubCategory.findOne({ where: { name: subCategoryName } });
@@ -40,6 +40,8 @@ class AdService {
     }
 
     const ad = await db.Product.create(req.body);
+    await db.Category.update({ belongedAd: parseInt(category.belongedAd) + 1 },
+      { where: { name: categoryName } });
 
     return {
       status: 'success',

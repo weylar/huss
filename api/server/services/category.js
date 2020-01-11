@@ -104,6 +104,19 @@ class CategoryService {
     }
   }
 
+  static async getPopularCategories(req) {
+    const limit = req.params.limit;
+
+    const popularCategories = await db.Category.findAll({limit,  order: [ ['belongedAd', 'DESC'] ]});
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: popularCategories,
+      message: 'All popular categories successfully retrieved'
+    }
+  }
+
   static async editCategory(req) {
     const id = req.params.id;
 

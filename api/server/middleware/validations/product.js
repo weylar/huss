@@ -5,7 +5,7 @@ String.prototype.capitalize = function() {
 }
 
 export  const adCheck = (req, res, next) => {
-  let { title, description, type, price, isNegotiable } = req.body;
+  let { title, description, type, price, isNegotiable, location } = req.body;
 
   if (title) title = title.capitalize().trim();
   if (description) description = description.capitalize().trim();

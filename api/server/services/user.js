@@ -62,7 +62,7 @@ class UserService {
       }
     }
     if (Helper.comparePassword(password, hash) === true) {
-      const { id, firstName, lastName, isAdmin } = foundUser;
+      const { id, firstName, lastName, isAdmin, profileImgUrl } = foundUser;
       const payLoad = { id, email, isAdmin };
       const token = Helper.getToken(payLoad);
       return {
@@ -74,6 +74,7 @@ class UserService {
           firstName,
           lastName,
           isAdmin,
+          profileImgUrl,
           token
         },
         message: `Welecome, ${firstName} ${lastName}`

@@ -56,6 +56,15 @@ class CategoryController {
     }
   }
 
+  static async getPopularCategories(req, res, next) {
+    try {
+      const response = await CategoryService.getPopularCategories(req);
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
+
   static async editCategory(req, res, next) {
     try {
       const response = await CategoryService.editCategory(req);
