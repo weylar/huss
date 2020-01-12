@@ -160,7 +160,7 @@ class UserService {
 
   static async getAnotherUserByEmail(req) {
     
-    const foundUser = await db.User.findOne({ where: { email: req.params.email, isDeleted: false, isAdmin: false}});
+    const foundUser = await db.User.findOne({ where: { email: req.params.email, isDeleted: false }});
 
     if(!foundUser) {
       return {
