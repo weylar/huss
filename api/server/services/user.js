@@ -101,7 +101,7 @@ class UserService {
     }
 
     await db.User.update(
-      { state: req.body.state, city: req.body.city, phoneNumber: req.body.phoneNumber },
+      { state: req.body.state, city: req.body.city, phoneNumber: req.body.phoneNumber, profileImgUrl: req.body.profileImgUrl },
       { where: { email: req.userEmail } }
     );
     return {
