@@ -125,17 +125,21 @@ class UserValidation {
   }
 
   static userDetailsCheck(req, res, next){
-    let { state, city, phoneNumber, profileImgUrl } = req.body;
+    let { state, city, phoneNumber, profileImgUrl, firstName, lastName } = req.body;
 
     if (state) state = state.capitalize().trim();
     if (city) city = city.capitalize().trim();
     if (phoneNumber) phoneNumber = phoneNumber.trim();
     if (profileImgUrl) profileImgUrl = profileImgUrl;
+    if (firstName) firstName = firstName;
+    if (lastName) lastName = lastName;
 
     req.body.state = state;
     req.body.city = city;
     req.body.phoneNumber = phoneNumber;
     req.body.profileImgUrl = profileImgUrl;
+    req.body.firstName = firstName;
+    req.body.lastName = lastName;
     return next();
   }
 
