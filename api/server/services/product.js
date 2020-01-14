@@ -40,8 +40,10 @@ class AdService {
     }
 
     const ad = await db.Product.create(req.body);
-    await db.Category.update({ belongedAd: parseInt(category.belongedAd) + 1 },
-      { where: { name: categoryName } });
+    await db.Category.update(
+      { belongedAd: parseInt(category.belongedAd) + 1 },
+      { where: { name: categoryName } }
+    );
 
     return {
       status: 'success',
@@ -433,45 +435,45 @@ class AdService {
     let { title, description, price } = req.body;
     if (title) title = title.capitalize().trim();
     if (description) description = description.capitalize().trim();
-    if (price) price = price
+    if (price) price = price;
     const editedAd = await db.Product.update(
       { title: title, description: description, price: price },
       { where: { userId: req.userId, id: req.params.adId } }
     );
 
-    if(editedAd[0] === 0) {
+    if (editedAd[0] === 0) {
       return {
         status: 'error',
         statusCode: 403,
         message: 'You cannot edit this ad'
-      }
+      };
     }
 
     return {
       status: 'success',
       statusCode: 202,
       message: 'Ad has been successfully edited'
-    }
+    };
   }
 
   static async deleteAd(req) {
-    const deletedAd = await db.Product.destroy(
-      { where: { userId: req.userId, id: req.params.adId } }
-    );
+    const deletedAd = await db.Product.destroy({
+      where: { userId: req.userId, id: req.params.adId }
+    });
 
-    if(!deletedAd) {
+    if (!deletedAd) {
       return {
         status: 'error',
         statusCode: 403,
-        message: 'You cannot delete this ad, there\'s no ad as such for you'
-      }
+        message: "You cannot delete this ad, there's no ad as such for you"
+      };
     }
 
     return {
       status: 'success',
       statusCode: 200,
       message: 'Ad has been successfully deleted'
-    }
+    };
   }
 }
 

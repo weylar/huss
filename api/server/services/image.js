@@ -3,7 +3,9 @@ import db from '../src/models';
 class AdImageService {
   static async createAdImage(req) {
     const adId = req.params.adId;
-    const ad = await db.Product.findOne({ where: { userId: req.userId, id: adId } });
+    const ad = await db.Product.findOne({ where: { userId: req.userId, id: adId },
+      attributes: { exclude: 'name' } });
+    
 
     if (!ad) {
       return {
@@ -15,6 +17,7 @@ class AdImageService {
 
     req.body.userId = req.userId;
     req.body.productId = adId;
+    
 
     const adImage = await db.Image.create(req.body);
 
