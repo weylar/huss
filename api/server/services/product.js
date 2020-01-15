@@ -54,7 +54,7 @@ class AdService {
   }
 
   static async getAd(req) {
-    const oldAd = await db.Product.findOne({ where: { id: req.params.adId } });
+    const oldAd = await db.Product.findOne({ where: { id: req.params.adId }, attributes: { exclude: 'name' } });
 
     if (!oldAd) {
       return {
@@ -87,7 +87,7 @@ class AdService {
 
   static async getOwnAd(req) {
     const foundAd = await db.Product.findOne({
-      where: { userId: req.userId, id: req.params.adId }
+      where: { userId: req.userId, id: req.params.adId }, attributes: { exclude: 'name' }
     });
 
     if (foundAd) {
@@ -112,7 +112,7 @@ class AdService {
   }
 
   static async getAllAds() {
-    const allAds = await db.Product.findAll({ order: [['id', 'DESC']] });
+    const allAds = await db.Product.findAll({ order: [['id', 'DESC']], attributes: { exclude: 'name' } });
 
     return {
       status: 'success',
@@ -125,7 +125,7 @@ class AdService {
   static async getAllAdsByLimit(req) {
     const allAds = await db.Product.findAll({
       limit: req.params.limit,
-      order: [['id', 'DESC']]
+      order: [['id', 'DESC']], attributes: { exclude: 'name' }
     });
 
     return {
@@ -142,7 +142,7 @@ class AdService {
     const allAds = await db.Product.findAll({
       offset,
       limit,
-      order: [['id', 'DESC']]
+      order: [['id', 'DESC']], attributes: { exclude: 'name' }
     });
 
     if (allAds) {
@@ -164,7 +164,7 @@ class AdService {
     const allAds = await db.Product.findAll({
       offset,
       limit,
-      where: { title: { [Op.startsWith]: `%${title}%` } }
+      where: { title: { [Op.startsWith]: `%${title}%` } }, attributes: { exclude: 'name' }
     });
 
     if (allAds) {
@@ -184,7 +184,7 @@ class AdService {
       offset,
       limit,
       where: { status: req.params.status },
-      order: [['id', 'DESC']]
+      order: [['id', 'DESC']], attributes: { exclude: 'name' }
     });
 
     if (allAds) {
@@ -206,7 +206,7 @@ class AdService {
     const allAds = await db.Product.findAll({
       offset,
       limit,
-      where: { status: req.params.status, title: { [Op.startsWith]: `%${title}%` } }
+      where: { status: req.params.status, title: { [Op.startsWith]: `%${title}%` } }, attributes: { exclude: 'name' }
     });
 
     if (allAds) {
@@ -222,7 +222,7 @@ class AdService {
   static async getAllOwnAds(req) {
     const allOwnAds = await db.Product.findAll({
       where: { userId: req.userId },
-      order: [['id', 'DESC']]
+      order: [['id', 'DESC']], attributes: { exclude: 'name' }
     });
 
     if (allOwnAds.length === 0) {
@@ -244,7 +244,7 @@ class AdService {
     const allAds = await db.Product.findAll({
       where: { userId: req.userId },
       limit: req.params.limit,
-      order: [['id', 'DESC']]
+      order: [['id', 'DESC']], attributes: { exclude: 'name' }
     });
 
     return {
@@ -262,7 +262,7 @@ class AdService {
       where: { userId: req.userId },
       offset,
       limit,
-      order: [['id', 'DESC']]
+      order: [['id', 'DESC']], attributes: { exclude: 'name' }
     });
 
     if (allAds) {
@@ -284,7 +284,7 @@ class AdService {
     const allAds = await db.Product.findAll({
       offset,
       limit,
-      where: { userId: req.userId, title: { [Op.startsWith]: `%${title}%` } }
+      where: { userId: req.userId, title: { [Op.startsWith]: `%${title}%` } }, attributes: { exclude: 'name' }
     });
 
     if (allAds) {
@@ -304,7 +304,7 @@ class AdService {
       offset,
       limit,
       where: { userId: req.userId, status: req.params.status },
-      order: [['id', 'DESC']]
+      order: [['id', 'DESC']], attributes: { exclude: 'name' }
     });
 
     if (allAds) {
@@ -330,7 +330,7 @@ class AdService {
         userId: req.userId,
         status: req.params.status,
         title: { [Op.startsWith]: `%${title}%` }
-      }
+      }, attributes: { exclude: 'name' }
     });
 
     if (allAds) {
@@ -344,7 +344,7 @@ class AdService {
   }
 
   static async makeAdInactive(req) {
-    const ad = await db.Product.findOne({ where: { id: req.params.adId } });
+    const ad = await db.Product.findOne({ where: { id: req.params.adId }, attributes: { exclude: 'name' } });
 
     if (!ad) {
       return {
@@ -360,7 +360,7 @@ class AdService {
 
     if (ad.type === 'free' && diffInDays > 7) {
       await db.Product.update({ status: 'inactive' }, { where: { id: req.params.adId } });
-      const newAd = await db.Product.findOne({ where: { id: req.params.adId } });
+      const newAd = await db.Product.findOne({ where: { id: req.params.adId }, attributes: { exclude: 'name' } });
 
       return {
         status: 'success',
@@ -390,7 +390,7 @@ class AdService {
       };
     }
 
-    const newAd = await db.Product.findOne({ where: { id: req.params.adId } });
+    const newAd = await db.Product.findOne({ where: { id: req.params.adId }, attributes: { exclude: 'name' } });
 
     return {
       status: 'success',
@@ -401,7 +401,7 @@ class AdService {
   }
 
   static async deactivatePayment(req) {
-    const ad = await db.Product.findOne({ where: { id: req.params.adId } });
+    const ad = await db.Product.findOne({ where: { id: req.params.adId }, attributes: { exclude: 'name' } });
 
     if (!ad) {
       return {
