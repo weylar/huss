@@ -48,7 +48,7 @@ class AdService {
     return {
       status: 'success',
       statusCode: 200,
-      data: { category, subCategory, ad },
+      data: ad,
       message: 'A new ad has been added'
     };
   }
@@ -79,7 +79,7 @@ class AdService {
       return {
         status: 'success',
         statusCode: 200,
-        data: { foundAd, foundSubCategory, category },
+        data: foundAd,
         message: 'Ad sucessfully retrieved'
       };
     }
@@ -99,7 +99,7 @@ class AdService {
       return {
         status: 'success',
         statusCode: 200,
-        data: { foundAd, foundSubCategory, category },
+        data: foundAd,
         message: 'Ad sucessfully retrieved'
       };
     }
