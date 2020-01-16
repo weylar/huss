@@ -118,12 +118,12 @@ class AdService {
       attributes: { exclude: 'name' }
     });
 
-    const adImages = allAds.map(item => await db.Image.findAll({ where: { productId: item.id } }));
+    // const adImages = allAds.map(item => await db.Image.findAll({ where: { productId: item.id } }));
 
     return {
       status: 'success',
       statusCode: 200,
-      data: {allAds, adImages},
+      data: allAds,
       message: 'All ads have been retrieved successfully'
     };
   }
