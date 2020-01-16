@@ -80,14 +80,11 @@ class AdService {
         attributes: { exclude: 'name' }
       });
 
-      let foundAdKey = Object.keys(foundAd);
-      let foundAdKeys = foundAdKey.dataValues;
-      let data = { foundAdKey, adImages };
+      let data = { foundAd, adImages };
       return {
         status: 'success',
         statusCode: 200,
         data,
-        foundAdKeys,
         message: 'Ad sucessfully retrieved'
       };
     }
