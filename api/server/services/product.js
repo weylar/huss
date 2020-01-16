@@ -80,7 +80,7 @@ class AdService {
         attributes: { exclude: 'name' }
       });
 
-      !foundAd.adImages ? (foundAd.adImages = adImages) : foundAd.adImages;
+      if (!foundAd.adImages) foundAd.adImages = adImages;
 
       // let data = foundAd;
       return {
