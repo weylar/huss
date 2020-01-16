@@ -67,7 +67,7 @@ class AdService {
       };
     }
 
-    const adImages = await db.Image.findAll({ where: { productId: oldAd.id } });
+    const adImages = db.Image.findAll({ where: { productId: oldAd.id } });
 
     const editViewCount = await db.Product.update(
       { count: oldAd.count + 1 },
@@ -75,15 +75,14 @@ class AdService {
     );
 
     if (editViewCount[0] === 1) {
-      const foundAd = await db.Product.findOne({
+      const foundAd = db.Product.findOne({
         where: { id: req.params.adId },
         attributes: { exclude: 'name' }
       });
 
       // if (!foundAd.adImages) foundAd.adImages = adImages;
       // let one = JSON.stringify({ ...foundAd, adImages });
-      let data = foundAd;
-      data['adImages'] = [];
+      let data = await Promise.all([adImages, foundAd]);
       // foundAd.adImages = await adImages;
       // foundAd.something = [...adImages];
 
