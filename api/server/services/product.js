@@ -66,6 +66,7 @@ class AdService {
 
     const adImages = await db.Image.findAll({ where: {productId: oldAd.id } });
 
+
     const editViewCount = await db.Product.update(
       { count: oldAd.count + 1 },
       { where: { id: req.params.adId } }
@@ -74,11 +75,11 @@ class AdService {
     if (editViewCount[0] === 1) {
       const foundAd = await db.Product.findOne({ where: { id: req.params.adId }, attributes: { exclude: 'name' } });
       
-      let result = {...foundAd, adImages};
+      let data = {...foundAd, adImages};
       return {
         status: 'success',
         statusCode: 200,
-        data: result,
+        data,
         message: 'Ad sucessfully retrieved'
       };
     }
