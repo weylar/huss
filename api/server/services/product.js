@@ -82,7 +82,7 @@ class AdService {
 
       // if (!foundAd.adImages) foundAd.adImages = adImages;
 
-      let data = Object.assign(foundAd, adImages);
+      // let data = Object.assign(foundAd, adImages);
       return {
         status: 'success',
         statusCode: 200,
