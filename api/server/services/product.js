@@ -67,7 +67,7 @@ class AdService {
       };
     }
 
-    const adImages = db.Image.findAll({ where: { productId: oldAd.id } });
+    const adImages = await db.Image.findAll({ where: { productId: oldAd.id } });
 
     const editViewCount = await db.Product.update(
       { count: oldAd.count + 1 },
@@ -75,19 +75,12 @@ class AdService {
     );
 
     if (editViewCount[0] === 1) {
-      const foundAd = db.Product.findOne({
+      const foundAd = await db.Product.findOne({
         where: { id: req.params.adId },
         attributes: { exclude: 'name' }
       });
 
-      // if (!foundAd.adImages) foundAd.adImages = adImages;
-      // let one = JSON.stringify({ ...foundAd, adImages });
-      let result = await Promise.all([adImages, foundAd]);
-      let data = { ...result[1], adImages: result[0] };
-      // foundAd.adImages = await adImages;
-      // foundAd.something = [...adImages];
-
-      // let data = Object.assign(foundAd, adImages);
+      let data = { foundAd, adImages };
       return {
         status: 'success',
         statusCode: 200,
