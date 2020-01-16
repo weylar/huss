@@ -82,7 +82,8 @@ class AdService {
 
       // if (!foundAd.adImages) foundAd.adImages = adImages;
       // let one = JSON.stringify({ ...foundAd, adImages });
-      let data = await Promise.all([adImages, foundAd]);
+      let result = await Promise.all([adImages, foundAd]);
+      let data = { ...result[1], adImages: result[0] };
       // foundAd.adImages = await adImages;
       // foundAd.something = [...adImages];
 
