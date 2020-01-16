@@ -80,13 +80,13 @@ class AdService {
         attributes: { exclude: 'name' }
       });
 
-      if (!foundAd.adImages) foundAd.adImages = adImages;
+      // if (!foundAd.adImages) foundAd.adImages = adImages;
 
-      // let data = foundAd;
+      let data = Object.assign(foundAd, adImages);
       return {
         status: 'success',
         statusCode: 200,
-        data: foundAd,
+        data,
         message: 'Ad sucessfully retrieved'
       };
     }
