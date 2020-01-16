@@ -75,11 +75,11 @@ class AdService {
     if (editViewCount[0] === 1) {
       const foundAd = await db.Product.findOne({ where: { id: req.params.adId }, attributes: { exclude: 'name' } });
       
-      let data = {...foundAd, adImages};
+      // let data = {...foundAd, adImages};
       return {
         status: 'success',
         statusCode: 200,
-        data,
+        data: {foundAd, adImages},
         message: 'Ad sucessfully retrieved'
       };
     }
