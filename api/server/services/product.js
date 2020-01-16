@@ -82,13 +82,13 @@ class AdService {
 
       // if (!foundAd.adImages) foundAd.adImages = adImages;
       // let one = JSON.stringify({ ...foundAd, adImages });
-      let data = await { ...foundAd, adImages };
+      foundAd.adImages = await adImages;
 
       // let data = Object.assign(foundAd, adImages);
       return {
         status: 'success',
         statusCode: 200,
-        data,
+        data: foundAd,
         message: 'Ad sucessfully retrieved'
       };
     }
