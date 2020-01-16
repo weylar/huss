@@ -75,7 +75,7 @@ class AdService {
     if (editViewCount[0] === 1) {
       const foundAd = await db.Product.findOne({ where: { id: req.params.adId }, attributes: { exclude: 'name' } });
       
-      let foundAdKey = Object.keys(foundAd)
+      let foundAdKey = Object.keys(foundAd).dataValues;
       let data = {foundAdKey, adImages};
       return {
         status: 'success',
