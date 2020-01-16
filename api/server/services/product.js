@@ -64,7 +64,7 @@ class AdService {
       };
     }
 
-    const adImages = await db.Image.findAll({ where: {productId: oldAd.id }, attributes: { exclude: 'name' }});
+    const adImages = await db.Image.findAll({ where: {productId: oldAd.id } });
 
     const editViewCount = await db.Product.update(
       { count: oldAd.count + 1 },
@@ -72,7 +72,7 @@ class AdService {
     );
 
     if (editViewCount[0] === 1) {
-      const foundAd = await db.Product.findOne({ where: { id: req.params.adId } });
+      const foundAd = await db.Product.findOne({ where: { id: req.params.adId }, attributes: { exclude: 'name' } });
 
       return {
         status: 'success',
@@ -89,10 +89,6 @@ class AdService {
     });
 
     if (foundAd) {
-      const foundSubCategory = await db.SubCategory.findOne({
-        where: { id: foundAd.subCategoryId }
-      });
-      const category = await db.Category.findOne({ where: { id: foundAd.categoryId } });
 
       return {
         status: 'success',
