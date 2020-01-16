@@ -80,7 +80,7 @@ class AdService {
         attributes: { exclude: 'name' }
       });
 
-      let data = { ...foundAd, adImages };
+      let data = { foundAd, adImages };
       return {
         status: 'success',
         statusCode: 200,
