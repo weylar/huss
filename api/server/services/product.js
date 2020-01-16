@@ -80,13 +80,13 @@ class AdService {
         attributes: { exclude: 'name' }
       });
 
-      !foundAd.adImages ? foundAd.adImages = adImages : foundAd.adImages
+      !foundAd.adImages ? (foundAd.adImages = adImages) : foundAd.adImages;
 
-      let data = { ...foundAd };
+      // let data = foundAd;
       return {
         status: 'success',
         statusCode: 200,
-        data,
+        data: foundAd,
         message: 'Ad sucessfully retrieved'
       };
     }
