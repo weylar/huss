@@ -83,6 +83,7 @@ class AdService {
       // if (!foundAd.adImages) foundAd.adImages = adImages;
       // let one = JSON.stringify({ ...foundAd, adImages });
       foundAd.adImages = await adImages;
+      foundAd.something = [...adImages];
 
       // let data = Object.assign(foundAd, adImages);
       return {
