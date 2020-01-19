@@ -75,12 +75,28 @@ class AdService {
     if (editViewCount[0] === 1) {
       const foundAd = await db.Product.findOne({ where: {id: oldAd.id}, attributes: { exclude: 'name' }});
       const adImages = await db.Image.findAll({ where: {productId: oldAd.id } });
-      const newObj = foundAd;
-      newObj['adImages'] = adImages;
+      const favorites = await db.Favorite.findAll({ where: { productId: oldAd.id }})
+      
       return {
         status: 'success',
         statusCode: 200,
-        data: newObj,
+        data: {
+          id: foundAd.id,
+          userId: foundAd.userId,
+          description: foundAd.description,
+          categoryName: foundAd.categoryName,
+          subCategoryName: foundAd.subCategoryName,
+          title: foundAd.title,
+          price: foundAd.price,
+          type: foundAd.type,
+          status: foundAd.status,
+          isNegotiable: foundAd.isNegotiable,
+          count: foundAd.count,
+          location: foundAd.location,
+          createdAt: foundAd.createdAt,
+          adImages,
+          favorites
+        },
         message: 'Ad sucessfully retrieved'
       };
     }
@@ -92,11 +108,31 @@ class AdService {
       attributes: { exclude: 'name' }
     });
 
+    const adImages = await db.Image.findAll({ where: {productId: req.params.adId } });
+
+    const favorites = await db.Favorite.findAll({ where: { productId: req.params.adId }})
+
     if (foundAd) {
       return {
         status: 'success',
         statusCode: 200,
-        data: foundAd,
+        data: {
+          id: foundAd.id,
+          userId: foundAd.userId,
+          description: foundAd.description,
+          categoryName: foundAd.categoryName,
+          subCategoryName: foundAd.subCategoryName,
+          title: foundAd.title,
+          price: foundAd.price,
+          type: foundAd.type,
+          status: foundAd.status,
+          isNegotiable: foundAd.isNegotiable,
+          count: foundAd.count,
+          location: foundAd.location,
+          createdAt: foundAd.createdAt,
+          adImages,
+          favorites
+        },
         message: 'Ad sucessfully retrieved'
       };
     }
@@ -109,21 +145,14 @@ class AdService {
   }
 
   static async getAllAds() {
-    const allAds = await db.Product.findAll({
-      order: [['id', 'DESC']],
-      attributes: { exclude: 'name' }
-    });
-
-    allAds = JSON.stringify(allAds);
-
-    // async const adImages = allAds.map(item => {
-    //   await db.Image.findAll({ where: { productId: item.id } })
-    // });
+    let result = await db.Product.findAll({
+      order: [['id', 'DESC']], attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
+    })
 
     return {
       status: 'success',
       statusCode: 200,
-      data: allAds,
+      data: result,
       message: 'All ads have been retrieved successfully'
     };
   }
@@ -132,7 +161,7 @@ class AdService {
     const allAds = await db.Product.findAll({
       limit: req.params.limit,
       order: [['id', 'DESC']],
-      attributes: { exclude: 'name' }
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
     });
 
     return {
@@ -150,7 +179,7 @@ class AdService {
       offset,
       limit,
       order: [['id', 'DESC']],
-      attributes: { exclude: 'name' }
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
     });
 
     if (allAds) {
@@ -173,7 +202,7 @@ class AdService {
       offset,
       limit,
       where: { title: { [Op.startsWith]: `%${title}%` } },
-      attributes: { exclude: 'name' }
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
     });
 
     if (allAds) {
@@ -194,7 +223,7 @@ class AdService {
       limit,
       where: { status: req.params.status },
       order: [['id', 'DESC']],
-      attributes: { exclude: 'name' }
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
     });
 
     if (allAds) {
@@ -217,7 +246,7 @@ class AdService {
       offset,
       limit,
       where: { status: req.params.status, title: { [Op.startsWith]: `%${title}%` } },
-      attributes: { exclude: 'name' }
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
     });
 
     if (allAds) {
@@ -234,7 +263,7 @@ class AdService {
     const allOwnAds = await db.Product.findAll({
       where: { userId: req.userId },
       order: [['id', 'DESC']],
-      attributes: { exclude: 'name' }
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
     });
 
     if (allOwnAds.length === 0) {
@@ -257,7 +286,7 @@ class AdService {
       where: { userId: req.userId },
       limit: req.params.limit,
       order: [['id', 'DESC']],
-      attributes: { exclude: 'name' }
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
     });
 
     return {
@@ -276,7 +305,7 @@ class AdService {
       offset,
       limit,
       order: [['id', 'DESC']],
-      attributes: { exclude: 'name' }
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
     });
 
     if (allAds) {
@@ -299,7 +328,7 @@ class AdService {
       offset,
       limit,
       where: { userId: req.userId, title: { [Op.startsWith]: `%${title}%` } },
-      attributes: { exclude: 'name' }
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
     });
 
     if (allAds) {
@@ -320,7 +349,7 @@ class AdService {
       limit,
       where: { userId: req.userId, status: req.params.status },
       order: [['id', 'DESC']],
-      attributes: { exclude: 'name' }
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
     });
 
     if (allAds) {
@@ -347,7 +376,7 @@ class AdService {
         status: req.params.status,
         title: { [Op.startsWith]: `%${title}%` }
       },
-      attributes: { exclude: 'name' }
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
     });
 
     if (allAds) {
