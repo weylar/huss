@@ -67,7 +67,7 @@ class AdService {
       };
     }
 
-    const adImages = await db.Image.find({ where: { productId: oldAd.id }, include: [Product] });
+    const adImages = await db.Image.findAll({ where: { productId: oldAd.id }, include: [db.Product] });
 
     const editViewCount = await db.Product.update(
       { count: oldAd.count + 1 },
