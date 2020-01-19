@@ -67,7 +67,7 @@ class AdService {
       };
     }
 
-    const adImages = await db.Image.findAll({ where: { productId: oldAd.id } });
+    const adImages = await db.Image.findAll({ where: { productId: oldAd.id }, include: [Product] });
 
     const editViewCount = await db.Product.update(
       { count: oldAd.count + 1 },
@@ -80,11 +80,11 @@ class AdService {
         attributes: { exclude: 'name' }
       });
 
-      let data = { foundAd, adImages };
+      // let data = { foundAd, adImages };
       return {
         status: 'success',
         statusCode: 200,
-        data,
+        data: adImages,
         message: 'Ad sucessfully retrieved'
       };
     }
@@ -118,7 +118,9 @@ class AdService {
       attributes: { exclude: 'name' }
     });
 
-    // const adImages = allAds.map(item => await db.Image.findAll({ where: { productId: item.id } }));
+    allAds = JSON.stringify(allAds);
+
+    const adImages = allAds.map(item => await db.Image.findAll({ where: { productId: item.id } }));
 
     return {
       status: 'success',
