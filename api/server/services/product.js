@@ -73,7 +73,7 @@ class AdService {
     );
 
     if (editViewCount[0] === 1) {
-      const foundAd = await db.Product.findOne({ where: { id: req.params.id }, include: [db.Image] });
+      const foundAd = await db.Product.findOne({ where: { productId: req.params.id }, include: [db.Image] });
       return {
         status: 'success',
         statusCode: 200,
