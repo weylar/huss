@@ -73,11 +73,30 @@ class AdService {
     );
 
     if (editViewCount[0] === 1) {
-      const foundAd = await db.sequelize.query('SELECT "Images".*, "Products".* FROM "Images" INNER JOIN "Products" AS "Products" on "Images"."productId" = ${req.params.adId}',);
+      const foundAd = await db.Product.findOne({ where: {id: req.params.id}, include: [{ model: db.Image }]})
+      const resObj = foundAd.map(ad => {
+        return Object.assign(
+          {},
+          {
+            id: ad.id,
+            userId: ad.userId,
+            categoryName: ad.categoryName,
+            adImages: ad.Image.map(image => {
+              return Object.assign(
+                {},
+                {
+                  id: image.id,
+                  productId: image.productId
+                }
+              )
+            })
+          }
+        )
+      })
       return {
         status: 'success',
         statusCode: 200,
-        data: foundAd,
+        data: resObj,
         message: 'Ad sucessfully retrieved'
       };
     }
