@@ -67,24 +67,17 @@ class AdService {
       };
     }
 
-    const adImages = await db.Image.find({ where: { productId: oldAd.id }, include: [db.Product] });
-
     const editViewCount = await db.Product.update(
       { count: oldAd.count + 1 },
       { where: { id: req.params.adId } }
     );
 
     if (editViewCount[0] === 1) {
-      const foundAd = await db.Product.findOne({
-        where: { id: req.params.adId },
-        attributes: { exclude: 'name' }
-      });
-
-      // let data = { foundAd, adImages };
+      const foundAd = await db.Product.findOne({ where: { id: req.params.id }, include: [db.Image] });
       return {
         status: 'success',
         statusCode: 200,
-        data: adImages,
+        data: foundAd,
         message: 'Ad sucessfully retrieved'
       };
     }
@@ -120,7 +113,9 @@ class AdService {
 
     allAds = JSON.stringify(allAds);
 
-    const adImages = allAds.map(item => await db.Image.findAll({ where: { productId: item.id } }));
+    // async const adImages = allAds.map(item => {
+    //   await db.Image.findAll({ where: { productId: item.id } })
+    // });
 
     return {
       status: 'success',
