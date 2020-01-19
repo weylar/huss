@@ -73,7 +73,7 @@ class AdService {
     );
 
     if (editViewCount[0] === 1) {
-      const foundAd = await db.Product.findOne({ where: { id: req.params.id, productId: req.params.id }, include: [db.Image] });
+      const foundAd = await db.sequelize.query('SELECT i.*, p.* FROM Images i inner join Products p on i.productId = :id', id=req.params.adId);
       return {
         status: 'success',
         statusCode: 200,
