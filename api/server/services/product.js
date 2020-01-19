@@ -73,7 +73,7 @@ class AdService {
     );
 
     if (editViewCount[0] === 1) {
-      const foundAd = await db.sequelize.query('SELECT "Images".*, "Products".* FROM "Images" INNER JOIN "Products" AS "Products" on "Images"."productId" = $1', [req.params.adId]);
+      const foundAd = await db.sequelize.query('SELECT "Images".*, "Products".* FROM "Images" INNER JOIN "Products" AS "Products" on "Images"."productId" = req.params.adId',);
       return {
         status: 'success',
         statusCode: 200,
