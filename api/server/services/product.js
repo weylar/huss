@@ -73,7 +73,7 @@ class AdService {
     );
 
     if (editViewCount[0] === 1) {
-      const foundAd = await db.Product.findOne({ where: {id: oldAd.id}});
+      const foundAd = await db.Product.findOne({ where: {id: oldAd.id}, attributes: { exclude: 'name' }});
       const adImages = await db.Image.findAll({ where: {productId: oldAd.id } });
       const newObj = foundAd;
       newObj['adImages'] = adImages;
