@@ -75,7 +75,13 @@ class AdService {
     if (editViewCount[0] === 1) {
       const foundAd = await db.Product.findOne({ where: {id: oldAd.id}, attributes: { exclude: 'name' }});
       const adImages = await db.Image.findAll({ where: {productId: oldAd.id } });
-      const favorites = await db.Favorite.findAll({ where: { productId: oldAd.id }})
+      const favorites = await db.Favorite.findAll({ where: { productId: oldAd.id, userId: req.userId }});
+      let isFavorited;
+      if (favorites.length > 0) {
+        isFavorited = true;
+      } else {
+        isFavorited = false;
+      }
       
       return {
         status: 'success',
@@ -95,7 +101,7 @@ class AdService {
           location: foundAd.location,
           createdAt: foundAd.createdAt,
           adImages,
-          favorites
+          isFavorited
         },
         message: 'Ad sucessfully retrieved'
       };
@@ -110,7 +116,13 @@ class AdService {
 
     const adImages = await db.Image.findAll({ where: {productId: req.params.adId } });
 
-    const favorites = await db.Favorite.findAll({ where: { productId: req.params.adId }})
+    const favorites = await db.Favorite.findAll({ where: { productId: req.params.adId, userId: req.userId }});
+    let isFavorited;
+      if (favorites.length > 0) {
+        isFavorited = true;
+      } else {
+        isFavorited = false;
+      }
 
     if (foundAd) {
       return {
@@ -131,7 +143,7 @@ class AdService {
           location: foundAd.location,
           createdAt: foundAd.createdAt,
           adImages,
-          favorites
+          isFavorited
         },
         message: 'Ad sucessfully retrieved'
       };
@@ -144,10 +156,26 @@ class AdService {
     };
   }
 
-  static async getAllAds() {
+  static async getAllAds(req) {
+    
     let result = await db.Product.findAll({
-      order: [['id', 'DESC']], attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
-    })
+      order: [['id', 'DESC']], attributes: { exclude: 'name' }, include: [{ model: db.Image }, { model : db.Favorite}]
+    });
+
+    // let res = [...result];
+
+    // let arr = res.map( (element, i) => {
+    //   // let favorites = await db.Favorite.findOne({ where: {userId: req.userId, productId: element.dataValues.id} });
+    //   // console.log(favorites);
+    //   // let isFavorited;
+    //   // if (favorites != null) {
+    //   //   isFavorited = true;
+    //   // } else {
+    //   //   isFavorited = false;
+    //   // }
+    //   //return {...element, isFavorited:true}
+    //   return {...element, isFavorited:true};
+    
 
     return {
       status: 'success',
@@ -263,7 +291,7 @@ class AdService {
     const allOwnAds = await db.Product.findAll({
       where: { userId: req.userId },
       order: [['id', 'DESC']],
-      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });
 
     if (allOwnAds.length === 0) {
@@ -273,49 +301,112 @@ class AdService {
         message: 'You do not have any ads'
       };
     }
-    return {
-      status: 'success',
-      statusCode: 200,
-      data: allOwnAds,
-      message: 'All your ads have been successfully retrieved'
-    };
-  }
 
-  static async getAllOwnAdsByLimit(req) {
-    const allAds = await db.Product.findAll({
-      where: { userId: req.userId },
-      limit: req.params.limit,
-      order: [['id', 'DESC']],
-      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
+    let res = allOwnAds.map(elem => {
+      return db.Favorite.findOne({ where: {userId: req.userId, productId: elem.dataValues.id}});
+      
+    })
+
+    let newResponse = await Promise.all(res);
+
+    let result = allOwnAds.map(element => {
+      newResponse.forEach(item => {
+        if (item !== null) {
+          element.dataValues['isFavorite'] = (element.dataValues.id == item.dataValues.productId) && (item.dataValues.userId == req.userId);
+        }
+      });
+      return element;
     });
 
     return {
       status: 'success',
       statusCode: 200,
-      data: allAds,
-      message: 'All ads retrieved successfully'
+      data: result,
+      message: 'All your ads have been successfully retrieved'
+    };
+  }
+
+  static async getAllOwnAdsByLimit(req) {
+    const allOwnAds = await db.Product.findAll({
+      where: { userId: req.userId },
+      limit: req.params.limit,
+      order: [['id', 'DESC']],
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }]
+    });
+
+    if (allOwnAds.length === 0) {
+      return {
+        status: 'error',
+        statusCode: 404,
+        message: 'You do not have any ads'
+      };
+    }
+
+    let res = allOwnAds.map(elem => {
+      return db.Favorite.findOne({ where: {userId: req.userId, productId: elem.dataValues.id}});
+      
+    })
+
+    let newResponse = await Promise.all(res);
+
+    let result = allOwnAds.map(element => {
+      newResponse.forEach(item => {
+        if (item !== null) {
+          element.dataValues['isFavorite'] = (element.dataValues.id == item.dataValues.productId) && (item.dataValues.userId == req.userId);
+        }
+      });
+      return element;
+    });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: result,
+      message: 'All your ads have been successfully retrieved'
     };
   }
 
   static async paginateOwnAds(req) {
     const limit = req.params.limit;
     const offset = req.params.offset;
-    const allAds = await db.Product.findAll({
+    const allOwnAds = await db.Product.findAll({
       where: { userId: req.userId },
       offset,
       limit,
       order: [['id', 'DESC']],
-      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });
 
-    if (allAds) {
+    if (allOwnAds.length === 0) {
       return {
-        status: 'success',
-        statusCode: 200,
-        data: allAds,
-        message: 'All ads retrieved successfully'
+        status: 'error',
+        statusCode: 404,
+        message: 'You do not have any ads'
       };
     }
+
+    let res = allOwnAds.map(elem => {
+      return db.Favorite.findOne({ where: {userId: req.userId, productId: elem.dataValues.id}});
+      
+    })
+
+    let newResponse = await Promise.all(res);
+
+    let result = allOwnAds.map(element => {
+      newResponse.forEach(item => {
+        if (item !== null) {
+          element.dataValues['isFavorite'] = (element.dataValues.id == item.dataValues.productId) && (item.dataValues.userId == req.userId);
+        }
+      });
+      return element;
+    });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: result,
+      message: 'All your ads have been successfully retrieved'
+    };
   }
 
   static async getOwnAdsSuggest(req) {
@@ -324,21 +415,43 @@ class AdService {
     let title = req.params.title;
     title = title.capitalize();
     const Op = Sequelize.Op;
-    const allAds = await db.Product.findAll({
+    const allOwnAds = await db.Product.findAll({
       offset,
       limit,
       where: { userId: req.userId, title: { [Op.startsWith]: `%${title}%` } },
-      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });
 
-    if (allAds) {
+    if (allOwnAds.length === 0) {
       return {
-        status: 'success',
-        statusCode: 200,
-        data: allAds,
-        message: 'All ads retrieved successfully'
+        status: 'error',
+        statusCode: 404,
+        message: 'You do not have any ads'
       };
     }
+
+    let res = allOwnAds.map(elem => {
+      return db.Favorite.findOne({ where: {userId: req.userId, productId: elem.dataValues.id}});
+      
+    })
+
+    let newResponse = await Promise.all(res);
+
+    let result = allOwnAds.map(element => {
+      newResponse.forEach(item => {
+        if (item !== null) {
+          element.dataValues['isFavorite'] = (element.dataValues.id == item.dataValues.productId) && (item.dataValues.userId == req.userId);
+        }
+      });
+      return element;
+    });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: result,
+      message: 'All your ads have been successfully retrieved'
+    };
   }
 
   static async getOwnAdsByStatus(req) {

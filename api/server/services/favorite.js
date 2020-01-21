@@ -3,7 +3,7 @@ import db from '../src/models';
 class FavoriteService {
   static async createFavorite(req) {
     const adId = req.params.adId;
-    const ad = await db.Product.findOne({ where: { id: adId } });
+    const ad = await db.Product.findOne({ where: { id: adId }, attributes: { exclude: 'name' } });
 
     if (!ad) {
       return {
