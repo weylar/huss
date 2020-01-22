@@ -11,6 +11,9 @@
         android:layout_height="match_parent"
         tools:text="Vehicles"
         android:gravity="center_vertical"
+        android:scrollHorizontally="true"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:padding="15dp"
         android:textSize="18sp"/>
 

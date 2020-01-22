@@ -16,10 +16,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.android.huss.utility.Utility.BEARER;
+
 
 public class SubCategoryRepository {
 
-    private static final String TAG = "SubCategoryRepository";
+    private static final String TAG = SubCategoryRepository.class.getSimpleName();
     private static SubCategoryRepository subCategoryRepository;
 
     public static SubCategoryRepository getInstance(){
@@ -29,21 +31,20 @@ public class SubCategoryRepository {
         return subCategoryRepository;
     }
 
-    public MutableLiveData<List<SubCategory>>getSubCategories(String catName) {
-        final MutableLiveData<List<SubCategory>> subCategoryRepository = new MutableLiveData<>();
+    public MutableLiveData<SubCategory> getSubCategories(String token, String catName) {
+        final MutableLiveData<SubCategory> subCategoryRepository = new MutableLiveData<>();
         HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
-        Call<List<SubCategory>> call = retrofit.getSubCategory(catName);
-        call.enqueue(new Callback<List<SubCategory>>() {
+        Call<SubCategory> call = retrofit.getSubCategory(BEARER + " " + token, catName);
+        call.enqueue(new Callback<SubCategory>() {
             @Override
-            public void onResponse(Call<List<SubCategory>> call, Response<List<SubCategory>> response) {
+            public void onResponse(Call<SubCategory> call, Response<SubCategory> response) {
                 if (response.isSuccessful()) {
-                    Log.e(TAG, "onResponse: SUCCESS");
                     subCategoryRepository.setValue(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<SubCategory>> call, Throwable t) {
+            public void onFailure(Call<SubCategory> call, Throwable t) {
                 Log.e(TAG, t.getMessage() + "Failed");
             }
         });

@@ -13,6 +13,8 @@ import com.android.huss.R;
 import com.android.huss.models.SubCategory;
 import com.android.huss.views.ads.latestAds.LatestAds;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import static com.android.huss.views.ads.singleAds.SingleAds.NAME;
@@ -20,12 +22,15 @@ import static com.android.huss.views.ads.singleAds.SingleAds.NAME;
 public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.CustomViewHolder>{
 
 
-    private List<SubCategory> dataList;
+    public static final String CATEGORY = "category";
+    private List<SubCategory.Data> dataList;
     private Context context;
+    private String category;
 
-     SubCategoryAdapter(Context context, List<SubCategory> dataList){
+     SubCategoryAdapter(Context context, List<SubCategory.Data> dataList, String category){
         this.context = context;
         this.dataList = dataList;
+        this.category = category;
 
     }
 
@@ -38,14 +43,16 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
         }
     }
 
+    @NotNull
     @Override
-    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CustomViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.sub_cat_view, parent, false);
         view.setOnClickListener(v -> {
             String name = String.valueOf(v.getTag());
             Intent intent =  new Intent(context, LatestAds.class);
             intent.putExtra(NAME, name);
+            intent.putExtra(CATEGORY, category);
             context.startActivity(intent);
         });
         return new CustomViewHolder(view);
@@ -54,7 +61,7 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
         String adTitle = dataList.get(position).getName();
-        holder.txtTitle.setText( "iPhone X Max"/*adTitle.length() > 70 ? adTitle.substring(0, 67).concat("...") : adTitle*/);
+        holder.txtTitle.setText( adTitle);
         holder.itemView.setTag(adTitle);
 
 

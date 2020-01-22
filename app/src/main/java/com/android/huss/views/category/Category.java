@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.GridLayout;
@@ -13,43 +15,55 @@ import com.android.huss.R;
 import com.android.huss.models.Ads;
 import com.android.huss.viewModels.CategoryViewModel;
 import com.android.huss.views.home.MainActivity;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 
 import java.util.List;
 
+import static com.android.huss.utility.Utility.MY_PREFERENCES;
+import static com.android.huss.utility.Utility.TOKEN;
+import static com.android.huss.utility.Utility.USER_NAME;
+import static com.android.huss.views.home.MainActivity.checkNetworkConnection;
+
 public class Category extends AppCompatActivity {
     GridLayoutManager gridLayout;
     RecyclerView recyclerView;
-    LVCircularZoom lvCircularZoom;
-    CategoryAdapter categoryAdapter;
+    ShimmerFrameLayout shimmerFrameLayout;
+    CategoryAllAdapter categoryAdapter;
     CategoryViewModel categoryViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
-        lvCircularZoom = findViewById(R.id.progress);
-        lvCircularZoom.setViewColor(getResources().getColor(R.color.gray));
-        lvCircularZoom.startAnim(100);
+        shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(checkNetworkConnection(this, shimmerFrameLayout), filter);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
-        categoryViewModel.init();
-        categoryViewModel.getCategory().observe(this, catResponse -> {
+        categoryViewModel.initAllCategory(getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(TOKEN, ""));
+        categoryViewModel.getAllCategory().observe(this, catResponse -> {
             Category.this.generateCategory(catResponse);
-            lvCircularZoom.stopAnim();
-            lvCircularZoom.setVisibility(View.GONE);
-            lvCircularZoom.stopAnim();
+            shimmerFrameLayout.setVisibility(View.GONE);
         });
     }
 
-    private void generateCategory(List<com.android.huss.models.Category> ads) {
+    private void generateCategory(com.android.huss.models.Category category) {
         gridLayout = new GridLayoutManager(this, 4);
         recyclerView = findViewById(R.id.cat_recycler);
-        categoryAdapter = new CategoryAdapter(this, ads);
+        recyclerView.setVisibility(View.VISIBLE);
+        categoryAdapter = new CategoryAllAdapter(this, category.getData());
         recyclerView.setAdapter(categoryAdapter);
         recyclerView.setLayoutManager(gridLayout);
 
@@ -58,4 +72,6 @@ public class Category extends AppCompatActivity {
     public void goBack(View view) {
         finish();
     }
+
+
 }

@@ -14,9 +14,13 @@ import com.android.huss.models.Ads;
 import com.android.huss.viewModels.AdsViewModel;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import static com.android.huss.utility.Utility.KEY;
 import static com.android.huss.views.ads.singleAds.SingleAds.NAME;
+import static com.android.huss.views.subCategory.SubCategoryAdapter.CATEGORY;
 
 public class LatestAds extends AppCompatActivity {
     RecyclerView all_latest_ads;
@@ -47,16 +51,33 @@ public class LatestAds extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         /*Get latest ads using view model*/
-        pageTitle.setText(getIntent().getStringExtra(NAME));
-        adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
-        adsViewModel.init();
-        adsViewModel.getAds().observe(this, ads -> {
-            LatestAds.this.generateLatestAdsList(ads);
-            progressBarLatestAds.stopAnim();
-            progressBarLatestAds.setVisibility(View.GONE);
-            progressBarLatestAds.stopAnim();
-        });
-
+        if (Objects.requireNonNull(getIntent().hasExtra(KEY))){
+            String key =  Objects.requireNonNull(getIntent().getStringExtra(KEY));
+            pageTitle.setText("Search results for " + key);
+            adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
+            adsViewModel.initSearchAds(getIntent().getStringExtra(KEY));
+            adsViewModel.getSearchAds().observe(this, ads -> {
+                LatestAds.this.generateLatestAdsList(ads);
+                progressBarLatestAds.stopAnim();
+                progressBarLatestAds.setVisibility(View.GONE);
+                progressBarLatestAds.stopAnim();
+            });
+        }else {
+            if (getIntent().getStringExtra(CATEGORY) == null){
+                pageTitle.setText(getIntent().getStringExtra(NAME));
+            }else {
+                pageTitle.setText(getIntent().getStringExtra(CATEGORY) + " >> " + getIntent().getStringExtra(NAME));
+            }
+            adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
+            adsViewModel.init();
+            adsViewModel.getAds().observe(this, ads -> {
+                LatestAds.this.generateLatestAdsList(ads);
+                progressBarLatestAds.stopAnim();
+                progressBarLatestAds.setVisibility(View.GONE);
+                progressBarLatestAds.stopAnim();
+            });
+            LatestAds.this.generateLatestAdsList(new ArrayList<>());
+        }
     }
 
 

@@ -12,6 +12,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import static com.android.huss.utility.Utility.BEARER;
+
 
 public class CategoryRepository {
 
@@ -25,13 +27,13 @@ public class CategoryRepository {
         return categoryRepository;
     }
 
-    public MutableLiveData<List<Category>>getCategories() {
-        final MutableLiveData<List<Category>> categoryData = new MutableLiveData<>();
+    public MutableLiveData<Category>getPopularCategory(String token, int limit) {
+        final MutableLiveData<Category> categoryData = new MutableLiveData<>();
         HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
-        Call<List<Category>> call = retrofit.getCategory();
-        call.enqueue(new Callback<List<Category>>() {
+        Call<Category> call = retrofit.getPopularCategory(BEARER + " " + token, limit);
+        call.enqueue(new Callback<Category>() {
             @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+            public void onResponse(Call <Category> call, Response<Category> response) {
                 if (response.isSuccessful()) {
                     Log.e(TAG, "onResponse: SUCCESS");
                     categoryData.setValue(response.body());
@@ -39,7 +41,29 @@ public class CategoryRepository {
             }
 
             @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
+            public void onFailure(Call<Category> call, Throwable t) {
+                Log.e(TAG, t.getMessage() + "Failed");
+
+            }
+        });
+        return categoryData;
+    }
+
+    public MutableLiveData<Category> getAllCategory(String token) {
+        final MutableLiveData<Category> categoryData = new MutableLiveData<>();
+        HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
+        Call<Category> call = retrofit.getAllCategory("Bearer " + token);
+        call.enqueue(new Callback<Category>() {
+            @Override
+            public void onResponse(Call<Category> call, Response<Category> response) {
+                if (response.isSuccessful()) {
+                    Log.e(TAG, "onResponse: SUCCESS");
+                    categoryData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Category> call, Throwable t) {
                 Log.e(TAG, t.getMessage() + "Failed");
 //               categoryData.setValue(null);
 

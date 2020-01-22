@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="Personal Information">
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:title="Contact details">
+            <intent android:action="com.android.huss.views.settings.ContactDetailsActivity"/>
+        </Preference>
+
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:title="Change password">
+            <intent android:action="com.android.huss.views.settings.ChangePasswordActivity"/>
+        </Preference>
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="Notification">
+
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            app:key="sync"
+            app:summary="General notifications"
+            app:title="Notifications" />
+
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            app:dependency="sync"
+            app:key="new_message"
+            app:summaryOn="Don't notify me when I receive new message"
+            app:summaryOff="Notify me when I receive new message"
+            app:title="Incoming message" />
+
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="Subscription">
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:title="Premium packages">
+            <intent android:action="com.android.huss.views.settings.ContactDetailsActivity"/>
+        </Preference>
+
+
+    </PreferenceCategory>
+
+
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="Communication">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:title="Frequently Asked Questions">
+            <intent android:action="android.intent.action.VIEW"/>
+        </Preference>
+
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:title="Rate us">
+            <intent android:action="android.intent.action.VIEW"/>
+        </Preference>
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

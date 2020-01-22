@@ -16,8 +16,8 @@ import android.widget.Toast;
 
 import com.android.huss.R;
 import com.android.huss.models.Ads;
+import com.android.huss.viewModels.AdsViewModel;
 import com.android.huss.viewModels.SimilarAdsViewModel;
-import com.android.huss.viewModels.SingleAdsViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 import com.squareup.picasso.Picasso;
@@ -34,7 +34,7 @@ public class SingleAds extends AppCompatActivity {
     ViewPager viewPager;
     RecyclerView similarAdsRecycler;
     Pager pager;
-    SingleAdsViewModel adsViewModel;
+    AdsViewModel adsViewModel;
     SimilarAdsViewModel similarAdsViewModel;
     LVCircularZoom progressBarLatestAds;
     SimilarAdsAdapter similarAdsAdapter;
@@ -74,31 +74,19 @@ public class SingleAds extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         /*Get latest ads using view model*/
-        adsViewModel = ViewModelProviders.of(this).get(SingleAdsViewModel.class);
-        adsViewModel.init(id);
-        adsViewModel.getSingleAds().observe(this, ads -> {
-            ads.setTitle("iPhoneX Max");
-            ads.setPrice("2");
-            ads.setLocation("Abuja");
-            ads.setViews("2000000000");
-            ads.setCreatedAt("2019-12-15T06:55:18.277Z");
-            ads.setDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
-                    "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
-                    "when an unknown printer took a galley of type and scrambled it to make a type specimen book. " +
-                    "It has survived not only five centuries, but also the leap into electronic typesetting, " +
-                    "remaining essentially unchanged. It was popularised in the 1960s with the release of " +
-                    "Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing " +
-                    "software like Aldus PageMaker including versions of Lorem Ipsum.");
-            SingleAds.this.generateAds(ads);
-            progressBarLatestAds.stopAnim();
-            progressBarLatestAds.setVisibility(View.GONE);
-            progressBarLatestAds.stopAnim();
-        });
+        adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
+//        adsViewModel.init(id);
+//        adsViewModel.getSingleAds().observe(this, ads -> {
+//            SingleAds.this.generateAds(ads.getData());
+//            progressBarLatestAds.stopAnim();
+//            progressBarLatestAds.setVisibility(View.GONE);
+//            progressBarLatestAds.stopAnim();
+//        });
 
         /*Get latest ads using view model*/
         similarAdsViewModel = ViewModelProviders.of(this).get(SimilarAdsViewModel.class);
         similarAdsViewModel.init(name);
-        similarAdsViewModel.getSimilarAds().observe(this, SingleAds.this::generateSimilarAds);
+        similarAdsViewModel.getSimilarAds().observe(this, this::generateSimilarAds);
 }
 
     ArrayList<String> allUrl = new ArrayList<>();
@@ -112,7 +100,7 @@ public class SingleAds extends AppCompatActivity {
         return allUrl;
     }
 
-    private void generateAds(Ads ads) {
+    private void generateAds(Ads.Data ads) {
         CircleImageView circleImageView = findViewById(R.id.profile_img);
         TextView adsName = findViewById(R.id.adsName);
         TextView report = findViewById(R.id.report);

@@ -113,6 +113,7 @@ class LoginActivity : AppCompatActivity() {
         editor.putString(USER_ID, profileData.data.id)
         editor.putString(USER_NAME, profileData.data.firstName + " " + profileData.data.lastName)
         editor.putString(EMAIL, profileData.data.email)
+        editor.putString(PHONE, profileData.data.phoneNumber)
         editor.putString(PROFILE_IMAGE_URL, profileData.data.profileImgUrl)
         editor.apply()
 

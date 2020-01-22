@@ -1,5 +1,6 @@
 package com.android.huss.views.auth
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
@@ -27,10 +28,13 @@ class ForgotPassword : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password)
+        emailLayout.editText?.setText(getSharedPreferences(Utility.MY_PREFERENCES, Context.MODE_PRIVATE)
+                .getString(Utility.EMAIL, ""))
     }
 
     fun sendPasswordResetLink(view: View) {
         val email: String = emailLayout.editText?.text.toString()
+
         if (!validateEmail(email)) {
             emailLayout.error = "Not a valid email address!"
         }

@@ -1,26 +1,25 @@
 package com.android.huss.views.ads.createAds
 
 import android.Manifest
-import android.app.ProgressDialog
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.SimpleAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -34,57 +33,112 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.huss.R
 import com.android.huss.models.*
 import com.android.huss.utility.NetworkReceiverUtil
+import com.android.huss.utility.Utility.*
 import com.android.huss.viewModels.*
+import com.android.huss.views.ads.singleAds.SingleAds.ID
+import com.android.huss.views.profile.Profile
 import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.ErrorInfo
 import com.cloudinary.android.callback.UploadCallback
 import com.google.android.material.snackbar.Snackbar
 import com.ldoublem.loadingviewlib.view.LVCircularZoom
 import kotlinx.android.synthetic.main.activity_create_ads.*
-import kotlinx.android.synthetic.main.custom_progress_add_ad.*
-import java.io.File
-import java.lang.NumberFormatException
-import java.text.DecimalFormat
-import java.text.NumberFormat
+import timber.log.Timber
 import java.util.*
 import kotlin.collections.ArrayList
 
 
+@Suppress("DEPRECATION")
 class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
 
-    private val REQUEST_CODE_READ_STORAGE = 100
+    private val requestCode = 100
+    private val draft = "draft"
+    private val category = "category"
+    private val price = "price"
+    private val title = "title"
+    private val description = "description"
+    private val location = "location"
+    private val subCategory = "subCategory"
+    private val negotiable = "isNegotiable"
     private val arrayList = ArrayList<Uri>()
+    private val array = ArrayList<SingleAd.AdImage>()
     var isValid = false
+    lateinit var token: String
 
+
+    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_ads)
-        setUpAdType(false)
-        popSpinnerCatAndSub()
+        token = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE).getString(TOKEN, "")!!
         validateEntry()
         setUpLocation()
         disableButtonPost()
+        loadFromDraft()
+        if (intent.extras != null) {
+            val id = intent.extras?.get(ID).toString()
+            val viewModel = ViewModelProviders.of(this).get(AdsViewModel::class.java)
+            viewModel.initSingleAd(token, id)
+            viewModel.singleAd.observe(this, Observer {
+                adTitle.setText(it.data.title)
+                adDescription.setText(it.data.description)
+                adLocation.setText(it.data.location)
+                adPrice.setText(it.data.price)
+                isNegotiable_checkbox.isChecked = it.data.isNegotiable
+                setUpAdType(it.data.type == STANDARD_AD)
+                postAd.text = getString(R.string.update_ad_cap)
+                page_title.text = getString(R.string.update_ad)
+                /*Images*/
+                it.data.adImages.map { url -> array.add(url) }
+                imagesRecycler.visibility = View.VISIBLE
+                val adapter = ImageAdapterUpdate(this, array)
+                imagesRecycler.adapter = adapter
+                imagesRecycler.layoutManager = LinearLayoutManager(this,
+                        LinearLayoutManager.HORIZONTAL, false)
+                itemTouchHelper.attachToRecyclerView(imagesRecycler)
+                popSpinnerCatAndSub(it.data.categoryName, it.data.subCategoryName)
 
+                if (adTitle.text.toString().isNotEmpty() and
+                        adDescription.text.toString().isNotEmpty() and
+                        adLocation.text.toString().isNotEmpty() and
+                        adPrice.text.toString().isNotEmpty()) {
+                    unDisableButtonPost()
+                }
 
-        add.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                askForPermission()
-            } else {
-                showChooser()
+            })
+            add_image_view.visibility = View.GONE
+            add.visibility = View.GONE
+
+        } else {
+            setUpAdType(false)
+            add.setOnClickListener {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    askForPermission()
+                } else {
+                    showChooser()
+                }
+                terms.setOnClickListener {
+                    openTerms()
+
+                }
+                typeInfo.setOnClickListener {
+                    showInfo()
+                }
+
             }
-            terms.setOnClickListener {
-                openTerms()
 
-            }
-            typeInfo.setOnClickListener {
-                showInfo()
-            }
-
+            popSpinnerCatAndSub("Agriculture & Food", "Farm Machinery & Equipment")
         }
+
+
+
+
 
         postAd.setOnClickListener {
             publishAd()
         }
+
+
         payCheck.setOnClickListener {
             /*TODO: Check if user has paid, if true don't show this again*/
 //            val fragment = BottomNavPay()
@@ -93,6 +147,82 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        val network = object : NetworkReceiverUtil() {
+            override fun onNetworkChange(state: Boolean) {
+                if (!state) {
+                    showSnack("No network connection!")
+                }
+            }
+
+
+        }
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(network, filter)
+    }
+
+    override fun onBackPressed() {
+        saveDraft()
+    }
+
+    private fun saveDraft() {
+            if (adTitle.text.isNotEmpty() or adDescription.text.isNotEmpty()
+                    or adPrice.text.isNotEmpty() or (isNegotiable_checkbox.isChecked) or
+                    categories.isSelected or sub_category.isSelected) {
+                val info = AlertDialog.Builder(this).create()
+                info.setMessage("You are about to leave this page without completing the posting process. " +
+                        "Do you want to save as draft and complete later?")
+                info.setTitle("Hi ${getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE)
+                        .getString(USER_NAME, "")!!.split(" ")[0]}")
+                info.setButton(DialogInterface.BUTTON_POSITIVE, "Save draft!") { _, _ ->
+                    val category = categories.selectedItem.toString()
+                    val subCat = sub_category.selectedItem.toString()
+                    val title = adTitle.text.toString()
+                    val description = adDescription.text.toString()
+                    val location = adLocation.text.toString()
+                    val price = adPrice.text.toString().replace(",", "")
+                    val isNegotiable = isNegotiable_checkbox.isChecked
+
+                    val sharedPreferences = getSharedPreferences(draft, Context.MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+                    editor.putStringSet(draft, mutableSetOf(title, description, location, price))
+                    editor.putString(title, title)
+                    editor.putString(this.description, description)
+                    editor.putString(this.location, location)
+                    editor.putString(this.price, price)
+                    editor.putString(this.category, category)
+                    editor.putString(subCategory, subCat)
+                    editor.putBoolean(this.negotiable, isNegotiable)
+                    editor.apply()
+                    finish()
+
+                }
+                info.setButton(DialogInterface.BUTTON_NEGATIVE, "Delete") { _, _ -> finish() }
+                info.setCancelable(true)
+                info.show()
+
+
+            } else {
+                finish()
+            }
+
+    }
+
+    private fun loadFromDraft() {
+        val sharedPreferences = getSharedPreferences(draft, Context.MODE_PRIVATE)
+        categories.post { categories.setSelection(sharedPreferences.getInt(category, 0), true) }
+        sub_category.post { sub_category.setSelection(sharedPreferences.getInt(subCategory, 0), true) }
+        adTitle.setText(sharedPreferences.getString(title, ""))
+        adDescription.setText(sharedPreferences.getString(description, ""))
+        adLocation.setText(sharedPreferences.getString(location, ""))
+        adPrice.setText(sharedPreferences.getString(price, ""))
+        isNegotiable_checkbox.isChecked = sharedPreferences.getBoolean(negotiable, false)
+        popSpinnerCatAndSub(sharedPreferences.getString(category, "")!!,
+                sharedPreferences.getString(subCategory, "")!!)
+        setUpAdType(state = false)
+        sharedPreferences.edit().clear().apply()
+    }
 
     private fun setUpAdType(state: Boolean) {
         if (state) radioGroup.check(R.id.payCheck)
@@ -124,7 +254,7 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
         intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
-        startActivityForResult(intent, REQUEST_CODE_READ_STORAGE)
+        startActivityForResult(intent, requestCode)
     }
 
     private fun askForPermission() {
@@ -138,7 +268,7 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
     private fun makeRequest() {
         ActivityCompat.requestPermissions(this,
                 arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                REQUEST_CODE_READ_STORAGE)
+                requestCode)
     }
 
 
@@ -196,9 +326,6 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
         ItemTouchHelper(simpleItemTouchCallback)
     }
 
-    fun startDragging(viewHolder: RecyclerView.ViewHolder) {
-        itemTouchHelper.startDrag(viewHolder)
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
@@ -207,7 +334,7 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
 
     private fun doSom(requestCode: Int, resultCode: Int, resultData: Intent?) {
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_CODE_READ_STORAGE) {
+            if (requestCode == this.requestCode) {
                 if (resultData != null) {
                     if (resultData.clipData != null) {
                         var count = resultData.clipData!!.itemCount
@@ -241,7 +368,6 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
                         }
                     } else if (resultData.data != null) {
                         val uri = resultData.data
-                        val file = File(getRealPathFromURI(uri.toString()))
                         try {
                             if (arrayList.size > 3) {
                                 Snackbar.make(add, "You have reached the maximum number of image upload", Snackbar.LENGTH_LONG).show()
@@ -270,7 +396,7 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
-            REQUEST_CODE_READ_STORAGE -> {
+            this.requestCode -> {
                 if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     val snackbar = Snackbar.make(add, "Permission denied!", Snackbar.LENGTH_SHORT)
                     snackbar.show()
@@ -281,41 +407,29 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
         }
     }
 
-    fun getRealPathFromURI(contentURI: String): String {
-        val contentUri = Uri.parse(contentURI)
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-
-        val cursor = contentResolver.query(contentUri, projection, null, null, null)
-
-        val columnIndex = cursor?.getColumnIndex(MediaStore.Images.Media.DATA)
-        cursor?.moveToFirst()
-        val path = cursor?.getString(columnIndex!!).toString()
-        cursor?.close()
-        Log.e("Path", path)
-        return path
-    }
 
     override fun hasPaid(state: Boolean) {
         setUpAdType(state)
 
     }
 
-    fun popSpinnerCatAndSub() {
+    private fun popSpinnerCatAndSub(categoryName: String, subCategoryName: String) {
+        val progress = showProgress(false)
         val list = arrayListOf<String>()
         val categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel::class.java)
-        categoryViewModel.init()
-        categoryViewModel.category.observe(this, Observer<List<Category?>> { catResponse: List<Category?>? ->
-            for (item in catResponse!!) {
-//                list += item!!.name
+        categoryViewModel.initAllCategory(token)
+        categoryViewModel.allCategory.observe(this, Observer<Category?> { catResponse ->
+            for (item in catResponse!!.data) {
+                list += item!!.name
             }
+            val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list)
+            categories.adapter = adapter
+            categories.setSelection(list.indexOf(categoryName))
+
 
         })
-        list += "Mobile"
-        list += "Auto"
-        list += "Housing"
-        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,
-                list)
-        categories.adapter = adapter
+
+
         categories?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -324,19 +438,18 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val sublist = arrayListOf<String>()
                 val subCategoryViewModel = ViewModelProviders.of(this@CreateAds).get(SubCategoryViewModel::class.java)
-                subCategoryViewModel.init(categories.getItemAtPosition(position).toString())
-                subCategoryViewModel.subCategory.observe(this@CreateAds, Observer<List<SubCategory?>> { subCatResponse: List<SubCategory?>? ->
-                    for (item in subCatResponse!!) {
-//                sublist += item!!.name
+                subCategoryViewModel.init(token, categories.getItemAtPosition(position).toString())
+                subCategoryViewModel.subCategory.observe(this@CreateAds, Observer<SubCategory?> { subCatResponse ->
+                    for (item in subCatResponse?.data!!) {
+                        sublist += item!!.name
                     }
-
+                    val subAdapter = ArrayAdapter<String>(this@CreateAds, android.R.layout.simple_spinner_item,
+                            sublist)
+                    sub_category.adapter = subAdapter
+                    sub_category.setSelection(sublist.indexOf(subCategoryName))
+                    progress.dismiss()
                 })
-                sublist += "Mobile"
-                sublist += "Auto"
-                sublist += "Housing"
-                val subAdapter = ArrayAdapter<String>(this@CreateAds, android.R.layout.simple_spinner_item,
-                        sublist)
-                sub_category.adapter = subAdapter
+
             }
 
         }
@@ -345,12 +458,12 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
     }
 
     fun disableButtonPost() {
-        postAd.background = resources.getDrawable(R.drawable.button_offer_disable)
+        postAd.background = resources.getDrawable(R.drawable.button_offer_disable, Resources.getSystem().newTheme())
         postAd.setTextColor(Color.LTGRAY)
     }
 
     private fun unDisableButtonPost() {
-        postAd.background = resources.getDrawable(R.drawable.button_offer)
+        postAd.background = resources.getDrawable(R.drawable.button_offer, Resources.getSystem().newTheme())
         postAd.setTextColor(Color.WHITE)
     }
 
@@ -360,7 +473,7 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
         locationViewModel.init()
         locationViewModel.locations.observe(this, Observer<List<Location?>> { locationRes: List<Location?>? ->
             for (item in locationRes!!) {
-//                list += item!!.location
+                list += item!!.location
 
             }
 
@@ -373,7 +486,10 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
     }
 
     private fun validateEntry() {
+
+
         val textWatcherTitle = object : TextWatcher {
+            @SuppressLint("SetTextI18n")
             override fun afterTextChanged(s: Editable?) {
                 val title = s.toString()
                 if (title.length > 70) {
@@ -385,12 +501,9 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
                     titleCount.setTextColor(Color.GRAY)
 
                 }
-                if (adTitle.text.isNotEmpty() && adTitle.text.length <= 70
-                        && categories.selectedItem != null
+                isValid = (adTitle.text.isNotEmpty() && adTitle.text.length <= 70
                         && adDescription.text.isNotEmpty() && adDescription.text.length <= 1200
-                        && adLocation.text.isNotEmpty() && adPrice.text.isNotEmpty()) {
-                    isValid = true
-                }
+                        && adLocation.text.isNotEmpty() && adPrice.text.isNotEmpty())
 
                 if (isValid) unDisableButtonPost() else disableButtonPost()
             }
@@ -404,6 +517,7 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
             }
         }
         val textWatcherDesc = object : TextWatcher {
+            @SuppressLint("SetTextI18n")
             override fun afterTextChanged(s: Editable?) {
                 val desc = s.toString()
                 if (desc.length > 1200) {
@@ -414,12 +528,9 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
                     descCount.setTextColor(Color.GRAY)
 
                 }
-                if (adTitle.text.isNotEmpty() && adTitle.text.length <= 70
-                        && categories.selectedItem != null
+                isValid = (adTitle.text.isNotEmpty() && adTitle.text.length <= 70
                         && adDescription.text.isNotEmpty() && adDescription.text.length <= 1200
-                        && adLocation.text.isNotEmpty() && adPrice.text.isNotEmpty()) {
-                    isValid = true
-                }
+                        && adLocation.text.isNotEmpty() && adPrice.text.isNotEmpty())
                 if (isValid) unDisableButtonPost() else disableButtonPost()
 
 
@@ -435,13 +546,9 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
         }
         val textWatcherLocation = object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                val desc = s.toString()
-                if (adTitle.text.isNotEmpty() && adTitle.text.length <= 70
-                        && categories.selectedItem != null
+                isValid = (adTitle.text.isNotEmpty() && adTitle.text.length <= 70
                         && adDescription.text.isNotEmpty() && adDescription.text.length <= 1200
-                        && adLocation.text.isNotEmpty() && adPrice.text.isNotEmpty()) {
-                    isValid = true
-                }
+                        && adLocation.text.isNotEmpty() && adPrice.text.isNotEmpty())
                 if (isValid) unDisableButtonPost() else disableButtonPost()
             }
 
@@ -468,12 +575,9 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
                     nfe.printStackTrace()
                 }
 
-                if (adTitle.text.isNotEmpty() && adTitle.text.length <= 70
-                        && categories.selectedItem != null
+                isValid = (adTitle.text.isNotEmpty() && adTitle.text.length <= 70
                         && adDescription.text.isNotEmpty() && adDescription.text.length <= 1200
-                        && adLocation.text.isNotEmpty() && adPrice.text.isNotEmpty()) {
-                    isValid = true
-                }
+                        && adLocation.text.isNotEmpty() && adPrice.text.isNotEmpty())
                 if (isValid) unDisableButtonPost() else disableButtonPost()
                 adPrice.addTextChangedListener(this)
 
@@ -498,109 +602,231 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
 
     private fun publishAd() {
         if (isValid) {
-            if (arrayList.isEmpty()) {
-                val snackbar = Snackbar.make(postAd, "Select at least one(1) image before publishing Ad", Snackbar.LENGTH_LONG);
-                snackbar.setAction("Ok") {
-                    snackbar.dismiss()
+
+            if (intent.extras == null) {
+                if (arrayList.isEmpty()) {
+                    val snackBar = Snackbar.make(postAd, "Select at least one(1) image before publishing Ad", Snackbar.LENGTH_LONG)
+                    snackBar.setAction("Ok") {
+                        snackBar.dismiss()
+                    }
+                    snackBar.setActionTextColor(resources.getColor(R.color.colorAccent))
+                    snackBar.show()
+                    return
                 }
-                snackbar.setActionTextColor(resources.getColor(R.color.colorAccent))
-                snackbar.show()
-                return
+            } else {
+                if (array.isEmpty() and arrayList.isEmpty()) {
+                    val snackBar = Snackbar.make(postAd, "Select at least one(1) image before publishing Ad", Snackbar.LENGTH_LONG)
+                    snackBar.setAction("Ok") {
+                        snackBar.dismiss()
+                    }
+                    snackBar.setActionTextColor(resources.getColor(R.color.colorAccent))
+                    snackBar.show()
+                    return
+                }
             }
+
             val category = categories.selectedItem.toString()
             val subCat = sub_category.selectedItem.toString()
             val title = adTitle.text.toString()
             val description = adDescription.text.toString()
             val location = adLocation.text.toString()
             val price = adPrice.text.toString().replace(",", "")
-            val isNegotiable = isNegotiable.isChecked
-            val adType = "Standard Ad"
-            val ads = Ads()
+            val isNegotiable = isNegotiable_checkbox.isChecked
+            val adType = STANDARD_AD
+            val ads = Ads().data
             ads.title = title
             ads.description = description
             ads.location = location
             ads.price = price
             ads.isNegotiable = isNegotiable
             ads.type = adType
+            ads.categoryName = category
+            ads.subCategoryName = subCat
 
 
-            val progress = AlertDialog.Builder(this).create()
-            progress.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            val viewCustom = View.inflate(this, R.layout.custom_progress, null)
-            progress.setView(viewCustom)
-            progress.setCancelable(true)
-            progress.show()
-            val progressBar = viewCustom.findViewById<LVCircularZoom>(R.id.progress)
-            progressBar.setViewColor(resources.getColor(R.color.colorAccent))
-            progressBar.startAnim(100)
-
+            val progress = showProgress(true)
             fun uploadImages(productId: Int) {
-                for (image in arrayList) {
-                    val uploadCallBack = object : UploadCallback {
-                        override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
-                            val createImageViewModel = ViewModelProviders.of(this@CreateAds).get(CreateImageViewModel::class.java)
-                            val adImage = AdImage()
-                            adImage.imageUrl = resultData!!["url"].toString()
-                            adImage.productId = productId
-                            createImageViewModel.init(adImage)
-                            createImageViewModel.createImageResponse.observe(this@CreateAds, Observer<String> { imageId: String ->
-                              progress.dismiss()
+                if (intent.extras == null) {
+                    for ((i, image) in arrayList.withIndex()) {
+                        val uploadCallBack = object : UploadCallback {
+                            override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
+                                val createImageViewModel = ViewModelProviders.of(this@CreateAds).get(CreateImageViewModel::class.java)
+                                val adImage = Image().data
+                                adImage.iconUrl = resultData!!["url"].toString()
+                                adImage.adId = productId
+                                adImage.featured = i == 0
+                                createImageViewModel.init(adImage, token)
+                                createImageViewModel.createImageResponse
+                                        .observe(this@CreateAds, Observer<Image> {
+                                            progress.dismiss()
+                                            val progressSuccess = AlertDialog.Builder(this@CreateAds)
+                                            progressSuccess.setCancelable(true)
+                                            progressSuccess.setTitle("Congratulations!")
+                                            progressSuccess.setMessage("Your Ad has been posted! Continue to view your listings")
+                                            progressSuccess.setPositiveButton("Ok") { dialog, _ ->
+                                                dialog.dismiss()
+                                                startActivity(Intent(this@CreateAds, Profile::class.java))
+                                            }
+                                            progressSuccess.show()
+                                        })
 
-                            })
+                            }
 
+                            override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {
+
+                            }
+
+                            override fun onReschedule(requestId: String?, error: ErrorInfo?) {
+
+                            }
+
+                            override fun onError(requestId: String?, error: ErrorInfo?) {
+                                val snackBar = Snackbar.make(postAd, " ${error.toString()}", Snackbar.LENGTH_LONG)
+                                snackBar.setActionTextColor(resources.getColor(R.color.colorAccent))
+                                snackBar.setAction("Ok") { snackBar.dismiss() }
+                                snackBar.show()
+                                progressUpload.visibility = View.GONE
+                            }
+
+                            override fun onStart(requestId: String?) {
+
+
+                            }
                         }
+                        val time = Calendar.getInstance().timeInMillis
+                        MediaManager.get().upload(image)
+                                .unsigned(this.getString(R.string.ads_upload_preset))
+                                .callback(uploadCallBack)
+                                .option(getString(R.string.public_id), time.toString())
+                                .dispatch()
 
-                        override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {
-
-                        }
-
-                        override fun onReschedule(requestId: String?, error: ErrorInfo?) {
-
-                        }
-
-                        override fun onError(requestId: String?, error: ErrorInfo?) {
-                            val snackBar = Snackbar.make(postAd, " ${error.toString()}", Snackbar.LENGTH_LONG)
-                            snackBar.setActionTextColor(resources.getColor(R.color.colorAccent))
-                            snackBar.setAction("Ok") { snackBar.dismiss() }
-                            snackBar.show()
-                            progressUpload.visibility = View.GONE
-                        }
-
-                        override fun onStart(requestId: String?) {
-
-
-                        }
                     }
-
-                    val time = Calendar.getInstance().timeInMillis
-                    MediaManager.get().upload(image)
-                            .unsigned(this.getString(R.string.preset))
-                            .callback(uploadCallBack)
-                            .option("public_id", time.toString())
-                            .dispatch()
                 }
             }
 
-            fun showSnack(text: String) {
-                val snackbar = Snackbar.make(postAd, text, Snackbar.LENGTH_LONG);
-                snackbar.setAction("Ok") { snackbar.dismiss() }
-                snackbar.setActionTextColor(postAd.resources.getColor(R.color.colorAccent))
-                snackbar.show()
-            }
+//            fun updateImage(singleAd: SingleAd.Data) {
+//                if (arrayList.isNotEmpty()) {
+//                    for ((i, image) in arrayList.withIndex()) {
+//                        val uploadCallBack = object : UploadCallback {
+//                            override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
+//                                Timber.e(resultData!!["version"].toString())
+//                                progress.dismiss()
+//                                val progressSuccess = AlertDialog.Builder(this@CreateAds)
+//                                progressSuccess.setCancelable(true)
+//                                progressSuccess.setTitle("Congratulations!")
+//                                progressSuccess.setMessage("Your Ad has been updated successfully! Continue to view your Ad")
+//                                progressSuccess.setPositiveButton("Ok") { dialog, _ ->
+//                                    dialog.dismiss()
+//                                    startActivity(Intent(this@CreateAds, Profile::class.java))
+//                                }
+//                                progressSuccess.show()
+//
+//
+//                            }
+//
+//                            override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {
+//
+//                            }
+//
+//                            override fun onReschedule(requestId: String?, error: ErrorInfo?) {
+//
+//                            }
+//
+//                            override fun onError(requestId: String?, error: ErrorInfo?) {
+//                                val snackBar = Snackbar.make(postAd, " ${error.toString()}", Snackbar.LENGTH_LONG)
+//                                snackBar.setActionTextColor(resources.getColor(R.color.colorAccent))
+//                                snackBar.setAction("Ok") { snackBar.dismiss() }
+//                                snackBar.show()
+//                                progressUpload.visibility = View.GONE
+//                                Timber.e(error?.description)
+//                            }
+//
+//                            override fun onStart(requestId: String?) {
+//
+//
+//                            }
+//                        }
+//
+//                        fun getPublicIdFromUrl(url: String): String{
+//                            val arr =  url.split("/")
+//                            val lastSegment = arr[arr.size - 1]
+//                            return lastSegment.substring(0, lastSegment.indexOf("."))
+//
+//                        }
+//
+//
+//                            val time = Calendar.getInstance().timeInMillis
+//                            MediaManager.get().upload(image)
+//                                    .unsigned(this.getString(R.string.ads_upload_preset))
+//                                    .callback(uploadCallBack)
+//                                    .option(getString(R.string.public_id), time.toString())
+//                                    .dispatch()
+//
+//
+//
+//
+//
+//
+//                    }
+//                } else {
+//                    for (image in array) {
+//                        progress.dismiss()
+//                        val progressSuccess = AlertDialog.Builder(this@CreateAds)
+//                        progressSuccess.setCancelable(true)
+//                        progressSuccess.setTitle("Congratulations!")
+//                        progressSuccess.setMessage("Your Ad has been updated successfully! Continue to view Ad")
+//                        progressSuccess.setPositiveButton("Ok") { dialog, _ ->
+//                            dialog.dismiss()
+//                            startActivity(Intent(this@CreateAds, Profile::class.java))
+//                        }
+//                        progressSuccess.show()
+//
+//
+//                    }
+//                }
+//            }
+
 
             val network = object : NetworkReceiverUtil() {
                 override fun onNetworkChange(state: Boolean) {
                     if (!state) {
                         showSnack("You not connected to the internet, connect and retry")
                     } else {
+                        if (intent.extras == null) {
+                            val createAdViewModel = ViewModelProviders.of(this@CreateAds).get(CreateAdViewModel::class.java)
+                            createAdViewModel.init(ads, token)
+                            createAdViewModel.createResponse.observe(this@CreateAds, Observer<Ads> { productId ->
+                                uploadImages(productId.data.id)
 
-                        val createAdViewModel = ViewModelProviders.of(this@CreateAds).get(CreateAdViewModel::class.java)
-                        createAdViewModel.init(ads, category, subCat, "Bearer" + ""/*TODO: Token from shared*/)
-                        createAdViewModel.createResponse.observe(this@CreateAds, Observer<Int> { catId: Int ->
-                            uploadImages(catId)
+                            })
 
-                        })
+                        } else {
+                            val singleAd = SingleAd().data
+                            singleAd.id = intent.extras?.getInt(ID)
+                            singleAd.categoryName = categories.selectedItem.toString()
+                            singleAd.subCategoryName = sub_category.selectedItem.toString()
+                            singleAd.title = adTitle.text.toString()
+                            singleAd.description = adDescription.text.toString()
+                            singleAd.price = adPrice.text.toString().replace(",", "")
+                            singleAd.isNegotiable = isNegotiable_checkbox.isChecked
+                            singleAd.type = STANDARD_AD
+                            singleAd.adImages = array
+                            val updateAdViewModel = ViewModelProviders.of(this@CreateAds).get(UpdateAdViewModel::class.java)
+                            updateAdViewModel.init(token, singleAd)
+                            updateAdViewModel.updateAdResponse.observe(this@CreateAds, Observer<SingleAd> {
+                                progress.dismiss()
+                                val progressSuccess = AlertDialog.Builder(this@CreateAds)
+                                progressSuccess.setCancelable(true)
+                                progressSuccess.setTitle("Congratulations!")
+                                progressSuccess.setMessage("Your Ad has been updated successfully! Continue to view your Ad")
+                                progressSuccess.setPositiveButton("Ok") { dialog, _ ->
+                                    dialog.dismiss()
+                                    startActivity(Intent(this@CreateAds, Profile::class.java))
+                                }
+                                progressSuccess.show()
 
+                            })
+                        }
                     }
                 }
 
@@ -611,5 +837,25 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
         }
     }
 
+
+    private fun showProgress(cancelable: Boolean): AlertDialog {
+        val progress = AlertDialog.Builder(this).create()
+        progress.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val viewCustom = View.inflate(this, R.layout.custom_progress, null)
+        progress.setView(viewCustom)
+        progress.setCancelable(cancelable)
+        progress.show()
+        val progressBar = viewCustom.findViewById<LVCircularZoom>(R.id.progress)
+        progressBar.setViewColor(resources.getColor(R.color.colorAccent))
+        progressBar.startAnim(100)
+        return progress
+    }
+
+    fun showSnack(text: String) {
+        val snackbar = Snackbar.make(postAd, text, Snackbar.LENGTH_INDEFINITE)
+        snackbar.setAction("Ok") { snackbar.dismiss() }
+        snackbar.setActionTextColor(postAd.resources.getColor(R.color.colorAccent))
+        snackbar.show()
+    }
 
 }

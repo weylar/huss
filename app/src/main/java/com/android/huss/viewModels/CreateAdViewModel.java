@@ -3,28 +3,23 @@ package com.android.huss.viewModels;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.android.huss.models.Ads;
-import com.android.huss.models.Category;
-import com.android.huss.repositories.CategoryRepository;
-import com.android.huss.repositories.CreateAdRepository;
-
-import java.util.List;
+import com.android.huss.repositories.AdsRepository;
 
 public class CreateAdViewModel extends ViewModel {
 
-    private MutableLiveData<Integer> mutableLiveData;
+    private MutableLiveData<Ads> mutableLiveData;
 
-    public void init(Ads ads, String category, String subcat, String token) {
+    public void init(Ads.Data ads, String token) {
         if (mutableLiveData != null) {
             return;
         }
-        CreateAdRepository createAdRepository = CreateAdRepository.getInstance();
-        mutableLiveData = createAdRepository.createAd(ads, category, subcat, token);
+        AdsRepository adsRepository = AdsRepository.getInstance();
+        mutableLiveData = adsRepository.createAd(ads, token);
 
     }
 
-    public LiveData<Integer> getCreateResponse() {
+    public LiveData<Ads> getCreateResponse() {
         return mutableLiveData;
     }
 

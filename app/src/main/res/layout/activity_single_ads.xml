@@ -328,12 +328,21 @@
             android:layout_toEndOf="@+id/back"
             android:textSize="20sp" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.varunest.sparkbutton.SparkButton
+            android:id="@+id/favorite"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_alignParentEnd="true"
-            android:onClick="favoriteAds"
-            android:src="@drawable/favorite_no" />
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:contentDescription="@string/favorite"
+            app:sparkbutton_activeImage="@drawable/favorite_yes"
+            app:sparkbutton_animationSpeed="1.5"
+            app:sparkbutton_iconSize="25dp"
+            app:sparkbutton_inActiveImage="@drawable/favorite_no"
+            app:sparkbutton_primaryColor="@color/colorAccent"
+            app:sparkbutton_secondaryColor="@color/colorAccent" />
 
 
     </RelativeLayout>

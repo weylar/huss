@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.android.huss">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -20,11 +22,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity
-            android:name=".views.auth.ResetPasswordActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".views.subscription.Subscription"/>
+        <activity android:name=".views.message.ChatActivity" />
+        <activity android:name=".views.message.AllChatActivity" />
+        <activity android:name=".views.profile.UserProfile" />
+        <activity android:name=".views.settings.ChangePassword">
+            <intent-filter>
+                <action android:name="com.android.huss.views.settings.ChangePasswordActivity" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity android:name=".views.settings.MapsActivity" />
+        <activity android:name=".views.settings.ContactDetailsActivity">
+            <intent-filter>
+                <action android:name="com.android.huss.views.settings.ContactDetailsActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".views.settings.SettingsActivity"
+            android:theme="@style/PreferenceScreen" />
+        <activity android:name=".views.auth.ResetPasswordActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -32,56 +59,29 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="https"
                     android:host="huss-ng.herokuapp.com"
-                    android:pathPrefix="/user/reset-password" />
+                    android:pathPrefix="/user/reset-password"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".views.auth.ForgotPassword"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".views.auth.SignUpActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".views.auth.LoginActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-
+        <activity android:name=".views.auth.ForgotPassword" />
+        <activity android:name=".views.auth.SignUpActivity" />
+        <activity android:name=".views.auth.LoginActivity" />
 
         <meta-data
             android:name="co.paystack.android.PublicKey"
             android:value="pk_test_91f5670d53cff8162b4df5bc8009ab9a305ca267" />
 
-        <activity
-            android:name=".views.ads.createAds.CreateAds"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".views.ads.createAds.FullAdImagePreview"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".views.category.Category"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".views.subCategory.SubCategoryView"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".views.profile.Profile"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".views.favorite.Favorite"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".views.adsImages.ImageFull"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".views.ads.singleAds.SingleAds"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".views.ads.latestAds.LatestAds"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".views.home.MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".views.ads.createAds.CreateAds" />
+        <activity android:name=".views.ads.createAds.FullAdImagePreview" />
+        <activity android:name=".views.category.Category" />
+        <activity android:name=".views.subCategory.SubCategoryView" />
+        <activity android:name=".views.profile.Profile" />
+        <activity android:name=".views.favorite.Favorite" />
+        <activity android:name=".views.adsImages.ImageFull" />
+        <activity android:name=".views.ads.singleAds.SingleAds" />
+        <activity android:name=".views.ads.latestAds.LatestAds" />
+        <activity android:name=".views.home.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

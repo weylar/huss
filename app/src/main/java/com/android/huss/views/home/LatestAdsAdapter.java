@@ -13,6 +13,8 @@ import com.android.huss.R;
 import com.android.huss.models.Ads;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
+import com.varunest.sparkbutton.SparkButton;
+import com.varunest.sparkbutton.SparkEventListener;
 
 import java.util.List;
 
@@ -56,7 +58,7 @@ public class LatestAdsAdapter extends RecyclerView.Adapter<LatestAdsAdapter.Cust
         TextView txtTitle;
         TextView price;
         TextView label;
-        ImageView favorite;
+        SparkButton favorite;
         private ImageView image;
 
         CustomViewHolder(View itemView) {
@@ -79,13 +81,33 @@ public class LatestAdsAdapter extends RecyclerView.Adapter<LatestAdsAdapter.Cust
 
         @Override
         public void onBindViewHolder(CustomViewHolder holder, int position) {
-            String adTitle = dataList.get(position).getTitle();
+         //   String adTitle = dataList.get(position).getTitle();
             holder.label.setVisibility(View.GONE);
             holder.txtTitle.setText( "iPhone X Max"/*adTitle.length() > 70 ? adTitle.substring(0, 67).concat("...") : adTitle*/);
             holder.price.setText("$35"/*dataList.get(position).getPrice()*/);
 //            holder.description.setText("Lorem ipsum dolor sit amet, minim veniam, ut aliquip ex ea commodo consequat");
           //  if (dataList.get(position).getFavorite().equals("Yes")){
-               holder.favorite.setImageResource(R.drawable.favorite_yes);
+            holder.favorite.setEventListener(new SparkEventListener(){
+
+                @Override
+                public void onEvent(ImageView button, boolean buttonState) {
+                    if (buttonState) {
+                        // Button is active
+                    } else {
+                        // Button is inactive
+                    }
+                }
+
+                @Override
+                public void onEventAnimationEnd(ImageView button, boolean buttonState) {
+
+                }
+
+                @Override
+                public void onEventAnimationStart(ImageView button, boolean buttonState) {
+
+                }
+            });
 
           //  }else{
                 //holder.favorite.setImageResource(R.drawable.favorite_no);
@@ -93,12 +115,9 @@ public class LatestAdsAdapter extends RecyclerView.Adapter<LatestAdsAdapter.Cust
 
 
 
-            Picasso.Builder builder = new Picasso.Builder(context);
-            builder.downloader(new OkHttp3Downloader(context));
-            builder.build().load(dataList.get(position).getFeatureImgUrl())
-                    .placeholder((R.drawable.ic_launcher_background))
-                    .error(R.drawable.ic_launcher_background)
-                    .into(holder.image);
+//            Picasso.Builder builder = new Picasso.Builder(context);
+//            builder.build().load(dataList.get(position).getFeatureImgUrl())
+//                    .into(holder.image);
 
         }
 

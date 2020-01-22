@@ -1,17 +1,21 @@
 package com.android.huss.data;
 
 
+import com.android.huss.models.Ad;
 import com.android.huss.models.AdImage;
 import com.android.huss.models.Ads;
+import com.android.huss.models.AllAds;
 import com.android.huss.models.Category;
+import com.android.huss.models.Image;
 import com.android.huss.models.Location;
 import com.android.huss.models.Profile;
+import com.android.huss.models.SingleAd;
 import com.android.huss.models.SubCategory;
 
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -25,8 +29,17 @@ import retrofit2.http.Query;
 
 public interface HussAPI {
 
-    @GET("photos")
-    Call<List<Category>> getCategory();
+    @GET("category/getPopularCategories/{limit}")
+    Call<Category> getPopularCategory(@Header("Authorization") String name,
+                                      @Path("limit") int limit);
+
+    @GET("category/all/categories")
+    Call<Category> getAllCategory(@Header("Authorization") String name);
+
+    @GET("subCategory/{categoryName}/getAllSubCategories")
+    Call<SubCategory> getSubCategory(@Header("Authorization") String name,
+                                     @Path("categoryName") String categoryName);
+
 
     @GET("photos/{id}")
     Call<Profile> getUserProfile(@Path("id") String id);
@@ -34,8 +47,50 @@ public interface HussAPI {
     @GET("photos")
     Call<List<Ads>> getAds();
 
-    @GET("photos/{id}")
-    Call<Ads> getSingleAds(@Path("id") String id);
+    @PUT("user/profile")
+    @FormUrlEncoded
+    Call<Profile> updateUserProfile(@Header("Authorization") String name,
+                                    @Field("profileImgUrl") String imageUrl,
+                                    @Field("firstName") String firstName,
+                                    @Field("lastName") String lastName,
+                                    @Field("phone") String phone,
+                                    @Field("city") String location);
+
+
+    @POST("ad/{categoryName}/{subCategoryName}/create")
+    @FormUrlEncoded
+    Call<Ads> postAd(@Path("categoryName") String categoryName,
+                     @Path("subCategoryName") String subCategoryName,
+                     @Field("title") String title,
+                     @Field("description") String description,
+                     @Field("price") String price,
+                     @Field("location") String location,
+                     @Field("isNegotiable") Boolean isNegotiable,
+                     @Header("Authorization") String name);
+
+
+    @DELETE("ad/deleteAd/{id}")
+    Call<Ads> deleteUserAd(@Header("Authorization") String token,
+                          @Path("id") int id);
+
+    @GET("photos")
+    Call<List<Ads>> getSearchAds(@Query("key") String key);
+
+    @GET("ad/getAd/{id}")
+    Call<SingleAd> getSingleAds(@Header("Authorization") String token,
+                                @Path("id") String id);
+
+    @PUT("ad/editAd/{id}")
+    @FormUrlEncoded
+    Call<SingleAd> updateAd(@Header("Authorization") String token,
+                            @Path("id") String id,
+                            @Field("categoryName") String categoryName,
+                            @Field("subCategoryName") String subCategoryName,
+                            @Field("title") String title,
+                            @Field("description") String description,
+                            @Field("price") String price,
+                            @Field("location") String location,
+                            @Field("isNegotiable") Boolean isNegotiable);
 
     @GET("photos")
     Call<List<Ads>> getSimilarAds(@Query("name") String adsName);
@@ -43,25 +98,25 @@ public interface HussAPI {
     @GET("photos")
     Call<List<Ads>> getFavoriteAds(@Query("userId") String userID);
 
-    @GET("photos")
-    Call<List<Ads>> getUserAds(@Query("userId") String userID);
+    @GET("ad/getAllOwnAds")
+    Call<AllAds> getUserAds(@Header("Authorization") String token);
 
-    @GET("photos")
-    Call<List<SubCategory>> getSubCategory(@Query("catName") String catName);
 
     @GET("locations")
     Call<List<Location>> getLocation();
 
 
-    @POST("ad/{categoryName}/{subCategoryName}create")
-    Call<Integer> createAd(@Body Ads ad,
-                          @Path("categoryName") String categoryName,
-                          @Path("subCategoryName") String subCategoryName,
-                          @Header("Authorization") String name
-    );
+    @POST("adImage/{adId}/create")
+    @FormUrlEncoded
+    Call<Image> createImage(@Path("adId") int adId,
+                            @Field("imageUrl") String url,
+                            @Field("displayImage") Boolean isFeatured,
+                            @Header("Authorization") String token);
 
-    @POST("images")
-    Call<String> createImage(@Body AdImage ad);
+
+    @GET("adImage/{adId}/getAnAdImages")
+    Call<AdImage> getFeaturedImage(@Path("adId") int adId,
+                                   @Header("Authorization") String token);
 
     @POST("auth/login")
     @FormUrlEncoded
@@ -71,7 +126,7 @@ public interface HussAPI {
     @POST("auth/signup")
     @FormUrlEncoded
     Call<Profile> signUp(@Field("firstName") String firstName,
-                        @Field("lastName") String lastName,
+                         @Field("lastName") String lastName,
                          @Field("email") String email,
                          @Field("password") String password,
                          @Field("confirmPassword") String confirmPassword);

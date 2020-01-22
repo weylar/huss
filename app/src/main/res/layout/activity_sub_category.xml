@@ -32,6 +32,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="15dp"
                 tools:text="Electronics"
+                android:textColor="@color/colorPrimaryDark"
                 android:layout_toEndOf="@+id/back"
                 android:textSize="20sp" />
 
@@ -44,13 +45,22 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/sub_cat_recycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
 
-    <com.ldoublem.loadingviewlib.view.LVCircularZoom
-        android:id="@+id/progress"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_gravity="center"
-        android:layout_margin="5dp" />
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/gray" />
+
+
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </LinearLayout>

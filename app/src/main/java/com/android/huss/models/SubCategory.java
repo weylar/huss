@@ -3,58 +3,98 @@ package com.android.huss.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class SubCategory {
-    private int id;
 
+    private String status;
+    private int statusCode;
+    private String message;
+    private List<Data> data;
 
+    public String getStatus() {
+        return status;
+    }
 
-    private String catId;
-    @SerializedName("title")
-    private String name;
-    private String createdAt;
-    private String updateAt;
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-    public int getId() {
-        return id;
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public List<Data> getData() {
+        return data;
+    }
+
+    public void setData(List<Data> data) {
+        this.data = data;
     }
 
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public class Data {
+        private int id;
+        private String catId;
+        private String name;
+        private String createdAt;
+        private String updateAt;
 
-    public String getCatId() {
-        return catId;
-    }
-
-    public void setCatId(String catId) {
-        this.catId = catId;
-    }
-
-    public String getName() {
-        return name;
-    }
+        public int getId() {
+            return id;
+        }
 
 
-    public void setName(String name) {
-        this.name = name;
-    }
+        public void setId(Integer id) {
+            this.id = id;
+        }
+
+        public String getCatId() {
+            return catId;
+        }
+
+        public void setCatId(String catId) {
+            this.catId = catId;
+        }
+
+        public String getName() {
+            return name;
+        }
 
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
+        public void setName(String name) {
+            this.name = name;
+        }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
 
-    public String getUpdateAt() {
-        return updateAt;
-    }
+        public String getCreatedAt() {
+            return createdAt;
+        }
 
-    public void setUpdateAt(String updateAt) {
-        this.updateAt = updateAt;
+        public void setCreatedAt(String createdAt) {
+            this.createdAt = createdAt;
+        }
+
+        public String getUpdateAt() {
+            return updateAt;
+        }
+
+        public void setUpdateAt(String updateAt) {
+            this.updateAt = updateAt;
+        }
+
     }
 
 }

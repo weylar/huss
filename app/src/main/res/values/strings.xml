@@ -17,7 +17,6 @@
     <string name="home">Home</string>
     <string name="favorites">Favorite Ads</string>
     <string name="messages">Messages</string>
-    <string name="settings">Settings</string>
     <string name="communicate">Communicate</string>
     <string name="send">Send</string>
     <string name="share">Share</string>
@@ -31,9 +30,12 @@
     <string name="similar_ads">Similar Ads</string>
     <string name="settings_icon">settings icon</string>
     <string name="navigate_back">navigate back</string>
-    <string name="inactive">Inactive</string>
+    <string name="inactive">inactive</string>
     <string name="ads_profile">Ads</string>
-    <string name="active">Active</string>
+    <string name="active">active</string>
+    <string name="action_geolocate">Pick Place</string>
+    <string name="default_info_title">Default Location</string>
+    <string name="default_info_snippet">No places found, because location permission is disabled.</string>
     <string name="go_backk">go back</string>
     <string name="category">Categories</string>
     <string name="help_icon">help icon</string>
@@ -87,6 +89,48 @@
     <string name="password_rest_link_has_been_sent_to_your_email_please_follow_the_link_to_reset_ypur_password">Password rest link has been sent to your email, please follow the link to reset your password.</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="settings">Settings</string>
+    <string name="contact_details">Contact Details</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="pick_location">Pick Location</string>
+    <string name="searching_for_your_location">Searching for your location...</string>
+    <string name="phone">Phone</string>
+    <string name="save_changes">Save changes</string>
+    <string name="change_password">Change Password</string>
+    <string name="current_password">Current password</string>
+    <string name="new_password">New password</string>
+    <string name="about">About</string>
+    <string name="change_image">Change image</string>
+    <string name="cap_active">Active</string>
+    <string name="cap_inactive">Inactive</string>
+    <string name="call">Call</string>
+    <string name="chat">Chat</string>
+    <string name="all_ads">All Ads</string>
+    <string name="renew_ad">Renew Ad</string>
+    <string name="edit_ad">Edit Ad</string>
+    <string name="delete_ad">Delete Ad</string>
+    <string name="account">Account</string>
+    <string name="update_ad_cap">UPDATE AD</string>
+    <string name="update_ad">Update Ad</string>
+    <string name="fixed">Fixed</string>
+    <string name="public_id">public_id</string>
+    <string name="ads_upload_preset">ads_upload_preset</string>
 
 
 </resources>

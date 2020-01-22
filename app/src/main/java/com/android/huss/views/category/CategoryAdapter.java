@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.huss.R;
 import com.android.huss.models.Category;
 import com.android.huss.views.subCategory.SubCategoryView;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -21,10 +23,10 @@ import static com.android.huss.views.ads.singleAds.SingleAds.NAME;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CustomViewHolder>{
 
 
-        private List<Category> dataList;
+        private List<Category.Data> dataList;
         private Context context;
 
-        public CategoryAdapter(Context context, List<Category> dataList){
+        public CategoryAdapter(Context context, List<Category.Data> dataList){
             this.context = context;
             this.dataList = dataList;
         }
@@ -35,12 +37,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Custom
 
             TextView txtTitle;
             private ImageView icon;
+            CardView cardView;
 
             CustomViewHolder(View itemView) {
                 super(itemView);
                 mView = itemView;
                 txtTitle = mView.findViewById(R.id.title);
                 icon = mView.findViewById(R.id.icon);
+                cardView = mView.findViewById(R.id.card_category);
             }
         }
 
@@ -59,15 +63,19 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Custom
 
         @Override
         public void onBindViewHolder(CustomViewHolder holder, int position) {
+            if (position == 0){
+                holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+            }else{
+                holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+            }
+
             holder.txtTitle.setText(dataList.get(position).getName());
             holder.mView.setTag(dataList.get(position).getName());
 
-//            Picasso.Builder builder = new Picasso.Builder(context);
-//            builder.downloader(new OkHttp3Downloader(context));
-//            builder.build().load(dataList.get(position).getIconUrl())
-//                    .placeholder((R.drawable.ic_launcher_background))
-//                    .error(R.drawable.ic_launcher_background)
-//                    .into(holder.icon);
+            Picasso.Builder builder = new Picasso.Builder(context);
+            builder.build().load(dataList.get(position).getIconUrl())
+                    .error(R.drawable.ic_launcher_background)
+                    .into(holder.icon);
 
         }
 

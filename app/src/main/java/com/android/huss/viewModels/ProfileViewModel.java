@@ -14,6 +14,7 @@ import java.util.List;
 public class ProfileViewModel extends ViewModel {
 
     private MutableLiveData<Profile> mutableLiveDataProfile;
+    private MutableLiveData<Profile> mutableLiveDataUpdateProfile;
     private ProfileRepository profileRepository;
 
     public void init(String userId) {
@@ -28,5 +29,15 @@ public class ProfileViewModel extends ViewModel {
         return mutableLiveDataProfile;
     }
 
+    public void initUpdateProfile(Profile.Data profile) {
+        profileRepository = ProfileRepository.getInstance();
+        mutableLiveDataUpdateProfile = profileRepository.updateProfile(profile);
+
+    }
+
+
+    public LiveData<Profile> updateProfile() {
+        return mutableLiveDataUpdateProfile;
+    }
 
 }

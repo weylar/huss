@@ -34,13 +34,10 @@
                 android:icon= "@drawable/share"
                 android:title= "@string/share" />
             <item
-                android:id= "@+id/send"
-                android:icon= "@drawable/send"
-                android:title= "@string/send" />
-            <item
-                android:id= "@+id/developer"
-                android:icon= "@drawable/developer"
-                android:title= "@string/developer" />
+                android:id= "@+id/about"
+                android:icon= "@drawable/info"
+                android:title= "@string/about" />
+
         </menu>
     </item>
 

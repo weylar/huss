@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.profile.ActiveAds">
+    android:fillViewport="true"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-   <androidx.recyclerview.widget.RecyclerView
-       android:id="@+id/activeAds"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"/>
 
-    <com.ldoublem.loadingviewlib.view.LVCircularZoom
-        android:id="@+id/progress"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_gravity="center"
-        android:layout_margin="5dp" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/activeAds"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:nestedScrollingEnabled="true" />
 
-</FrameLayout>
+
+</androidx.core.widget.NestedScrollView>

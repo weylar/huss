@@ -71,14 +71,14 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Custom
 
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
-        String adTitle = dataList.get(position).getTitle();
+        String adTitle = dataList.get(position).getData().getTitle();
         holder.txtTitle.setText("iPhone X Max"/*adTitle.length() > 70 ? adTitle.substring(0, 67).concat("...") : adTitle*/);
         holder.price.setText("$35"/*dataList.get(position).getPrice()*/);
         String description = "Lorem ipsum dolor sit amet, minim veniam, ut aliquip ex ea commodo consequat";
         holder.description.setText(description/*description.length() > 90 ? description.substring(0, 86).concat("..."): description*/);
         //  if (dataList.get(position).getFavorite().equals("Yes")){
         holder.favorite.setImageResource(R.drawable.favorite_yes);
-        holder.itemView.setId(dataList.get(position).getId());
+        holder.itemView.setId(dataList.get(position).getData().getId());
         holder.itemView.setTag(adTitle);
 
 
@@ -89,7 +89,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Custom
 
         Picasso.Builder builder = new Picasso.Builder(context);
         builder.downloader(new OkHttp3Downloader(context));
-        builder.build().load(dataList.get(position).getFeatureImgUrl())
+        builder.build().load(dataList.get(position).getData().getFeatureImgUrl())
                 .placeholder((R.drawable.ic_launcher_background))
                 .error(R.drawable.ic_launcher_background)
                 .into(holder.image);

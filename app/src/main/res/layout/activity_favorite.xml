@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".views.home.MainActivity">
+    tools:context=".views.favorite.Favorite">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -29,8 +28,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="15dp"
-                android:text="@string/favorites"
                 android:layout_toEndOf="@+id/back"
+                android:text="@string/favorites"
                 android:textSize="20sp" />
 
 
@@ -42,15 +41,23 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favorite_recycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
 
-    <com.ldoublem.loadingviewlib.view.LVCircularZoom
-        android:id="@+id/progress"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_gravity="center"
-        android:layout_margin="5dp" />
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
 
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/gray" />
+
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 
 </LinearLayout>

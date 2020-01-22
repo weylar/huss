@@ -11,19 +11,16 @@ import java.util.List;
 
 public class SubCategoryViewModel extends ViewModel {
 
-    private MutableLiveData<List<SubCategory>> mutableLiveData;
+    private MutableLiveData<SubCategory> mutableLiveData;
     private SubCategoryRepository subCategoryRepository;
 
-    public void init(String catName) {
-        if (mutableLiveData != null) {
-            return;
-        }
+    public void init(String token, String catName) {
         subCategoryRepository = SubCategoryRepository.getInstance();
-        mutableLiveData = subCategoryRepository.getSubCategories(catName);
+        mutableLiveData = subCategoryRepository.getSubCategories(token, catName);
 
     }
 
-    public LiveData<List<SubCategory>> getSubCategory() {
+    public LiveData<SubCategory> getSubCategory() {
         return mutableLiveData;
     }
 

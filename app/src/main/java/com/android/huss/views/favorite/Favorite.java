@@ -7,30 +7,41 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
 
 import com.android.huss.R;
 import com.android.huss.models.Ads;
 import com.android.huss.viewModels.FavoriteViewModel;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 
 import java.util.List;
 
+import static com.android.huss.views.home.MainActivity.checkNetworkConnection;
+
 public class Favorite extends AppCompatActivity {
 RecyclerView recyclerView;
 FavoriteViewModel favoriteViewModel;
-LVCircularZoom progressBar;
+ShimmerFrameLayout shimmerFrameLayout;
 FavoriteAdapter favoriteAdapter;
 LinearLayoutManager layoutManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
-        progressBar = findViewById(R.id.progress);
-        progressBar.setViewColor(getResources().getColor(R.color.gray));
-        progressBar.startAnim(100);
+       shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(checkNetworkConnection(this, shimmerFrameLayout), filter);
     }
 
     @Override
@@ -43,9 +54,7 @@ LinearLayoutManager layoutManager;
         favoriteViewModel.getFavoriteAds().observe(this, favoriteAds -> {
 
             Favorite.this.generateFavoriteAds(favoriteAds);
-            progressBar.stopAnim();
-            progressBar.setVisibility(View.GONE);
-            progressBar.stopAnim();
+            shimmerFrameLayout.setVisibility(View.GONE);
         });
     }
 
@@ -55,6 +64,7 @@ LinearLayoutManager layoutManager;
 
 
     private void generateFavoriteAds(List<Ads> ads) {
+        recyclerView.setVisibility(View.VISIBLE);
         recyclerView = findViewById(R.id.favorite_recycler);
         favoriteAdapter = new FavoriteAdapter(this, ads);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -74,7 +84,7 @@ LinearLayoutManager layoutManager;
                 final Ads item = favoriteAdapter.getData().get(position);
                 favoriteAdapter.removeItem(position);
                 /*TODO: Remove from db*/
-                Snackbar snackbar = Snackbar.make(progressBar, "Ad has been removed from favorites", Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(shimmerFrameLayout, "Ad has been removed from favorites", Snackbar.LENGTH_LONG);
                 snackbar.setAction("UNDO", view -> {
 
                     favoriteAdapter.restoreItem(item, position);

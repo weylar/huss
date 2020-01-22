@@ -11,19 +11,33 @@ import java.util.List;
 
 public class CategoryViewModel extends ViewModel {
 
-    private MutableLiveData<List<Category>> mutableLiveData;
+    private MutableLiveData<Category> mutableLiveDatap;
+    private MutableLiveData<Category> mutableLiveData;
     private CategoryRepository categoryRepository;
 
-    public void init() {
+    public void init(String token, int limit) {
+        if (mutableLiveDatap != null) {
+            return;
+        }
+        categoryRepository = CategoryRepository.getInstance();
+        mutableLiveDatap = categoryRepository.getPopularCategory(token, limit);
+
+    }
+
+    public LiveData<Category> getPopularCategory() {
+        return mutableLiveDatap;
+    }
+
+    public void initAllCategory(String token) {
         if (mutableLiveData != null) {
             return;
         }
         categoryRepository = CategoryRepository.getInstance();
-        mutableLiveData = categoryRepository.getCategories();
+        mutableLiveData = categoryRepository.getAllCategory(token);
 
     }
 
-    public LiveData<List<Category>> getCategory() {
+    public LiveData<Category> getAllCategory() {
         return mutableLiveData;
     }
 

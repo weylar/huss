@@ -69,7 +69,7 @@ public class SimilarAdsAdapter extends RecyclerView.Adapter<SimilarAdsAdapter.Cu
 
         @Override
         public void onBindViewHolder(CustomViewHolder holder, int position) {
-            String adTitle = dataList.get(position).getTitle();
+            String adTitle = dataList.get(position).getData().getTitle();
             holder.label.setVisibility(View.GONE);
             holder.txtTitle.setText( "iPhone X Max"/*adTitle.length() > 70 ? adTitle.substring(0, 67).concat("...") : adTitle*/);
             holder.price.setText("$35"/*dataList.get(position).getPrice()*/);
@@ -86,7 +86,7 @@ public class SimilarAdsAdapter extends RecyclerView.Adapter<SimilarAdsAdapter.Cu
 
             Picasso.Builder builder = new Picasso.Builder(context);
             builder.downloader(new OkHttp3Downloader(context));
-            builder.build().load(dataList.get(position).getFeatureImgUrl())
+            builder.build().load(dataList.get(position).getData().getFeatureImgUrl())
                     .placeholder((R.drawable.ic_launcher_background))
                     .error(R.drawable.ic_launcher_background)
                     .into(holder.image);

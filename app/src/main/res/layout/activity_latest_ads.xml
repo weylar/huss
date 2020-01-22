@@ -27,12 +27,19 @@
 
             <TextView
                 android:id="@+id/page_title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="15dp"
-                tools:text="@string/latest_ads"
                 android:layout_toEndOf="@+id/back"
-                android:textSize="20sp" />
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:gravity="center_vertical"
+                android:layout_centerVertical="true"
+                android:scrollHorizontally="true"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="17sp"
+                tools:text="@string/latest_ads" />
+
 
 
         </RelativeLayout>
@@ -43,7 +50,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/all_latest_ads"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <com.ldoublem.loadingviewlib.view.LVCircularZoom
         android:id="@+id/progress"

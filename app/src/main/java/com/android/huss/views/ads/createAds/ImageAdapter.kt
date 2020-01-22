@@ -18,10 +18,10 @@ class ImageAdapter(private val context: Context, private val dataList: ArrayList
     : RecyclerView.Adapter<ImageAdapter.CustomViewHolder>() {
 
 
+
     inner class CustomViewHolder(mView: View) : RecyclerView.ViewHolder(mView) {
         val image: ImageView = mView.findViewById(R.id.image)
         var progress: ProgressBar = mView.findViewById(R.id.uploadProgress)
-        var retry: ImageView = mView.findViewById(R.id.retry)
         var remove: ImageView = mView.findViewById(R.id.removeItem)
     }
 
@@ -56,10 +56,6 @@ class ImageAdapter(private val context: Context, private val dataList: ArrayList
             notifyItemRemoved(position)
             notifyItemRangeChanged(position,dataList.size)
 
-
-//            val cloudinary = Cloudinary("https://cloudinary.com")
-//            val deleteParams = ObjectUtils.asMap("invalidate", true )
-//            cloudinary.uploader().destroy(time.toString(), deleteParams )
         }
 
     }

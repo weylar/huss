@@ -9,4 +9,5 @@
     <color name="colrAccent">#FF69E6</color>
     <color name="danger">#FF0000</color>
     <color name="trans_black">#CC000000</color>
+    <color name="trans_white">#FFFFFF</color>
 </resources>
