@@ -199,7 +199,7 @@ class AdService {
     let res = allAds.map(elem => {
       return db.Favorite.findOne({ where: {userId: req.userId, productId: elem.dataValues.id}});
       
-    })
+    });
 
     let newResponse = await Promise.all(res);
 
@@ -207,6 +207,8 @@ class AdService {
       newResponse.forEach(item => {
         if (item !== null) {
           element.dataValues['isFavorite'] = (element.dataValues.id == item.dataValues.productId) && (item.dataValues.userId == req.userId);
+        } else {
+          element.dataValues['isFavorite'] = false;
         }
       });
       return element;
