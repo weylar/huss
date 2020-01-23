@@ -151,9 +151,9 @@ class AdController {
     }
   }
 
-  static async makeAdInactive(req,res,next) {
+  static async activateStatus(req,res,next) {
     try {
-      const response = await AdService.makeAdInactive(req);
+      const response = await AdService.activateStatus(req);
       
       return res.status(response.statusCode).json(response);
     } catch (e) {

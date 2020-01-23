@@ -1,6 +1,7 @@
 import Helper from '../middleware/utils/Helper';
 import db from '../src/models';
 import Sequelize from 'sequelize';
+import jwt from 'jsonwebtoken';
 
 String.prototype.capitalize = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);

@@ -32,6 +32,7 @@ class AdService {
     req.body.categoryName = categoryName;
     req.body.subCategoryName = subCategoryName;
     req.body.userId = req.userId;
+    req.body.modifiedStatusDate = new Date();
 
     if (req.body.type === 'Top') {
       req.body.payDate = new Date();
@@ -40,6 +41,9 @@ class AdService {
     }
 
     const ad = await db.Product.create(req.body);
+    if (ad.type === 'free') {
+      ad.expireAd()
+    }
     await db.Category.update(
       { belongedAd: parseInt(category.belongedAd) + 1 },
       { where: { name: categoryName } }
@@ -55,7 +59,7 @@ class AdService {
 
   static async getAd(req) {
     const oldAd = await db.Product.findOne({
-      where: { id: req.params.adId },
+      where: { id: req.params.adId, status: 'active' },
       attributes: { exclude: 'name' }
     });
 
@@ -66,6 +70,35 @@ class AdService {
         message: 'Such ad does not exist'
       };
     }
+
+    let title = oldAd.title
+    title = title.capitalize();
+    let category = oldAd.categoryName;
+    category = category.capitalize();
+    const Op = Sequelize.Op;
+    const result = await db.Product.findAll({
+      where: { title:  { [Op.iLike]: `%${title}%` }, categoryName: category },
+      attributes: { exclude: 'name' }, include: [{ model: db.Image }]
+    });
+
+    let res = result.map(elem => {
+      return db.Favorite.findOne({ where: {userId: req.userId, productId: elem.dataValues.id}});
+      
+    })
+
+    let newResponse = await Promise.all(res);
+
+    let similarAds = result.map(element => {
+      newResponse.forEach(item => {
+        if (item !== null) {
+          element.dataValues['isFavorite'] = (element.dataValues.id == item.dataValues.productId) && (item.dataValues.userId == req.userId);
+        }
+      });
+      return element;
+    });
+
+    let index = similarAds.findIndex(elem => elem.dataValues.title === oldAd.title);
+    similarAds.splice(index, 1);
 
     const editViewCount = await db.Product.update(
       { count: oldAd.count + 1 },
@@ -101,6 +134,7 @@ class AdService {
           location: foundAd.location,
           createdAt: foundAd.createdAt,
           adImages,
+          similarAds,
           isFavorited
         },
         message: 'Ad sucessfully retrieved'
@@ -110,7 +144,7 @@ class AdService {
 
   static async getOwnAd(req) {
     const foundAd = await db.Product.findOne({
-      where: { userId: req.userId, id: req.params.adId },
+      where: { userId: req.userId, id: req.params.adId, status: 'active' },
       attributes: { exclude: 'name' }
     });
 
@@ -158,24 +192,25 @@ class AdService {
 
   static async getAllAds(req) {
     
-    let result = await db.Product.findAll({
-      order: [['id', 'DESC']], attributes: { exclude: 'name' }, include: [{ model: db.Image }, { model : db.Favorite}]
+    let allAds = await db.Product.findAll({ where: {status: 'active'},
+      order: [['id', 'DESC']], attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });
 
-    // let res = [...result];
+    let res = allAds.map(elem => {
+      return db.Favorite.findOne({ where: {userId: req.userId, productId: elem.dataValues.id}});
+      
+    })
 
-    // let arr = res.map( (element, i) => {
-    //   // let favorites = await db.Favorite.findOne({ where: {userId: req.userId, productId: element.dataValues.id} });
-    //   // console.log(favorites);
-    //   // let isFavorited;
-    //   // if (favorites != null) {
-    //   //   isFavorited = true;
-    //   // } else {
-    //   //   isFavorited = false;
-    //   // }
-    //   //return {...element, isFavorited:true}
-    //   return {...element, isFavorited:true};
-    
+    let newResponse = await Promise.all(res);
+
+    let result = allAds.map(element => {
+      newResponse.forEach(item => {
+        if (item !== null) {
+          element.dataValues['isFavorite'] = (element.dataValues.id == item.dataValues.productId) && (item.dataValues.userId == req.userId);
+        }
+      });
+      return element;
+    });
 
     return {
       status: 'success',
@@ -187,122 +222,13 @@ class AdService {
 
   static async getAllAdsByLimit(req) {
     const allAds = await db.Product.findAll({
+      where: {status: 'active'},
       limit: req.params.limit,
-      order: [['id', 'DESC']],
-      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
-    });
-
-    return {
-      status: 'success',
-      statusCode: 200,
-      data: allAds,
-      message: 'All ads retrieved successfully'
-    };
-  }
-
-  static async paginateAds(req) {
-    const limit = req.params.limit;
-    const offset = req.params.offset;
-    const allAds = await db.Product.findAll({
-      offset,
-      limit,
-      order: [['id', 'DESC']],
-      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
-    });
-
-    if (allAds) {
-      return {
-        status: 'success',
-        statusCode: 200,
-        data: allAds,
-        message: 'All ads retrieved successfully'
-      };
-    }
-  }
-
-  static async getAdsSuggest(req) {
-    const limit = req.params.limit;
-    const offset = req.params.offset;
-    let title = req.params.title;
-    title = title.capitalize();
-    const Op = Sequelize.Op;
-    const allAds = await db.Product.findAll({
-      offset,
-      limit,
-      where: { title: { [Op.startsWith]: `%${title}%` } },
-      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
-    });
-
-    if (allAds) {
-      return {
-        status: 'success',
-        statusCode: 200,
-        data: allAds,
-        message: 'All ads retrieved successfully'
-      };
-    }
-  }
-
-  static async getAdsByStatus(req) {
-    const limit = req.params.limit;
-    const offset = req.params.offset;
-    const allAds = await db.Product.findAll({
-      offset,
-      limit,
-      where: { status: req.params.status },
-      order: [['id', 'DESC']],
-      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
-    });
-
-    if (allAds) {
-      return {
-        status: 'success',
-        statusCode: 200,
-        data: allAds,
-        message: 'All ads retrieved successfully'
-      };
-    }
-  }
-
-  static async getAdsByStatusSuggest(req) {
-    const limit = req.params.limit;
-    const offset = req.params.offset;
-    let title = req.params.title;
-    title = title.capitalize();
-    const Op = Sequelize.Op;
-    const allAds = await db.Product.findAll({
-      offset,
-      limit,
-      where: { status: req.params.status, title: { [Op.startsWith]: `%${title}%` } },
-      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
-    });
-
-    if (allAds) {
-      return {
-        status: 'success',
-        statusCode: 200,
-        data: allAds,
-        message: 'All ads retrieved successfully'
-      };
-    }
-  }
-
-  static async getAllOwnAds(req) {
-    const allOwnAds = await db.Product.findAll({
-      where: { userId: req.userId },
       order: [['id', 'DESC']],
       attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });
 
-    if (allOwnAds.length === 0) {
-      return {
-        status: 'error',
-        statusCode: 404,
-        message: 'You do not have any ads'
-      };
-    }
-
-    let res = allOwnAds.map(elem => {
+    let res = allAds.map(elem => {
       return db.Favorite.findOne({ where: {userId: req.userId, productId: elem.dataValues.id}});
       
     })
@@ -322,13 +248,178 @@ class AdService {
       status: 'success',
       statusCode: 200,
       data: result,
+      message: 'All ads have been retrieved successfully'
+    };
+  }
+
+  static async paginateAds(req) {
+    const limit = req.params.limit;
+    const offset = req.params.offset;
+    const allAds = await db.Product.findAll({
+      offset,
+      limit,
+      where: {status: 'active'},
+      order: [['id', 'DESC']],
+      attributes: { exclude: 'name' }, include: [{ model: db.Image }]
+    });
+
+    let res = allAds.map(elem => {
+      return db.Favorite.findOne({ where: {userId: req.userId, productId: elem.dataValues.id}});
+      
+    })
+
+    let newResponse = await Promise.all(res);
+
+    let result = allOwnAds.map(element => {
+      newResponse.forEach(item => {
+        if (item !== null) {
+          element.dataValues['isFavorite'] = (element.dataValues.id == item.dataValues.productId) && (item.dataValues.userId == req.userId);
+        }
+      });
+      return element;
+    });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: result,
+      message: 'All ads have been retrieved successfully'
+    };
+  }
+
+  static async getAdsSuggest(req) {
+    const limit = req.params.limit;
+    const offset = req.params.offset;
+    let title = req.params.title;
+    title = title.capitalize();
+    const Op = Sequelize.Op;
+    const allAds = await db.Product.findAll({
+      offset,
+      limit,
+      where: { title: { [Op.startsWith]: `%${title}%` }, status: 'active' },
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }]
+    });
+
+    let res = allAds.map(elem => {
+      return db.Favorite.findOne({ where: {userId: req.userId, productId: elem.dataValues.id}});
+      
+    })
+
+    let newResponse = await Promise.all(res);
+
+    let result = allOwnAds.map(element => {
+      newResponse.forEach(item => {
+        if (item !== null) {
+          element.dataValues['isFavorite'] = (element.dataValues.id == item.dataValues.productId) && (item.dataValues.userId == req.userId);
+        }
+      });
+      return element;
+    });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: result,
+      message: 'All ads have been retrieved successfully'
+    };
+  }
+
+  static async getAdsByStatus(req) {
+    const limit = req.params.limit;
+    const offset = req.params.offset;
+    const allAds = await db.Product.findAll({
+      offset,
+      limit,
+      where: { status: req.params.status },
+      order: [['id', 'DESC']],
+      attributes: { exclude: 'name' }, include: [{ model: db.Image }]
+    });
+    let res = allAds.map(elem => {
+      return db.Favorite.findOne({ where: {userId: req.userId, productId: elem.dataValues.id}});
+      
+    })
+
+    let newResponse = await Promise.all(res);
+
+    let result = allOwnAds.map(element => {
+      newResponse.forEach(item => {
+        if (item !== null) {
+          element.dataValues['isFavorite'] = (element.dataValues.id == item.dataValues.productId) && (item.dataValues.userId == req.userId);
+        }
+      });
+      return element;
+    });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: result,
+      message: 'All ads have been retrieved successfully'
+    };
+  }
+
+  static async getAdsByStatusSuggest(req) {
+    const limit = req.params.limit;
+    const offset = req.params.offset;
+    let title = req.params.title;
+    title = title.capitalize();
+    const Op = Sequelize.Op;
+    const allAds = await db.Product.findAll({
+      offset,
+      limit,
+      where: { status: req.params.status, title: { [Op.iLike]: `%${title}%` } },
+      attributes: { exclude: 'name' }, include: [{ model: db.Image }]
+    });
+    let res = allAds.map(elem => {
+      return db.Favorite.findOne({ where: {userId: req.userId, productId: elem.dataValues.id}});
+      
+    })
+
+    let newResponse = await Promise.all(res);
+
+    let result = allOwnAds.map(element => {
+      newResponse.forEach(item => {
+        if (item !== null) {
+          element.dataValues['isFavorite'] = (element.dataValues.id == item.dataValues.productId) && (item.dataValues.userId == req.userId);
+        }
+      });
+      return element;
+    });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: result,
+      message: 'All ads have been retrieved successfully'
+    };
+  }
+
+  static async getAllOwnAds(req) {
+    const allOwnAds = await db.Product.findAll({
+      where: { userId: req.userId, status: 'active' },
+      order: [['id', 'DESC']],
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }]
+    });
+
+    if (allOwnAds.length === 0) {
+      return {
+        status: 'error',
+        statusCode: 404,
+        message: 'You do not have any ads'
+      };
+    }
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: allOwnAds,
       message: 'All your ads have been successfully retrieved'
     };
   }
 
   static async getAllOwnAdsByLimit(req) {
     const allOwnAds = await db.Product.findAll({
-      where: { userId: req.userId },
+      where: { userId: req.userId, status: 'active' },
       limit: req.params.limit,
       order: [['id', 'DESC']],
       attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }]
@@ -370,7 +461,7 @@ class AdService {
     const limit = req.params.limit;
     const offset = req.params.offset;
     const allOwnAds = await db.Product.findAll({
-      where: { userId: req.userId },
+      where: { userId: req.userId, status: 'active' },
       offset,
       limit,
       order: [['id', 'DESC']],
@@ -418,7 +509,7 @@ class AdService {
     const allOwnAds = await db.Product.findAll({
       offset,
       limit,
-      where: { userId: req.userId, title: { [Op.startsWith]: `%${title}%` } },
+      where: { userId: req.userId, title: { [Op.startsWith]: `%${title}%` }, status: 'active' },
       attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });
 
@@ -461,8 +552,7 @@ class AdService {
       offset,
       limit,
       where: { userId: req.userId, status: req.params.status },
-      order: [['id', 'DESC']],
-      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
+      order: [['id', 'DESC']],attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });
 
     if (allAds) {
@@ -489,7 +579,7 @@ class AdService {
         status: req.params.status,
         title: { [Op.startsWith]: `%${title}%` }
       },
-      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }, {model: db.Favorite}]
+      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });
 
     if (allAds) {
@@ -502,7 +592,7 @@ class AdService {
     }
   }
 
-  static async makeAdInactive(req) {
+  static async activateStatus(req) {
     const ad = await db.Product.findOne({
       where: { id: req.params.adId },
       attributes: { exclude: 'name' }
@@ -516,28 +606,15 @@ class AdService {
       };
     }
 
-    const today = new Date();
-    const diffInTime = today.getTime() - ad.createdAt.getTime();
-    const diffInDays = diffInTime / (1000 * 3600 * 24);
+    const modifiedStatusDate = new Date();
 
-    if (ad.type === 'free' && diffInDays > 7) {
-      await db.Product.update({ status: 'inactive' }, { where: { id: req.params.adId } });
-      const newAd = await db.Product.findOne({
-        where: { id: req.params.adId },
-        attributes: { exclude: 'name' }
-      });
-
-      return {
-        status: 'success',
-        statusCode: 200,
-        data: newAd
-      };
-    }
+    const newAd = await db.Product.update({ status: 'active', modifiedStatusDate: modifiedStatusDate }, { where: { id: req.params.adId } });
+    ad.expireAd();
 
     return {
-      status: 'error',
-      statusCode: 403,
-      message: `It remains ${Math.round(7 - diffInDays)} days to make ad status inactive`
+      status: 'success',
+      statusCode: 200,
+      data: newAd
     };
   }
 
@@ -611,6 +688,8 @@ class AdService {
       { title: title, description: description, price: price },
       { where: { userId: req.userId, id: req.params.adId } }
     );
+    console.log(editedAd);
+    
 
     if (editedAd[0] === 0) {
       return {

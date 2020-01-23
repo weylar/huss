@@ -45,6 +45,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: true
     },
+    modifiedStatusDate: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
     location: {
       type: DataTypes.STRING,
       allowNull: true
@@ -77,5 +81,14 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     });
   };
+
+  Product.prototype.expireAd = function() {
+    const timeInMinutes = 60 * 24 * 7 * 60 * 1000;
+    
+    setTimeout(async () => {
+      await this.update({ status: 'inactive' });
+    }, timeInMinutes);
+    
+  }
   return Product;
 };
