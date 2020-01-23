@@ -225,7 +225,7 @@ class AdService {
   static async getAllAdsByLimit(req) {
     const allAds = await db.Product.findAll({
       where: {status: 'active'},
-      limit: req.params.limit,
+      limit: 10,
       order: [['id', 'DESC']],
       attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });

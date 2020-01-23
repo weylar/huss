@@ -16,7 +16,7 @@ adRouter.get('/getAd/:adId', getUser, getAd);
 adRouter.get('/getOwnAd/:adId', getUser, getOwnAd);
 adRouter.get('/getAllAds', getUser, getAllAds);
 adRouter.get('/getAllOwnAds', getUser, getAllOwnAds);
-adRouter.get('/getAllAdsByLimit/:limit', getUser, getAllAdsByLimit);
+adRouter.get('/getAllAdsByLimit', getUser, getAllAdsByLimit);
 adRouter.get('/getAllOwnAdsByLimit/:limit', getUser, getAllOwnAdsByLimit);
 adRouter.get('/paginateAds/:offset/:limit', getUser, paginateAds);
 adRouter.get('/paginateOwnAds/:offset/:limit', getUser, paginateOwnAds);
