@@ -237,7 +237,7 @@ class AdService {
 
     let newResponse = await Promise.all(res);
 
-    let result = allOwnAds.map(element => {
+    let result = allAds.map(element => {
       newResponse.forEach(item => {
         if (item !== null) {
           element.dataValues['isFavorite'] = (element.dataValues.id == item.dataValues.productId) && (item.dataValues.userId == req.userId);
