@@ -92,12 +92,14 @@ class AdService {
       newResponse.forEach(item => {
         if (item !== null) {
           element.dataValues['isFavorite'] = (element.dataValues.id == item.dataValues.productId) && (item.dataValues.userId == req.userId);
+        } else {
+          element.dataValues['isFavorite'] = false;
         }
       });
       return element;
     });
 
-    let index = similarAds.findIndex(elem => elem.dataValues.title === oldAd.title);
+    let index = similarAds.findIndex(elem => elem.dataValues.id === oldAd.id);
     similarAds.splice(index, 1);
 
     const editViewCount = await db.Product.update(
