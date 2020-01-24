@@ -104,9 +104,9 @@ class CategoryService {
     }
   }
 
-  static async getPopularCategories(req) {
+  static async getPopularCategories() {
 
-    const popularCategories = await db.Category.findAll({limit: 5,  order: [['belongedAd', 'DESC']]});
+    const popularCategories = await db.Category.findAll({limit: 5,  order: [['belongedAd', 'ASC']]});
 
     return {
       status: 'success',
