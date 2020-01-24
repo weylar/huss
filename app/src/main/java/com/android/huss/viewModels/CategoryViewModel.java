@@ -15,12 +15,12 @@ public class CategoryViewModel extends ViewModel {
     private MutableLiveData<Category> mutableLiveData;
     private CategoryRepository categoryRepository;
 
-    public void init(String token, int limit) {
+    public void init(String token) {
         if (mutableLiveDatap != null) {
             return;
         }
         categoryRepository = CategoryRepository.getInstance();
-        mutableLiveDatap = categoryRepository.getPopularCategory(token, limit);
+        mutableLiveDatap = categoryRepository.getPopularCategory(token);
 
     }
 

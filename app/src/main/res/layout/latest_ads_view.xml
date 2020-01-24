@@ -6,10 +6,10 @@
     android:id="@+id/card_category"
     android:layout_width="match_parent"
     android:layout_height="130dp"
-    android:layout_marginStart="10dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginEnd="10dp"
-    app:cardCornerRadius="10dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    app:cardCornerRadius="8dp"
     app:cardElevation="2dp">
 
     <LinearLayout
@@ -38,47 +38,24 @@
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:ellipsize="end"
+                android:gravity="top"
                 android:maxLines="1"
                 android:scrollHorizontally="true"
+                android:layout_toStartOf="@+id/favorite"
+                android:layout_alignParentStart="true"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="20sp"
                 tools:text="Cotton Shirt" />
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_margin="5dp"
-                android:ellipsize="end"
-                android:maxLines="3"
-                android:scrollHorizontally="true"
-                tools:text="Lorem ipsum dolor sit amet, minim veniam, ut aliquip ex ea commodo consequat. " />
-
-            <TextView
-                android:id="@+id/price"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="5dp"
-                android:textColor="@color/colorAccent"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:text="$500" />
-
 
             <com.varunest.sparkbutton.SparkButton
                 android:id="@+id/favorite"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_centerVertical="true"
-                android:layout_margin="10dp"
                 android:contentDescription="@string/favorite"
                 app:sparkbutton_activeImage="@drawable/favorite_yes"
                 app:sparkbutton_animationSpeed="1.5"
@@ -86,6 +63,41 @@
                 app:sparkbutton_inActiveImage="@drawable/favorite_no"
                 app:sparkbutton_primaryColor="@color/colorAccent"
                 app:sparkbutton_secondaryColor="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_below="@+id/title"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:scrollHorizontally="true"
+                tools:text="Lorem ipsum dolor sit amet, minim veniam, ut aliquip ex ea commodo consequat. " />
+
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="5dp"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                tools:text="$5000000" />
+
+            <TextView
+                android:id="@+id/negotiable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="5dp"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                tools:text="Negotiable" />
 
 
         </RelativeLayout>

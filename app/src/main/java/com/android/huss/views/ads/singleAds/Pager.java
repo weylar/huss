@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.viewpager.widget.PagerAdapter;
@@ -16,56 +17,63 @@ import com.android.huss.views.adsImages.ImageFull;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+
+import timber.log.Timber;
 
 import static com.android.huss.views.adsImages.ImageFull.PAGE;
 
 public class Pager extends PagerAdapter {
-
-    Context mContext;
-    LayoutInflater mLayoutInflater;
+    private Context mContext;
+    private LayoutInflater mLayoutInflater;
     private ArrayList<String> allImagesUrl;
 
-     Pager(Context context, ArrayList<String> allImagesUrl) {
+    Pager(Context context, ArrayList<String> allImagesUrl) {
         this.mContext = context;
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.allImagesUrl = allImagesUrl;
 
+
     }
 
+    @NotNull
     @Override
-    public int getCount() {
-        return (null != allImagesUrl ? allImagesUrl.size() : 0);
-    }
-
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return view == object;
-    }
-
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        View itemView = mLayoutInflater.inflate(R.layout.ads_image_view, container, false);
-        PhotoView photoView = itemView.findViewById(R.id.image);
+    public Object instantiateItem(@NotNull ViewGroup collection, int position) {
+        String url = allImagesUrl.get(position);
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        View itemView = inflater.inflate(R.layout.ads_image_view, collection, false);
+        ImageView photoView = itemView.findViewById(R.id.image_product);
         photoView.setOnClickListener(v -> {
             Intent intent = new Intent(mContext, ImageFull.class);
             intent.putExtra(PAGE, position);
+            intent.putStringArrayListExtra("URL", allImagesUrl);
             mContext.startActivity(intent);
         });
+
         Picasso.Builder builder = new Picasso.Builder(mContext);
-        builder.build().load(allImagesUrl.get(position))
-                .placeholder((R.drawable.sample))
-                .error(R.drawable.flag)
+        builder.build().load(url)
                 .into(photoView);
-
-        container.addView(itemView);
-
+        collection.addView(itemView);
         return itemView;
     }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((LinearLayout) object);
+    public void destroyItem(ViewGroup collection, int position, @NotNull Object view) {
+        collection.removeView((View) view);
     }
+
+    @Override
+    public int getCount() {
+        return allImagesUrl.size();
+    }
+
+    @Override
+    public boolean isViewFromObject(@NotNull View view, @NotNull Object object) {
+        return view == object;
+    }
+
+
 
 }

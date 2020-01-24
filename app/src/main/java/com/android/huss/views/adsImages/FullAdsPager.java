@@ -15,14 +15,16 @@ import com.android.huss.R;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import static com.android.huss.views.adsImages.ImageFull.PAGE;
 
 public class FullAdsPager extends PagerAdapter {
 
-    Context mContext;
-    LayoutInflater mLayoutInflater;
+    private Context mContext;
+    private LayoutInflater mLayoutInflater;
     private ArrayList<String> allImagesUrl;
     private String uri;
 
@@ -39,20 +41,17 @@ public class FullAdsPager extends PagerAdapter {
     }
 
     @Override
-    public boolean isViewFromObject(View view, Object object) {
+    public boolean isViewFromObject(@NotNull View view, @NotNull Object object) {
         return view == object;
     }
 
+    @NotNull
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        View itemView = mLayoutInflater.inflate(R.layout.ads_image_view, container, false);
+    public Object instantiateItem(@NotNull ViewGroup container, int position) {
+        View itemView = mLayoutInflater.inflate(R.layout.ads_image_view_preview, container, false);
         PhotoView photoView = itemView.findViewById(R.id.image);
-
-
             Picasso.Builder builder = new Picasso.Builder(mContext);
             builder.build().load(allImagesUrl.get(position))
-                    .placeholder((R.drawable.sample))
-                    .error(R.drawable.flag)
                     .into(photoView);
 
 

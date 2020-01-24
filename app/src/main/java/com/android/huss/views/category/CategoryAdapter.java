@@ -16,6 +16,8 @@ import com.android.huss.models.Category;
 import com.android.huss.views.subCategory.SubCategoryView;
 import com.squareup.picasso.Picasso;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import static com.android.huss.views.ads.singleAds.SingleAds.NAME;
@@ -48,6 +50,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Custom
             }
         }
 
+        @NotNull
         @Override
         public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
@@ -62,19 +65,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Custom
         }
 
         @Override
-        public void onBindViewHolder(CustomViewHolder holder, int position) {
+        public void onBindViewHolder(@NotNull CustomViewHolder holder, int position) {
             if (position == 0){
                 holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorAccent));
             }else{
                 holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
             }
 
-            holder.txtTitle.setText(dataList.get(position).getName());
+            holder.txtTitle.setText(dataList.get(position).getName().split(" ")[0].replace(",", ""));
             holder.mView.setTag(dataList.get(position).getName());
 
             Picasso.Builder builder = new Picasso.Builder(context);
             builder.build().load(dataList.get(position).getIconUrl())
-                    .error(R.drawable.ic_launcher_background)
                     .into(holder.icon);
 
         }

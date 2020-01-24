@@ -1,7 +1,6 @@
 package com.android.huss.data;
 
 
-import com.android.huss.models.Ad;
 import com.android.huss.models.AdImage;
 import com.android.huss.models.Ads;
 import com.android.huss.models.AllAds;
@@ -20,7 +19,6 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -29,9 +27,8 @@ import retrofit2.http.Query;
 
 public interface HussAPI {
 
-    @GET("category/getPopularCategories/{limit}")
-    Call<Category> getPopularCategory(@Header("Authorization") String name,
-                                      @Path("limit") int limit);
+    @GET("category/all/getPopularCategories")
+    Call<Category> getPopularCategory(@Header("Authorization") String name);
 
     @GET("category/all/categories")
     Call<Category> getAllCategory(@Header("Authorization") String name);
@@ -41,11 +38,10 @@ public interface HussAPI {
                                      @Path("categoryName") String categoryName);
 
 
-    @GET("photos/{id}")
-    Call<Profile> getUserProfile(@Path("id") String id);
+    @GET("user/profile/{id}")
+    Call<Profile> getUserProfile(@Header("Authorization") String name,
+                                 @Path("id") String id);
 
-    @GET("photos")
-    Call<List<Ads>> getAds();
 
     @PUT("user/profile")
     @FormUrlEncoded
@@ -53,7 +49,7 @@ public interface HussAPI {
                                     @Field("profileImgUrl") String imageUrl,
                                     @Field("firstName") String firstName,
                                     @Field("lastName") String lastName,
-                                    @Field("phone") String phone,
+                                    @Field("phoneNumber") String phone,
                                     @Field("city") String location);
 
 
@@ -71,10 +67,10 @@ public interface HussAPI {
 
     @DELETE("ad/deleteAd/{id}")
     Call<Ads> deleteUserAd(@Header("Authorization") String token,
-                          @Path("id") int id);
+                           @Path("id") int id);
 
     @GET("photos")
-    Call<List<Ads>> getSearchAds(@Query("key") String key);
+    Call<AllAds> getSearchAds(@Query("key") String key);
 
     @GET("ad/getAd/{id}")
     Call<SingleAd> getSingleAds(@Header("Authorization") String token,
@@ -100,6 +96,16 @@ public interface HussAPI {
 
     @GET("ad/getAllOwnAds")
     Call<AllAds> getUserAds(@Header("Authorization") String token);
+
+    @GET("ad/getAllUserAds/{userId}")
+    Call<AllAds> getUserAdsById(@Header("Authorization") String token,
+                                @Path("userId") String id);
+
+    @GET("ad/getAllAdsByLimit")
+    Call<AllAds> getAllAdsByLimit(@Header("Authorization") String token);
+
+    @GET("ad/getAllAds")
+    Call<AllAds> getAllAds(@Header("Authorization") String token);
 
 
     @GET("locations")

@@ -1,6 +1,7 @@
 package com.android.huss.views.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,20 +12,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.huss.R;
 import com.android.huss.models.Ads;
+import com.android.huss.models.AllAds;
+import com.android.huss.views.ads.singleAds.SingleAds;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
+
+import static com.android.huss.utility.Utility.PREMIUM_AD;
+import static com.android.huss.utility.Utility.STANDARD_AD;
+import static com.android.huss.views.ads.singleAds.SingleAds.ID;
+import static com.android.huss.views.ads.singleAds.SingleAds.NAME;
 
 public class TopAdsAdapter extends RecyclerView.Adapter<TopAdsAdapter.CustomViewHolder>{
 
 
-        private List<Ads> dataList;
+        private AllAds dataList;
         private Context context;
 
-        public TopAdsAdapter(Context context, List<Ads> dataList){
+        TopAdsAdapter(Context context, AllAds dataList){
             this.context = context;
             this.dataList = dataList;
 
@@ -51,58 +61,69 @@ public class TopAdsAdapter extends RecyclerView.Adapter<TopAdsAdapter.CustomView
             }
         }
 
+        @NotNull
         @Override
         public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             View view = layoutInflater.inflate(R.layout.top_ads_view, parent, false);
+            view.setOnClickListener(v -> {
+                String id = String.valueOf(v.getId());
+                Intent intent = new Intent(context, SingleAds.class);
+                intent.putExtra(ID, id);
+                intent.putExtra(NAME, String.valueOf(v.getTag()));
+                context.startActivity(intent);
+            });
             return new CustomViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(CustomViewHolder holder, int position) {
-//            String adTitle = dataList.get(position).getTitle();
-            holder.txtTitle.setText("iPhone X" /*adTitle.length() > 14 ? adTitle.substring(0, 14).concat("...") : adTitle*/);
-            holder.price.setText("$35"/*dataList.get(position).getPrice()*/);
-          //  if (dataList.get(position).getFavorite().equals("Yes")){
-            holder.favorite.setEventListener(new SparkEventListener(){
+        public void onBindViewHolder(@NotNull CustomViewHolder holder, int position) {
+            AllAds.Data ad = dataList.getData().get(position);
+            if (ad.getType().equals(STANDARD_AD)) {
+                holder.txtTitle.setText(ad.getTitle());
+                holder.price.setText(String.format("₦%s", String.format("%,d", Integer.parseInt(ad.getPrice()))));
+                holder.favorite.setChecked(ad.getFavorites());
+                holder.itemView.setId(ad.getId());
+                holder.favorite.setEventListener(new SparkEventListener() {
 
-                @Override
-                public void onEvent(ImageView button, boolean buttonState) {
-                    if (buttonState) {
-                        // Button is active
-                    } else {
-                        // Button is inactive
+                    @Override
+                    public void onEvent(ImageView button, boolean buttonState) {
+                        if (buttonState) {
+                            // Button is active
+                        } else {
+                            // Button is inactive
+                        }
+                    }
+
+                    @Override
+                    public void onEventAnimationEnd(ImageView button, boolean buttonState) {
+
+                    }
+
+                    @Override
+                    public void onEventAnimationStart(ImageView button, boolean buttonState) {
+
+                    }
+                });
+                for (AllAds.Data.Image image: ad.getImages()){
+                    if (image.getDisplayImage()){
+                        Picasso.Builder builder = new Picasso.Builder(context);
+                        builder.build().load(image.getImageUrl())
+                                .into(holder.image);
                     }
                 }
 
-                @Override
-                public void onEventAnimationEnd(ImageView button, boolean buttonState) {
+            }
 
-                }
-
-                @Override
-                public void onEventAnimationStart(ImageView button, boolean buttonState) {
-
-                }
-            });
-          //  }else{
-                //holder.favorite.setImageResource(R.drawable.favorite_no);
-           // }
-
-
-
-            Picasso.Builder builder = new Picasso.Builder(context);
-            builder.build().load("https://via.placeholder.com/150?"/*dataList.get(position).getFeatureImgUrl()*/)
-                    .into(holder.image);
 
         }
 
         @Override
         public int getItemCount() {
-            //if (dataList != null) {
-                return 10;/*dataList.size();*/
-            //}
-           // return 0;
+            if (dataList != null) {
+              return dataList.getData().size();
+            }
+            return 0;
         }
     }
 

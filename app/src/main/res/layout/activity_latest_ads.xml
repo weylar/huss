@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -29,17 +28,16 @@
                 android:id="@+id/page_title"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_centerVertical="true"
                 android:layout_marginStart="15dp"
                 android:layout_toEndOf="@+id/back"
                 android:ellipsize="end"
-                android:maxLines="1"
                 android:gravity="center_vertical"
-                android:layout_centerVertical="true"
+                android:maxLines="1"
                 android:scrollHorizontally="true"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="17sp"
                 tools:text="@string/latest_ads" />
-
 
 
         </RelativeLayout>
@@ -51,6 +49,17 @@
         android:id="@+id/all_latest_ads"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/gray" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <com.ldoublem.loadingviewlib.view.LVCircularZoom
         android:id="@+id/progress"

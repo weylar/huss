@@ -119,9 +119,7 @@
     <string name="change_image">Change image</string>
     <string name="cap_active">Active</string>
     <string name="cap_inactive">Inactive</string>
-    <string name="call">Call</string>
     <string name="chat">Chat</string>
-    <string name="all_ads">All Ads</string>
     <string name="renew_ad">Renew Ad</string>
     <string name="edit_ad">Edit Ad</string>
     <string name="delete_ad">Delete Ad</string>
@@ -131,6 +129,19 @@
     <string name="fixed">Fixed</string>
     <string name="public_id">public_id</string>
     <string name="ads_upload_preset">ads_upload_preset</string>
+    <string name="call_seller">Call seller</string>
+    <string name="phone_number_where_your_potential_buyers_can_reach_you">Phone number where your potential buyers can reach you</string>
+    <string name="user_profile">User Profile</string>
+    <string name="report_description">Help us understand the problem. What is going on with this Ad?</string>
+    <string name="prepayment">Seller requested for a prepayment</string>
+    <string name="wrong_category">It\'s in a wrong category</string>
+    <string name="wrong_price">The price is wrong</string>
+    <string name="spam">It\'s suspicious or spam</string>
+    <string name="comment">You can also leave a comment</string>
+    <string name="violation_link">Learn more about reporting violations of our rules</string>
+    <string name="submit">Submit</string>
+    <string name="all_ads">All Ads</string>
+    <string name="call">Call</string>
 
 
 </resources>

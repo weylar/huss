@@ -11,26 +11,93 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.huss.R;
-import com.android.huss.models.Ads;
-import com.jakewharton.picasso.OkHttp3Downloader;
+import com.android.huss.models.SingleAd;
 import com.squareup.picasso.Picasso;
+import com.varunest.sparkbutton.SparkButton;
+import com.varunest.sparkbutton.SparkEventListener;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 import static com.android.huss.views.ads.singleAds.SingleAds.ID;
 
-public class SimilarAdsAdapter extends RecyclerView.Adapter<SimilarAdsAdapter.CustomViewHolder>{
+public class SimilarAdsAdapter extends RecyclerView.Adapter<SimilarAdsAdapter.CustomViewHolder> {
 
 
-        private List<Ads> dataList;
-        private Context context;
+    private List<SingleAd.SimilarAd> dataList;
+    private Context context;
 
-        public SimilarAdsAdapter(Context context, List<Ads> dataList){
-            this.context = context;
-            this.dataList = dataList;
+    SimilarAdsAdapter(Context context, List<SingleAd.SimilarAd> dataList) {
+        this.context = context;
+        this.dataList = dataList;
+        Timber.e(dataList.size() +"");
 
+    }
+
+    @NotNull
+    @Override
+    public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        View view = layoutInflater.inflate(R.layout.top_ads_view, parent, false);
+        view.setOnClickListener(v -> {
+            String id = String.valueOf(v.getId());
+            Intent intent = new Intent(context, SingleAds.class);
+            intent.putExtra(ID, id);
+            context.startActivity(intent);
+        });
+
+        return new CustomViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(CustomViewHolder holder, int position) {
+        SingleAd.SimilarAd ad = dataList.get(position);
+        holder.label.setVisibility(View.GONE);
+        holder.txtTitle.setText(ad.getTitle());
+        holder.price.setText(String.format("₦%s", String.format("%,d", Integer.parseInt(ad.getPrice()))));
+//                holder.favorite.setChecked(ad.is);
+        holder.itemView.setId(ad.getId());
+        holder.favorite.setEventListener(new SparkEventListener() {
+
+            @Override
+            public void onEvent(ImageView button, boolean buttonState) {
+                if (buttonState) {
+                    // Button is active
+                } else {
+                    // Button is inactive
+                }
+            }
+
+            @Override
+            public void onEventAnimationEnd(ImageView button, boolean buttonState) {
+
+            }
+
+            @Override
+            public void onEventAnimationStart(ImageView button, boolean buttonState) {
+
+            }
+        });
+        for (SingleAd.Image image : ad.getImages()) {
+            if (image.getDisplayImage()) {
+                Picasso.Builder builder = new Picasso.Builder(context);
+                builder.build().load(image.getImageUrl())
+                        .into(holder.image);
+            }
         }
 
+    }
+
+    @Override
+    public int getItemCount() {
+        if (dataList != null) {
+            return dataList.size();
+        }
+        return 0;
+    }
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
 
@@ -39,7 +106,7 @@ public class SimilarAdsAdapter extends RecyclerView.Adapter<SimilarAdsAdapter.Cu
         TextView txtTitle;
         TextView price;
         TextView label;
-        ImageView favorite;
+        SparkButton favorite;
         private ImageView image;
 
         CustomViewHolder(View itemView) {
@@ -50,56 +117,9 @@ public class SimilarAdsAdapter extends RecyclerView.Adapter<SimilarAdsAdapter.Cu
             price = mView.findViewById(R.id.price);
             favorite = mView.findViewById(R.id.favorite);
             label = mView.findViewById(R.id.label);
+
         }
     }
-
-        @Override
-        public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-            View view = layoutInflater.inflate(R.layout.top_ads_view, parent, false);
-            view.setOnClickListener(v -> {
-                String id = String.valueOf(v.getId());
-                Intent intent = new Intent(context, SingleAds.class);
-                intent.putExtra(ID, id);
-                context.startActivity(intent);
-            });
-
-            return new CustomViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(CustomViewHolder holder, int position) {
-            String adTitle = dataList.get(position).getData().getTitle();
-            holder.label.setVisibility(View.GONE);
-            holder.txtTitle.setText( "iPhone X Max"/*adTitle.length() > 70 ? adTitle.substring(0, 67).concat("...") : adTitle*/);
-            holder.price.setText("$35"/*dataList.get(position).getPrice()*/);
-//            holder.description.setText("Lorem ipsum dolor sit amet, minim veniam, ut aliquip ex ea commodo consequat");
-          //  if (dataList.get(position).getFavorite().equals("Yes")){
-               holder.favorite.setImageResource(R.drawable.favorite_yes);
-               holder.itemView.setId(1);
-
-          //  }else{
-                //holder.favorite.setImageResource(R.drawable.favorite_no);
-           // }
-
-
-
-            Picasso.Builder builder = new Picasso.Builder(context);
-            builder.downloader(new OkHttp3Downloader(context));
-            builder.build().load(dataList.get(position).getData().getFeatureImgUrl())
-                    .placeholder((R.drawable.ic_launcher_background))
-                    .error(R.drawable.ic_launcher_background)
-                    .into(holder.image);
-
-        }
-
-        @Override
-        public int getItemCount() {
-            if (dataList != null) {
-                return dataList.size();
-            }
-            return 0;
-        }
-    }
+}
 
 

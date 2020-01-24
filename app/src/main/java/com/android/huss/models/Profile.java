@@ -60,9 +60,6 @@ public class Profile {
         private String lastSeen;
         private String isDeleted;
         private String password;
-
-
-
         private String confirmPassword;
         private String phoneNumber;
         private String createdAt;

@@ -2,12 +2,8 @@ package com.android.huss.views.ads.createAds
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.content.pm.PackageManager
-import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -43,7 +39,6 @@ import com.cloudinary.android.callback.UploadCallback
 import com.google.android.material.snackbar.Snackbar
 import com.ldoublem.loadingviewlib.view.LVCircularZoom
 import kotlinx.android.synthetic.main.activity_create_ads.*
-import timber.log.Timber
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -63,14 +58,20 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
     private val arrayList = ArrayList<Uri>()
     private val array = ArrayList<SingleAd.AdImage>()
     var isValid = false
-    lateinit var token: String
+    private lateinit var sharedPref: SharedPreferences
+    private lateinit var token : String
+    private lateinit var phoneString : String
+    private lateinit var userId : String
 
 
     @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_ads)
-        token = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE).getString(TOKEN, "")!!
+        sharedPref = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE)
+         token = sharedPref.getString(TOKEN, "")!!
+        phoneString = sharedPref.getString(PHONE, "")!!
+        userId = sharedPref.getString(USER_ID, "")!!
         validateEntry()
         setUpLocation()
         disableButtonPost()
@@ -111,27 +112,25 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
 
         } else {
             setUpAdType(false)
-            add.setOnClickListener {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    askForPermission()
-                } else {
-                    showChooser()
-                }
-                terms.setOnClickListener {
-                    openTerms()
-
-                }
-                typeInfo.setOnClickListener {
-                    showInfo()
-                }
-
-            }
 
             popSpinnerCatAndSub("Agriculture & Food", "Farm Machinery & Equipment")
         }
 
+        add.setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                askForPermission()
+            } else {
+                showChooser()
+            }
 
+        }
+        terms.setOnClickListener {
+            openTerms()
 
+        }
+        typeInfo.setOnClickListener {
+            showInfo()
+        }
 
 
         postAd.setOnClickListener {
@@ -143,6 +142,11 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
             /*TODO: Check if user has paid, if true don't show this again*/
 //            val fragment = BottomNavPay()
 //                fragment.show(supportFragmentManager, "TAG")
+        }
+
+        if (phoneString != "") {
+            phone_label.visibility = View.GONE
+            phone_edit.visibility = View.GONE
         }
 
     }
@@ -167,61 +171,52 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
     }
 
     private fun saveDraft() {
-            if (adTitle.text.isNotEmpty() or adDescription.text.isNotEmpty()
-                    or adPrice.text.isNotEmpty() or (isNegotiable_checkbox.isChecked) or
-                    categories.isSelected or sub_category.isSelected) {
-                val info = AlertDialog.Builder(this).create()
-                info.setMessage("You are about to leave this page without completing the posting process. " +
-                        "Do you want to save as draft and complete later?")
-                info.setTitle("Hi ${getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE)
-                        .getString(USER_NAME, "")!!.split(" ")[0]}")
-                info.setButton(DialogInterface.BUTTON_POSITIVE, "Save draft!") { _, _ ->
-                    val category = categories.selectedItem.toString()
-                    val subCat = sub_category.selectedItem.toString()
-                    val title = adTitle.text.toString()
-                    val description = adDescription.text.toString()
-                    val location = adLocation.text.toString()
-                    val price = adPrice.text.toString().replace(",", "")
-                    val isNegotiable = isNegotiable_checkbox.isChecked
+        if (adTitle.text.isNotEmpty() or adDescription.text.isNotEmpty()
+                or adPrice.text.isNotEmpty() or (isNegotiable_checkbox.isChecked) or
+                categories.isSelected or sub_category.isSelected) {
+            val info = AlertDialog.Builder(this).create()
+            info.setMessage("You are about to leave this page without completing the posting process. " +
+                    "Do you want to save as draft and complete later?")
+            info.setTitle("Hi ${getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE)
+                    .getString(USER_NAME, "")!!.split(" ")[0]}")
+            info.setButton(DialogInterface.BUTTON_POSITIVE, "Save draft!") { _, _ ->
 
-                    val sharedPreferences = getSharedPreferences(draft, Context.MODE_PRIVATE)
-                    val editor = sharedPreferences.edit()
-                    editor.putStringSet(draft, mutableSetOf(title, description, location, price))
-                    editor.putString(title, title)
-                    editor.putString(this.description, description)
-                    editor.putString(this.location, location)
-                    editor.putString(this.price, price)
-                    editor.putString(this.category, category)
-                    editor.putString(subCategory, subCat)
-                    editor.putBoolean(this.negotiable, isNegotiable)
-                    editor.apply()
-                    finish()
-
-                }
-                info.setButton(DialogInterface.BUTTON_NEGATIVE, "Delete") { _, _ -> finish() }
-                info.setCancelable(true)
-                info.show()
-
-
-            } else {
+                val sharedPreferences = getSharedPreferences(draft, Context.MODE_PRIVATE)
+                val editor = sharedPreferences.edit()
+                editor.putString(title, adTitle.text.toString())
+                editor.putString(description, adDescription.text.toString())
+                editor.putString(location, adLocation.text.toString())
+                editor.putString(price, adPrice.text.toString().replace(",", ""))
+                editor.putString(category, categories.selectedItem.toString())
+                editor.putString(subCategory, sub_category.selectedItem.toString())
+                editor.putBoolean(negotiable, isNegotiable_checkbox.isChecked)
+                editor.apply()
                 finish()
+
             }
+            info.setButton(DialogInterface.BUTTON_NEGATIVE, "Delete") { _, _ -> finish() }
+            info.setCancelable(true)
+            info.show()
+
+
+        } else {
+            finish()
+        }
 
     }
 
     private fun loadFromDraft() {
         val sharedPreferences = getSharedPreferences(draft, Context.MODE_PRIVATE)
-        categories.post { categories.setSelection(sharedPreferences.getInt(category, 0), true) }
-        sub_category.post { sub_category.setSelection(sharedPreferences.getInt(subCategory, 0), true) }
         adTitle.setText(sharedPreferences.getString(title, ""))
         adDescription.setText(sharedPreferences.getString(description, ""))
         adLocation.setText(sharedPreferences.getString(location, ""))
         adPrice.setText(sharedPreferences.getString(price, ""))
         isNegotiable_checkbox.isChecked = sharedPreferences.getBoolean(negotiable, false)
-        popSpinnerCatAndSub(sharedPreferences.getString(category, "")!!,
-                sharedPreferences.getString(subCategory, "")!!)
+//            popSpinnerCatAndSub(sharedPreferences.getString(category, "Agriculture & Food")!!,
+//                    sharedPreferences.getString(subCategory, "Farm Machinery & Equipment")!!)
         setUpAdType(state = false)
         sharedPreferences.edit().clear().apply()
+
     }
 
     private fun setUpAdType(state: Boolean) {
@@ -592,10 +587,31 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
             }
         }
 
+        val textWatcherPhone = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                phone_edit.removeTextChangedListener(this)
+
+                isValid = (adTitle.text.isNotEmpty() && adTitle.text.length <= 70
+                        && adDescription.text.isNotEmpty() && adDescription.text.length <= 1200
+                        && adLocation.text.isNotEmpty() && adPrice.text.isNotEmpty() && phone_edit.text.isNotEmpty())
+                if (isValid) unDisableButtonPost() else disableButtonPost()
+                phone_edit.addTextChangedListener(this)
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        }
         adTitle.addTextChangedListener(textWatcherTitle)
         adDescription.addTextChangedListener(textWatcherDesc)
         adPrice.addTextChangedListener(textWatcherPrice)
         adLocation.addTextChangedListener(textWatcherLocation)
+        phone_edit.addTextChangedListener(textWatcherPhone)
 
 
     }
@@ -796,9 +812,29 @@ class CreateAds : AppCompatActivity(), BottomNavPay.PayState {
                             val createAdViewModel = ViewModelProviders.of(this@CreateAds).get(CreateAdViewModel::class.java)
                             createAdViewModel.init(ads, token)
                             createAdViewModel.createResponse.observe(this@CreateAds, Observer<Ads> { productId ->
-                                uploadImages(productId.data.id)
+                                /*Update phone number in profile */
+                                val profileViewModel = ViewModelProviders.of(this@CreateAds).get(ProfileViewModel::class.java)
+                                val profile = com.android.huss.models.Profile().Data()
+                                profile.token = token
+                                profile.id = userId
+//                                profile.profileImgUrl = sharedPref.getString(PROFILE_IMAGE_URL, "")
+//                                profile.firstName = sharedPref.getString(USER_NAME, "")!!.split(" ")[0]
+//                                profile.lastName = sharedPref.getString(USER_NAME, "")!!.split(" ")[1]
+//                                profile.city = sharedPref.getString(LOCATION, "")
+                                if (phoneString != "") {
+                                    profile.phoneNumber = phoneString
+                                } else {
+                                    profile.phoneNumber = phone_edit.text.toString()
+                                }
+                                profileViewModel.initUpdateProfile(profile)
+                                profileViewModel.updateProfile().observe(this@CreateAds, Observer {
+                                    uploadImages(productId.data.id)
+                                    sharedPref.edit().putString(PHONE,  phone_edit.text.toString()).apply()
+                                })
+
 
                             })
+
 
                         } else {
                             val singleAd = SingleAd().data

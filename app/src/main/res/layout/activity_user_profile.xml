@@ -1,160 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".views.profile.UserProfile">
+<layout>
 
-
-    <RelativeLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/nav_header_bck"
-        android:padding="10dp">
-
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="@dimen/toolbar_icon_size"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/navigate_back"
-            android:onClick="goBack"
-            android:src="@drawable/back" />
+        android:orientation="vertical"
+        tools:context=".views.profile.Profile">
 
 
-        <ImageView
-            android:id="@+id/report"
-            android:layout_width="@dimen/toolbar_icon_size"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/navigate_back"
-            android:onClick="report"
-            android:layout_alignParentEnd="true"
-            android:src="@drawable/flag" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:cardElevation="2dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/back"
+                    android:layout_width="@dimen/toolbar_icon_size"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:contentDescription="@string/navigate_back"
+                    android:onClick="goBack"
+                    android:src="@drawable/back" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/back"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/user_profile"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="20sp" />
+
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="80dp"
-            android:background="@drawable/white_curve"
-            android:orientation="vertical" />
-
-        <RelativeLayout
-            android:id="@+id/holder"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp">
-
-            <TextView
-                android:id="@+id/placeholder"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:background="@drawable/circle"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="40sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                tools:text="I" />
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_img"
-                android:layout_width="85dp"
-                android:layout_height="85dp"
-                android:background="@drawable/image_bg"
-                tools:src="@drawable/sample" />
-
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/holder"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/profileName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textAlignment="center"
-                android:textColor="@color/colorAccent"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                tools:text="Aminu Idris" />
-
-            <TextView
-                android:id="@+id/last_seen"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                tools:text="Last seen: Yesterday" />
-
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:layout_gravity="center">
+                android:id="@+id/root"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:background="@drawable/nav_header_bck"
+                android:orientation="vertical"
+                android:padding="8dp">
 
-                <TextView
-                    android:id="@+id/makeCall"
+                <RelativeLayout
+                    android:id="@+id/holder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/button_offer"
-                    android:contentDescription="@string/make_call"
-                    android:onClick="makeCall"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:id="@+id/placeholder"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:background="@drawable/circle"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="40sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        tools:text="I" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profile_img_"
+                        android:layout_width="85dp"
+                        android:layout_height="85dp"
+                        android:background="@drawable/image_bg"
+                        tools:src="@drawable/sample" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/profileName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:textAlignment="center"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:text="@string/call"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/colorAccent"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    tools:text="Aminu Idris" />
+
 
                 <TextView
-                    android:id="@+id/message_icon"
+                    android:id="@+id/totalAds"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:textColor="@color/colorPrimaryDark"
+                    tools:text="Total Ads: 32" />
+
+                <Button
+                    android:id="@+id/phone"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
                     android:background="@drawable/button_offer"
-                    android:contentDescription="@string/text_the_seller"
-                    android:onClick="text"
                     android:textColor="@color/white"
-                    android:textAlignment="center"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:text="@string/chat" />
-
+                    android:layout_margin="4dp"
+                    android:text="@string/call" />
 
 
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/all_ads"
-                android:layout_margin="16dp"
-                android:textAlignment="center"
-                android:textSize="20sp"/>
-
-            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/all_ads_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/userAdsRecycler"/>
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:text="@string/all_ads"
+                android:layout_margin="8dp"/>
 
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/recycler_all_ads"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         </LinearLayout>
 
 
+    </LinearLayout>
 
-
-    </RelativeLayout>
-
-
-</LinearLayout>
+</layout>

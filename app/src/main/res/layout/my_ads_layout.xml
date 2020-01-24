@@ -80,6 +80,7 @@
                 android:layout_margin="5dp"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold"
+                android:textSize="18sp"
                 tools:text="$5000000" />
 
             <TextView

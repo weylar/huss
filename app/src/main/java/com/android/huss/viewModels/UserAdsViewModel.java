@@ -22,6 +22,11 @@ public class UserAdsViewModel extends ViewModel {
         mutableLiveDataAllAds = adsRepository.getUserAds(token);
 
     }
+    public void initAdById(String token, String id) {
+        adsRepository = AdsRepository.getInstance();
+        mutableLiveDataAllAds = adsRepository.getUserAdsById(token, id);
+
+    }
 
     public void initDelete(String token, int id) {
         adsRepository = AdsRepository.getInstance();

@@ -63,7 +63,8 @@ public class AllAds {
         private String updatedAt;
         @SerializedName("Images")
         private List<Image> images = new ArrayList<>();
-        private List<Object> favorites = null;
+        @SerializedName("isFavorite")
+        private boolean favorites;
 
         public Integer getId() {
             return id;
@@ -193,11 +194,11 @@ public class AllAds {
             this.images = images;
         }
 
-        public List<Object> getFavorites() {
+        public boolean getFavorites() {
             return favorites;
         }
 
-        public void setFavorites(List<Object> favorites) {
+        public void setFavorites(Boolean favorites) {
             this.favorites = favorites;
         }
 

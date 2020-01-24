@@ -20,9 +20,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp">
 
                 <ImageView
                     android:id="@+id/back"
@@ -52,13 +52,13 @@
 
             <ProgressBar
                 android:id="@+id/progressUpload"
-                android:visibility="gone"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:indeterminate="true"
+                android:layout_alignParentBottom="true"
                 android:layout_margin="0dp"
-                android:layout_alignParentBottom="true" />
+                android:indeterminate="true"
+                android:visibility="gone" />
 
 
         </RelativeLayout>
@@ -98,8 +98,8 @@
                     android:layout_marginStart="10dp"
                     android:drawableStart="@drawable/small_file"
                     android:drawablePadding="5dp"
-                    android:textColor="@color/colorAccent"
-                    android:text="@string/categorys" />
+                    android:text="@string/categorys"
+                    android:textColor="@color/colorAccent" />
 
                 <Spinner
                     android:id="@+id/categories"
@@ -122,9 +122,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:drawableStart="@drawable/small_sub_cat"
-                    android:textColor="@color/colorAccent"
                     android:drawablePadding="5dp"
-                    android:text="@string/sub_category" />
+                    android:text="@string/sub_category"
+                    android:textColor="@color/colorAccent" />
 
                 <Spinner
                     android:id="@+id/sub_category"
@@ -233,6 +233,31 @@
                 android:hint="@string/location_description"
                 android:importantForAutofill="no"
                 android:inputType="text|textCapSentences"
+                android:padding="10dp" />
+
+            <TextView
+                android:id="@+id/phone_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:drawableStart="@drawable/no_small_phone_"
+                android:drawablePadding="5dp"
+                android:text="@string/phone" />
+
+
+            <EditText
+                android:id="@+id/phone_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/custom_bg"
+                android:drawablePadding="5dp"
+                android:hint="@string/phone_number_where_your_potential_buyers_can_reach_you"
+                android:importantForAutofill="no"
+                android:inputType="phone"
                 android:padding="10dp" />
 
             <TextView

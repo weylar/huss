@@ -30,13 +30,13 @@ public class AdsRepository {
         return adsRepository;
     }
 
-    public MutableLiveData<List<Ads>> getAds() {
-        final MutableLiveData<List<Ads>> adsData = new MutableLiveData<>();
+    public MutableLiveData<AllAds> getAllAdsByLimit(String token) {
+        final MutableLiveData<AllAds> adsData = new MutableLiveData<>();
         HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
-        Call<List<Ads>> call = retrofit.getAds();
-        call.enqueue(new Callback<List<Ads>>() {
+        Call<AllAds> call = retrofit.getAllAdsByLimit(BEARER + " " + token);
+        call.enqueue(new Callback<AllAds>() {
             @Override
-            public void onResponse(@NotNull Call<List<Ads>> call, @NotNull Response<List<Ads>> response) {
+            public void onResponse(@NotNull Call<AllAds> call, @NotNull Response<AllAds> response) {
                 if (response.isSuccessful()) {
                     Timber.e("onResponse: SUCCESS");
                     adsData.setValue(response.body());
@@ -44,20 +44,20 @@ public class AdsRepository {
             }
 
             @Override
-            public void onFailure(Call<List<Ads>> call, Throwable t) {
+            public void onFailure(Call<AllAds> call, Throwable t) {
                 Timber.e("%sFailed", t.getMessage());
             }
         });
         return adsData;
     }
 
-    public MutableLiveData<List<Ads>> getSearchAds(String key) {
-        final MutableLiveData<List<Ads>> adsData = new MutableLiveData<>();
+    public MutableLiveData<AllAds> getAllAds(String token) {
+        final MutableLiveData<AllAds> adsData = new MutableLiveData<>();
         HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
-        Call<List<Ads>> call = retrofit.getSearchAds(key);
-        call.enqueue(new Callback<List<Ads>>() {
+        Call<AllAds> call = retrofit.getAllAds(BEARER + " " + token);
+        call.enqueue(new Callback<AllAds>() {
             @Override
-            public void onResponse(@NotNull Call<List<Ads>> call, @NotNull Response<List<Ads>> response) {
+            public void onResponse(@NotNull Call<AllAds> call, @NotNull Response<AllAds> response) {
                 if (response.isSuccessful()) {
                     Timber.e("onResponse: SUCCESS");
                     adsData.setValue(response.body());
@@ -65,7 +65,28 @@ public class AdsRepository {
             }
 
             @Override
-            public void onFailure(@NotNull Call<List<Ads>> call, @NotNull Throwable t) {
+            public void onFailure(Call<AllAds> call, Throwable t) {
+                Timber.e("%sFailed", t.getMessage());
+            }
+        });
+        return adsData;
+    }
+
+    public MutableLiveData<AllAds> getSearchAds(String key) {
+        final MutableLiveData<AllAds> adsData = new MutableLiveData<>();
+        HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
+        Call<AllAds> call = retrofit.getSearchAds(key);
+        call.enqueue(new Callback<AllAds>() {
+            @Override
+            public void onResponse(@NotNull Call<AllAds> call, @NotNull Response<AllAds> response) {
+                if (response.isSuccessful()) {
+                    Timber.e("onResponse: SUCCESS");
+                    adsData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<AllAds> call, @NotNull Throwable t) {
                 Timber.e("%sFailed", t.getMessage());
             }
         });
@@ -76,6 +97,29 @@ public class AdsRepository {
         final MutableLiveData<AllAds> adsData = new MutableLiveData<>();
         HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
         Call<AllAds> call = retrofit.getUserAds(BEARER + " " + token);
+        call.enqueue(new Callback<AllAds>() {
+            @Override
+            public void onResponse(@NotNull Call<AllAds> call, @NotNull Response<AllAds> response) {
+                if (response.isSuccessful()) {
+                    Timber.e("Success");
+                    adsData.setValue(response.body());
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<AllAds> call, @NotNull Throwable t) {
+                Timber.e("%sFailed", t.getMessage());
+
+            }
+        });
+        return adsData;
+    }
+
+    public MutableLiveData<AllAds> getUserAdsById(String token, String id) {
+        final MutableLiveData<AllAds> adsData = new MutableLiveData<>();
+        HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
+        Call<AllAds> call = retrofit.getUserAdsById(BEARER + " " + token, id);
         call.enqueue(new Callback<AllAds>() {
             @Override
             public void onResponse(@NotNull Call<AllAds> call, @NotNull Response<AllAds> response) {

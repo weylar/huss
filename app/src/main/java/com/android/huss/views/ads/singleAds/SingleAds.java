@@ -1,23 +1,38 @@
 package com.android.huss.views.ads.singleAds;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
 import com.android.huss.R;
 import com.android.huss.models.Ads;
+import com.android.huss.models.SingleAd;
 import com.android.huss.viewModels.AdsViewModel;
+import com.android.huss.viewModels.ProfileViewModel;
 import com.android.huss.viewModels.SimilarAdsViewModel;
+import com.android.huss.views.ads.singleAds.report.FragmentReport;
+import com.android.huss.views.message.ChatActivity;
+import com.android.huss.views.profile.UserProfile;
+import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 import com.squareup.picasso.Picasso;
@@ -29,39 +44,62 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.android.huss.utility.Utility.MY_PREFERENCES;
+import static com.android.huss.utility.Utility.TOKEN;
+import static com.android.huss.utility.Utility.USER_ID;
+import static com.android.huss.utility.Utility.USER_NAME;
+
 public class SingleAds extends AppCompatActivity {
 
+    public static final String ID = "AdsId";
+    public static final String NAME = "Name";
     ViewPager viewPager;
     RecyclerView similarAdsRecycler;
     Pager pager;
     AdsViewModel adsViewModel;
-    SimilarAdsViewModel similarAdsViewModel;
-    LVCircularZoom progressBarLatestAds;
+    ShimmerFrameLayout shimmerImage;
     SimilarAdsAdapter similarAdsAdapter;
+    NestedScrollView root;
     RecyclerView.LayoutManager layoutManagerSimilarAds;
-    String id, name;
-    public static final String ID = "AdsId";
-    public static final String NAME = "Name";
-    TextView offerPrice;
+    String id, name, token;
+    TextView similarLabel;
+    CardView cardView;
+    ArrayList<String> allUrl = new ArrayList<>();
+    String phoneNumber, userId;
+
+    public static String formatViews(String views) {
+        String value = Integer.parseInt(views) > 1000000000 ? (Float.parseFloat(views) / 1000000000) + "B" :
+                Integer.parseInt(views) > 1000000 ? (Float.parseFloat(views) / 1000000) + "M" :
+                        Integer.parseInt(views) > 1000 ? (Integer.parseInt(views) / 1000) + "K" :
+                                views;
+        return value.endsWith(".0B") || value.endsWith(".0M") || value.endsWith(".0K")
+                ? value.replace(".0", "") : value;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_ads);
+        cardView = findViewById(R.id.card_view);
+        shimmerImage = findViewById(R.id.shimmer_image);
         viewPager = findViewById(R.id.viewPagerAds);
-        progressBarLatestAds = findViewById(R.id.progress);
+        root = findViewById(R.id.root);
+        root.setVisibility(View.GONE);
         similarAdsRecycler = findViewById(R.id.similarAdsRecycler);
-        progressBarLatestAds.setViewColor(getResources().getColor(R.color.colorAccent));
-        progressBarLatestAds.startAnim(100);
         id = getIntent().getStringExtra(ID);
+        token = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(TOKEN, "");
         name = getIntent().getStringExtra(NAME);
+        similarLabel = findViewById(R.id.similar_label);
+        adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
+        adsViewModel.initSingleAd(token, id);
+        adsViewModel.getSingleAd().observe(this, ads -> {
+            generateAds(ads.getData());
+            generateSimilarAds(ads.getData().getSimilarAds());
+            shimmerImage.hideShimmer();
+            shimmerImage.setVisibility(View.GONE);
+            root.setVisibility(View.VISIBLE);
 
-        pager = new Pager(this, getAllUrl() /*ads.getAllImgUrl()*/);
-        viewPager.setAdapter(pager);
-        TabLayout tabLayout = findViewById(R.id.tabDots);
-        tabLayout.setupWithViewPager(viewPager, true);
-
-
+        });
 
     }
 
@@ -69,38 +107,15 @@ public class SingleAds extends AppCompatActivity {
         finish();
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
-        /*Get latest ads using view model*/
-        adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
-//        adsViewModel.init(id);
-//        adsViewModel.getSingleAds().observe(this, ads -> {
-//            SingleAds.this.generateAds(ads.getData());
-//            progressBarLatestAds.stopAnim();
-//            progressBarLatestAds.setVisibility(View.GONE);
-//            progressBarLatestAds.stopAnim();
-//        });
 
-        /*Get latest ads using view model*/
-        similarAdsViewModel = ViewModelProviders.of(this).get(SimilarAdsViewModel.class);
-        similarAdsViewModel.init(name);
-        similarAdsViewModel.getSimilarAds().observe(this, this::generateSimilarAds);
-}
 
-    ArrayList<String> allUrl = new ArrayList<>();
-
-    public ArrayList<String> getAllUrl() {
-        allUrl.add( "https://via.placeholder.com/600/771796");
-        allUrl.add("https://randomuser.me/api/portraits/men/58.jpg");
-        allUrl.add( "https://via.placeholder.com/600/771796");
-        allUrl.add("https://via.placeholder.com/600/24f355");
-        allUrl.add("https://via.placeholder.com/600/f66b97");
-        return allUrl;
     }
 
-    private void generateAds(Ads.Data ads) {
+
+    private void generateAds(SingleAd.Data ads) {
         CircleImageView circleImageView = findViewById(R.id.profile_img);
         TextView adsName = findViewById(R.id.adsName);
         TextView report = findViewById(R.id.report);
@@ -108,36 +123,59 @@ public class SingleAds extends AppCompatActivity {
         TextView price = findViewById(R.id.price);
         TextView username = findViewById(R.id.username);
         TextView lastseen = findViewById(R.id.lastseen);
-        offerPrice = findViewById(R.id.offerPrice);
+        TextView registered = findViewById(R.id.registered);
         TextView description = findViewById(R.id.description);
         TextView dateAndTime = findViewById(R.id.timeAndDate);
+        ImageView phone = findViewById(R.id.make_call);
+
         adsName.setText(ads.getTitle());
-        views.setText(formatViews(ads.getViews()));
+        views.setText(String.format("%s views", formatViews(ads.getCount().toString())));
         price.setText(formatPrice(ads.getPrice()));
         description.setText(ads.getDescription());
-        dateAndTime.setText(ads.getLocation() + ", " + formatDate(ads.getCreatedAt()));
-//        TODO: Get the username,lastseen, imgUrl from sharedPreference class
-        username.setText("Aminu Idris");
-        lastseen.setText("Today, at 6:30PM");
-        offerPrice.setText( formatPrice(String.valueOf(Integer.parseInt(ads.getPrice()) / 2)));
-        Picasso.Builder builder = new Picasso.Builder(this);
-        builder.build().load("https://randomuser.me/api/portraits/women/5.jpg")
-                .placeholder((R.drawable.sample))
-                .error(R.drawable.flag)
-                .into(circleImageView);
+        for (SingleAd.AdImage i : ads.getAdImages()) {
+            if (i.getDisplayImage()) {
+                allUrl.add(0, i.getImageUrl());
+            } else {
+                allUrl.add(i.getImageUrl());
+            }
 
+        }
+        pager = new Pager(this, allUrl);
+        viewPager.setAdapter(pager);
+        TabLayout tabLayout = findViewById(R.id.tabDots);
+        tabLayout.setupWithViewPager(viewPager, true);
+        dateAndTime.setText(String.format("%s | %s", ads.getLocation(), formatDate(ads.getCreatedAt())));
+        username.setText(getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(USER_NAME, ""));
+        userId = ads.getUserId().toString();
+        ProfileViewModel profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+        profileViewModel.init(token, userId);
+        profileViewModel.getProfile().observe(this, profile -> {
+            lastseen.setText(String.format("Last seen %s", profile.getData().getLastSeen()));
+            registered.setText(String.format("Registered %s", profile.getData().getCreatedAt()));
+            phoneNumber = profile.getData().getPhoneNumber();
+            if (phoneNumber == null) phone.setImageResource(R.drawable.no_small_phone_);
+            Picasso.Builder builder = new Picasso.Builder(this);
+            builder.build().load(profile.getData().getProfileImgUrl())
+                    .into(circleImageView);
+        });
 
 
         report.setOnClickListener(v -> {
-            /*TODO: Send to db report*/
-            Toast.makeText(this, "Ad already reported, thanks for the feedback", Toast.LENGTH_LONG).show();
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentReport reportFrag = new FragmentReport();
+            reportFrag.show(fm, "report_fragment");
         });
+
+
 
     }
 
-    private void generateSimilarAds(List<Ads> ads) {
-        /*Load Similar Ads*/
-        similarAdsAdapter = new SimilarAdsAdapter(SingleAds.this, ads);
+    private void generateSimilarAds(List<SingleAd.SimilarAd> ads) {
+        if (ads.size() < 1){
+            similarLabel.setVisibility(View.GONE);
+            cardView.setVisibility(View.GONE);
+        }
+        similarAdsAdapter = new SimilarAdsAdapter(this, ads);
         layoutManagerSimilarAds = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         similarAdsRecycler.setLayoutManager(layoutManagerSimilarAds);
         similarAdsRecycler.setAdapter(similarAdsAdapter);
@@ -145,47 +183,46 @@ public class SingleAds extends AppCompatActivity {
 
     }
 
-    public void bid(View view){
-//        TODO: Raise bids. Check if not less than half the original price
-        Toast.makeText(this, offerPrice.getText().toString().replace("\u20A6", ""), Toast.LENGTH_SHORT).show();
+
+
+    public void text(View view) {
+       Intent intent = new Intent(this, ChatActivity.class);
+       intent.putExtra(USER_ID, userId);
+       startActivity(intent);
     }
 
-    public void text(View view){
-        Toast.makeText(this, "Message seller", Toast.LENGTH_SHORT).show();
-    }
-    public void makeCall(View view){
-        Uri u = Uri.parse("tel:" + "08138028915");
-        Intent i = new Intent(Intent.ACTION_DIAL, u);
-        try {
-            startActivity(i);
-        }
-        catch (SecurityException s) {
-            Toast.makeText(this, s.getMessage(), Toast.LENGTH_LONG).show();
+    public void makeCall(View view) {
+        if (phoneNumber == null){
+            Snackbar snackbar = Snackbar.make(view, "You can't call this user because, phone number is not provided.",
+                    Snackbar.LENGTH_LONG);
+            snackbar.setActionTextColor(getResources().getColor(R.color.colorAccent));
+            snackbar.setAction("Ok", v -> snackbar.dismiss());
+            snackbar.show();
+        }else {
+            Uri u = Uri.parse("tel:" + phoneNumber);
+            Intent i = new Intent(Intent.ACTION_DIAL, u);
+            try {
+                startActivity(i);
+            } catch (SecurityException s) {
+                Toast.makeText(this, s.getMessage(), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
-    public void favoriteAds(View view){
-        ImageView imageView = (ImageView) view ;
-        /*TODO: Check for state and update appropriately*/
-        imageView.setImageResource(R.drawable.favorite_yes);
+    public void favoriteAds(View view) {
+
     }
-    private String formatPrice(String price){
+
+    private String formatPrice(String price) {
         String value = Integer.parseInt(price) > 1000000000 ? "\u20A6" + (Float.parseFloat(price) / 1000000000) + "B" :
-                Integer.parseInt(price) > 1000000  ? "\u20A6" + (Float.parseFloat(price) / 1000000) + "M" :
-                        Integer.parseInt(price) > 1000  ? "\u20A6" + (Float.parseFloat(price) / 1000) + "K" :
-                        "\u20A6" + price;
+                Integer.parseInt(price) > 1000000 ? "\u20A6" + (Float.parseFloat(price) / 1000000) + "M" :
+                        Integer.parseInt(price) > 1000 ? "\u20A6" + (Float.parseFloat(price) / 1000) + "K" :
+                                "\u20A6" + price;
         return value.endsWith(".0B") || value.endsWith(".0M") || value.endsWith(".0K")
-                ? value.replace(".0", ""): value;
+                ? value.replace(".0", "") : value;
     }
-    public static String formatViews(String views){
-        String value = Integer.parseInt(views) > 1000000000 ? (Float.parseFloat(views) / 1000000000) + "B" :
-                Integer.parseInt(views) > 1000000 ? (Float.parseFloat(views) / 1000000) + "M" :
-                        Integer.parseInt(views) > 1000 ? (Float.parseFloat(views) / 1000) + "K" :
-                         views;
-        return value.endsWith(".0B") || value.endsWith(".0M") || value.endsWith(".0K")
-                ? value.replace(".0", ""): value;
-    }
-    private String formatDate(String date){
+
+    private String formatDate(String date) {
         String dbDay = date.split("T")[0].split("-")[2];
         String dbYear = date.split("T")[0].split("-")[0];
         String dbMonth = date.split("T")[0].split("-")[1];
@@ -195,17 +232,23 @@ public class SingleAds extends AppCompatActivity {
         String yesterday = String.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH) - 1);
         String month = String.valueOf(Calendar.getInstance().get(Calendar.MONTH) + 1);
         String year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
-        return dbDay.equals(today) && dbMonth.equals(month) && dbYear.equals(year) ?  "Today at " + time
+        return dbDay.equals(today) && dbMonth.equals(month) && dbYear.equals(year) ? "Today at " + time
                 : dbDay.equals(yesterday) && dbMonth.equals(month) && dbYear.equals(year) ? "Yesterday at " + time
                 : setAnyOtherDay(dbMonth, dbDay);
 
     }
-    private String setAnyOtherDay(String dbMonth, String dbDay){
+
+    private String setAnyOtherDay(String dbMonth, String dbDay) {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.MONTH, Integer.parseInt(dbMonth) - 1);
-        return String.format(Locale.US,"%tB", cal) + " " + dbDay;
+        return String.format(Locale.US, "%tB", cal) + " " + dbDay;
 
     }
 
 
+    public void openUserProfile(View view) {
+        Intent intent = new Intent(this, UserProfile.class);
+        intent.putExtra(USER_ID, userId);
+        startActivity(intent);
+    }
 }

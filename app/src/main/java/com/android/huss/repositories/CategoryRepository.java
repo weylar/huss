@@ -27,10 +27,10 @@ public class CategoryRepository {
         return categoryRepository;
     }
 
-    public MutableLiveData<Category>getPopularCategory(String token, int limit) {
+    public MutableLiveData<Category>getPopularCategory(String token) {
         final MutableLiveData<Category> categoryData = new MutableLiveData<>();
         HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
-        Call<Category> call = retrofit.getPopularCategory(BEARER + " " + token, limit);
+        Call<Category> call = retrofit.getPopularCategory(BEARER + " " + token);
         call.enqueue(new Callback<Category>() {
             @Override
             public void onResponse(Call <Category> call, Response<Category> response) {

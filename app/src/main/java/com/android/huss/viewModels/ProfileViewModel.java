@@ -17,10 +17,10 @@ public class ProfileViewModel extends ViewModel {
     private MutableLiveData<Profile> mutableLiveDataUpdateProfile;
     private ProfileRepository profileRepository;
 
-    public void init(String userId) {
+    public void init(String token, String userId) {
         if (mutableLiveDataProfile != null) return;
         profileRepository= ProfileRepository.getInstance();
-        mutableLiveDataProfile = profileRepository.getUserProfile(userId);
+        mutableLiveDataProfile = profileRepository.getUserProfile(token, userId);
 
     }
 
