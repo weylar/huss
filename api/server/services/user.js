@@ -124,24 +124,23 @@ class UserService {
       }
     }
 
-    const lastSeen = new Date();
-    const isOnline = req.body.isOnline;
-    if (!isOnline) {
+    if (!req.body.isOnline) {
       return {
         status: 'error',
         statusCode: 400,
         message: 'Kindly send an online status'
       }
     }
+    const isOnline = req.body.isOnline;
 
-    if (isOnline === true) {
+    if (isOnline == 'true') {
       await db.User.update(
         { isOnline: isOnline },
         { where: { email: req.userEmail } }
       );
-    } else {
+    } else if (isOnline == 'false') {
       await db.User.update(
-        { lastSeen: lastSeen, isOnline: isOnline },
+        { lastSeen: new Date(), isOnline: isOnline },
         { where: { email: req.userEmail } }
       );
     }
