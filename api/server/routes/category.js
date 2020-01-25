@@ -14,7 +14,7 @@ categoryRouter.post('/create', getUser, adminCheck, categoryCheck, createCategor
 categoryRouter.get('/:id', getUser, getACategory);
 categoryRouter.get('/all/categories', getUser, getAllCategories);
 categoryRouter.get('/getAllCategoriesByLimit/:limit', getUser, getAllCategoriesByLimit);
-categoryRouter.get('/getPopularCategories', getUser, getPopularCategories);
+categoryRouter.get('/all/getPopularCategories', getUser, getPopularCategories);
 categoryRouter.get('/paginateCategories/:offset/:limit', getUser, paginateCategories);
 categoryRouter.get('/getCategoriesSuggest/:offset/:name/:limit', getUser, getCategoriesSuggest);
 categoryRouter.put('/editCategory/:id', getUser, editCategory);
