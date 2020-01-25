@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".views.category.Category">
+    tools:context="com.huss.android.views.category.Category">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

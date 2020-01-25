@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.android.huss">
+    package="com.huss.android">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -14,7 +14,7 @@
     <dist:module dist:instant="true" />
 
     <application
-        android:name=".Init"
+        android:name="com.huss.android.Init"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -30,7 +30,7 @@
         <activity android:name=".views.profile.UserProfile" />
         <activity android:name=".views.settings.ChangePassword">
             <intent-filter>
-                <action android:name="com.android.huss.views.settings.ChangePasswordActivity" />
+                <action android:name="com.huss.android.views.settings.ChangePasswordActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -40,10 +40,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".views.settings.MapsActivity" />
+        <activity android:name="com.huss.android.views.settings.MapsActivity" />
         <activity android:name=".views.settings.ContactDetailsActivity">
             <intent-filter>
-                <action android:name="com.android.huss.views.settings.ContactDetailsActivity" />
+                <action android:name="com.huss.android.views.settings.ContactDetailsActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -74,14 +74,14 @@
 
         <activity android:name=".views.ads.createAds.CreateAds" />
         <activity android:name=".views.ads.createAds.FullAdImagePreview" />
-        <activity android:name=".views.category.Category" />
-        <activity android:name=".views.subCategory.SubCategoryView" />
-        <activity android:name=".views.profile.Profile" />
-        <activity android:name=".views.favorite.Favorite" />
-        <activity android:name=".views.adsImages.ImageFull" />
-        <activity android:name=".views.ads.singleAds.SingleAds" />
-        <activity android:name=".views.ads.latestAds.LatestAds" />
-        <activity android:name=".views.home.MainActivity">
+        <activity android:name="com.huss.android.views.category.Category" />
+        <activity android:name="com.huss.android.views.subCategory.SubCategoryView" />
+        <activity android:name="com.huss.android.views.profile.Profile" />
+        <activity android:name="com.huss.android.views.favorite.Favorite" />
+        <activity android:name="com.huss.android.views.adsImages.ImageFull" />
+        <activity android:name="com.huss.android.views.ads.singleAds.SingleAds" />
+        <activity android:name="com.huss.android.views.ads.latestAds.LatestAds" />
+        <activity android:name="com.huss.android.views.home.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -89,7 +89,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".utility.NetworkReceiverUtil">
+        <receiver android:name="com.huss.android.utility.NetworkReceiverUtil">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />

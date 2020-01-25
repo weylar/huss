@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "809116847350",
+    "firebase_url": "https://huss-ng-83c55.firebaseio.com",
+    "project_id": "huss-ng-83c55",
+    "storage_bucket": "huss-ng-83c55.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:809116847350:android:9dfb23897a02f7728cf0d7",
+        "android_client_info": {
+          "package_name": "com.huss.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "809116847350-69719qff0g2ms15hmqms6hj691oo78v8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAs4VY_2pCzxl0d5SSrlpZIFPGIuloh5js"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "809116847350-69719qff0g2ms15hmqms6hj691oo78v8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

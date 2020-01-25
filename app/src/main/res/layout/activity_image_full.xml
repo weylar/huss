@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/trans_black"
-    tools:context=".views.adsImages.ImageFull">
+    tools:context="com.huss.android.views.adsImages.ImageFull">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

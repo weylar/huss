@@ -87,19 +87,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/change_image"
+            android:onClick="selectImage"
             android:textColor="@color/colorAccent"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
             android:layout_below="@id/img"/>
 
 
-        <ImageView
-            android:id="@+id/white_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@id/img"
-            android:visibility="gone"
-            android:layout_alignBottom="@id/img"
-            android:src="@drawable/ic_camera_alt_white_24dp" />
     </RelativeLayout>
 
     <LinearLayout

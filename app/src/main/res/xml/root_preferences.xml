@@ -9,14 +9,14 @@
         <Preference
             app:iconSpaceReserved="false"
             app:title="Contact details">
-            <intent android:action="com.android.huss.views.settings.ContactDetailsActivity"/>
+            <intent android:action="com.huss.android.views.settings.ContactDetailsActivity"/>
         </Preference>
 
 
         <Preference
             app:iconSpaceReserved="false"
             app:title="Change password">
-            <intent android:action="com.android.huss.views.settings.ChangePasswordActivity"/>
+            <intent android:action="com.huss.android.views.settings.ChangePasswordActivity"/>
         </Preference>
 
 
@@ -51,7 +51,7 @@
         <Preference
             app:iconSpaceReserved="false"
             app:title="Premium packages">
-            <intent android:action="com.android.huss.views.settings.ContactDetailsActivity"/>
+            <intent android:action="com.huss.android.views.settings.ContactDetailsActivity"/>
         </Preference>
 
 

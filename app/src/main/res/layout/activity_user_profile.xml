@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".views.profile.Profile">
+        tools:context="com.huss.android.views.profile.Profile">
 
 
         <androidx.cardview.widget.CardView
@@ -32,9 +32,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/back"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@+id/back"
                     android:text="@string/user_profile"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="20sp" />
@@ -53,7 +53,7 @@
             <LinearLayout
                 android:id="@+id/root"
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_height="225dp"
                 android:background="@drawable/nav_header_bck"
                 android:orientation="vertical"
                 android:padding="8dp">
@@ -104,43 +104,52 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textAlignment="center"
-                    android:textSize="18sp"
                     android:textColor="@color/colorPrimaryDark"
+                    android:textSize="18sp"
                     tools:text="Total Ads: 32" />
 
-                <Button
-                    android:id="@+id/phone"
-                    android:layout_width="150dp"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textAlignment="center"
-                    android:background="@drawable/button_offer"
-                    android:textColor="@color/white"
-                    android:layout_margin="4dp"
-                    android:text="@string/call" />
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/phone"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/button_offer"
+                        android:text="@string/call"
+                        android:layout_marginEnd="4dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/white" />
+
+                    <Button
+                        android:id="@+id/message"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="4dp"
+                        android:background="@drawable/button_offer"
+                        android:text="@string/messages"
+                        android:textAlignment="center"
+                        android:textColor="@color/white" />
+                </LinearLayout>
 
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/all_ads_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:text="@string/all_ads"
-                android:layout_margin="8dp"/>
-
-
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_all_ads"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/recycler_all_ads"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         </LinearLayout>
 
