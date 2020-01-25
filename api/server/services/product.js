@@ -229,7 +229,7 @@ class AdService {
       where: {status: 'active'},
       limit: 10,
       order: [['id', 'DESC']],
-      attributes: { exclude: 'name' }, attributes: { exclude: 'name' }, include: [{ model: db.Image }]
+      attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });
 
     let res = allAds.map(elem => {
