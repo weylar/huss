@@ -134,10 +134,18 @@ class UserService {
       }
     }
 
-    await db.User.update(
-      { lastSeen: lastSeen, isOnline: isOnline },
-      { where: { email: req.userEmail } }
-    );
+    if (isOnline === true) {
+      await db.User.update(
+        { isOnline: isOnline },
+        { where: { email: req.userEmail } }
+      );
+    } else {
+      await db.User.update(
+        { lastSeen: lastSeen, isOnline: isOnline },
+        { where: { email: req.userEmail } }
+      );
+    }
+
 
     return {
       statusCode: 200,
