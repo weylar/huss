@@ -102,12 +102,13 @@ class AdService {
     let index = similarAds.findIndex(elem => elem.dataValues.id === oldAd.id);
     similarAds.splice(index, 1);
 
-    const editViewCount = await db.Product.update(
-      { count: oldAd.count + 1 },
-      { where: { id: req.params.adId } }
-    );
+    if (oldAd.userId != req.userId) {
+      await db.Product.update(
+        { count: oldAd.count + 1 },
+        { where: { id: req.params.adId } }
+      );
+    }
 
-    if (editViewCount[0] === 1) {
       const foundAd = await db.Product.findOne({ where: {id: oldAd.id}, attributes: { exclude: 'name' }});
       const adImages = await db.Image.findAll({ where: {productId: oldAd.id } });
       const favorites = await db.Favorite.findAll({ where: { productId: oldAd.id, userId: req.userId }});
@@ -118,30 +119,29 @@ class AdService {
         isFavorited = false;
       }
       
-      return {
-        status: 'success',
-        statusCode: 200,
-        data: {
-          id: foundAd.id,
-          userId: foundAd.userId,
-          description: foundAd.description,
-          categoryName: foundAd.categoryName,
-          subCategoryName: foundAd.subCategoryName,
-          title: foundAd.title,
-          price: foundAd.price,
-          type: foundAd.type,
-          status: foundAd.status,
-          isNegotiable: foundAd.isNegotiable,
-          count: foundAd.count,
-          location: foundAd.location,
-          createdAt: foundAd.createdAt,
-          adImages,
-          similarAds,
-          isFavorited
-        },
-        message: 'Ad sucessfully retrieved'
-      };
-    }
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: {
+        id: foundAd.id,
+        userId: foundAd.userId,
+        description: foundAd.description,
+        categoryName: foundAd.categoryName,
+        subCategoryName: foundAd.subCategoryName,
+        title: foundAd.title,
+        price: foundAd.price,
+        type: foundAd.type,
+        status: foundAd.status,
+        isNegotiable: foundAd.isNegotiable,
+        count: foundAd.count,
+        location: foundAd.location,
+        createdAt: foundAd.createdAt,
+        adImages,
+        similarAds,
+        isFavorited
+      },
+      message: 'Ad sucessfully retrieved'
+    };
   }
 
   static async getOwnAd(req) {

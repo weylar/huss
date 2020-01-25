@@ -8,7 +8,7 @@ const {
 } = UserValidation;
 const {
   signUpUser, logInUser, addUserDetails, userImage, sendPasswordResetEmail,
-   receiveNewPassword, logOutUser, deleteUser, getAnotherUser, getOwnUser, getAllUsers,
+   receiveNewPassword, updateOnlineStatus, deleteUser, getAnotherUser, getOwnUser, getAllUsers,
    getAnotherUserByEmail, getAllUsersByLimit, paginateUsers, getUsersLikeSuggest
 } = UserController;
 const { getUser } = Auth;
@@ -18,7 +18,7 @@ const userDetails = Router();
 
 userRouter.post('/signup', signUpCheck, signUpUser);
 userRouter.post('/login', loginCheck, logInUser);
-userRouter.put('/logout', getUser, logOutUser);
+userRouter.put('/updateOnlineStatus', getUser, updateOnlineStatus);
 userDetails.put('/profile', getUser, userDetailsCheck, addUserDetails);
 userDetails.get('/profile/:id', getUser, getAnotherUser);
 userDetails.get('/anotheruserdetails/:email', getUser, getAnotherUserByEmail);

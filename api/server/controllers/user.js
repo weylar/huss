@@ -56,9 +56,9 @@ class UserController {
     }
   }
 
-  static async logOutUser(req, res, next) {
+  static async updateOnlineStatus(req, res, next) {
     try {
-      const response = await UserService.logOutUser(req, res);
+      const response = await UserService.updateOnlineStatus(req, res);
       return res.status(response.statusCode).json(response);
     } catch (e) {
       return next(e);

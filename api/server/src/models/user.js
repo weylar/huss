@@ -30,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: true
     },
+    isOnline: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
+    },
     lastSeen: {
       type: DataTypes.DATE,
       allowNull: true

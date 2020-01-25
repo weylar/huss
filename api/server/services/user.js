@@ -112,7 +112,7 @@ class UserService {
     };
   }
 
-  static async logOutUser(req) {
+  static async updateOnlineStatus(req) {
     const getUser = await db.User.findOne({ where: {email : req.userEmail} });
 
     if(!getUser) {
@@ -124,16 +124,24 @@ class UserService {
     }
 
     const lastSeen = new Date();
+    const isOnline = req.body.isOnline;
+    if (!isOnline) {
+      return {
+        status: 'error',
+        statusCode: 400,
+        message: 'Kindly send an online status'
+      }
+    }
 
     await db.User.update(
-      { lastSeen: lastSeen },
+      { lastSeen: lastSeen, isOnline: isOnline },
       { where: { email: req.userEmail } }
     );
 
     return {
       statusCode: 200,
       status: 'success',
-      message: 'User logged out successfully'
+      message: 'Online status successfully changed'
     };
   }
 
@@ -149,12 +157,12 @@ class UserService {
       }
     }
 
-    const { id, firstName, lastName, email, state, city, profileImgUrl, lastSeen, phoneNumber } = foundUser;
+    const { id, firstName, lastName, email, state, city, profileImgUrl, lastSeen, phoneNumber, createdAt, isOnline } = foundUser;
 
     return {
       status: 'success',
       statusCode: 200,
-      data: { id, firstName, lastName, email, state, city, profileImgUrl, lastSeen, phoneNumber},
+      data: { id, firstName, lastName, email, state, city, profileImgUrl, lastSeen, phoneNumber, createdAt, isOnline},
       message: 'User information retrieved successfully'
     }
   }
