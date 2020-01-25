@@ -11,6 +11,7 @@ class UserService {
   static async signUpUser(newUser) {
     const hashedpassword = Helper.hashPassword(newUser.password);
     newUser.password = hashedpassword;
+    newUser.isOnline = true;
 
     const user = await db.User.create(newUser);
 
