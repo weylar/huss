@@ -6,7 +6,7 @@ module.exports = {
       'Categories',
       'belongedAd',
       {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: true,
         defaultValue: 0
       }

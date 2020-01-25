@@ -45,7 +45,7 @@ class AdService {
       ad.expireAd()
     }
     await db.Category.update(
-      { belongedAd: parseInt(category.belongedAd) + 1 },
+      { belongedAd: category.belongedAd + 1 },
       { where: { name: categoryName } }
     );
 
