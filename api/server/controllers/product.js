@@ -41,6 +41,16 @@ class AdController {
     }
   }
 
+  static async getAllUserAds(req,res,next) {
+    try {
+      const response = await AdService.getAllUserAds(req);
+      
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
+
   static async getAllOwnAds(req,res,next) {
     try {
       const response = await AdService.getAllOwnAds(req);

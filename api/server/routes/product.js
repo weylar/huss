@@ -5,7 +5,7 @@ import Auth from '../middleware/utils/Auth';
 
 const { createAd, getAd, getOwnAd, getAllAds, getAllOwnAds, getAllAdsByLimit, getAllOwnAdsByLimit, paginateAds, paginateOwnAds,
   getAdsSuggest, getOwnAdsSuggest, getAdsByStatus, getOwnAdsByStatus, getOwnAdsByStatusSuggest, getAdsByStatusSuggest,
-  makeAdInactive, makePayment, deactivatePayment, editAd, deleteAd, activateStatus
+  makeAdInactive, makePayment, deactivatePayment, editAd, deleteAd, activateStatus, getAllUserAds
  } = AdController;
 const { getUser } = Auth;
 
@@ -15,6 +15,7 @@ adRouter.post('/:categoryName/:subCategoryName/create', getUser, adCheck, create
 adRouter.get('/getAd/:adId', getUser, getAd);
 adRouter.get('/getOwnAd/:adId', getUser, getOwnAd);
 adRouter.get('/getAllAds', getUser, getAllAds);
+adRouter.get('/getAllUserAds/:userId', getUser, getAllUserAds);
 adRouter.get('/getAllOwnAds', getUser, getAllOwnAds);
 adRouter.get('/getAllAdsByLimit', getUser, getAllAdsByLimit);
 adRouter.get('/getAllOwnAdsByLimit/:limit', getUser, getAllOwnAdsByLimit);

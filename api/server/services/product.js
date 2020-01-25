@@ -224,6 +224,37 @@ class AdService {
     };
   }
 
+  static async getAllUserAds(req) {
+    let allUserAds = await db.Product.findAll({ where: {status: 'active', userId: req.params.userId},
+      order: [['id', 'DESC']], attributes: { exclude: 'name' }, include: [{ model: db.Image }]
+    });
+
+    let res = allUserAds.map(elem => {
+      return db.Favorite.findOne({ where: {userId: req.userId, productId: elem.dataValues.id}});
+      
+    });
+
+    let newResponse = await Promise.all(res);
+
+    let result = allUserAds.map(element => {
+      newResponse.forEach(item => {
+        if (item !== null) {
+          element.dataValues['isFavorite'] = (element.dataValues.id == item.dataValues.productId) && (item.dataValues.userId == req.userId);
+        } else {
+          element.dataValues['isFavorite'] = false;
+        }
+      });
+      return element;
+    });
+
+    return {
+      status: 'success',
+      statusCode: 200,
+      data: result,
+      message: 'All ads have been retrieved successfully'
+    };
+  }
+
   static async getAllAdsByLimit(req) {
     const allAds = await db.Product.findAll({
       where: {status: 'active'},
