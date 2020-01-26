@@ -14,7 +14,7 @@ const adRouter = Router();
 adRouter.post('/:categoryName/:subCategoryName/create', getUser, adCheck, createAd);
 adRouter.get('/getAd/:adId', getUser, getAd);
 adRouter.get('/getOwnAd/:adId', getUser, getOwnAd);
-adRouter.get('/getAllAds', getUser, getAllAds);
+adRouter.get('/getAllAds', getAllAds);
 adRouter.get('/getAllUserAds/:userId', getUser, getAllUserAds);
 adRouter.get('/getAllOwnAds', getUser, getAllOwnAds);
 adRouter.get('/getAllAdsByLimit', getUser, getAllAdsByLimit);
