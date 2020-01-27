@@ -4,12 +4,12 @@ import UserValidation from '../middleware/validations/user';
 import Auth from '../middleware/utils/Auth';
 
 const {
-  signUpCheck, loginCheck, userDetailsCheck, userImageCheck
+  signUpCheck, loginCheck, userDetailsCheck, userImageCheck, passwordCheck
 } = UserValidation;
 const {
   signUpUser, logInUser, addUserDetails, userImage, sendPasswordResetEmail,
    receiveNewPassword, updateOnlineStatus, deleteUser, getAnotherUser, getOwnUser, getAllUsers,
-   getAnotherUserByEmail, getAllUsersByLimit, paginateUsers, getUsersLikeSuggest
+   getAnotherUserByEmail, getAllUsersByLimit, paginateUsers, getUsersLikeSuggest, changePassword
 } = UserController;
 const { getUser } = Auth;
 
@@ -19,6 +19,7 @@ const userDetails = Router();
 userRouter.post('/signup', signUpCheck, signUpUser);
 userRouter.post('/login', loginCheck, logInUser);
 userRouter.put('/updateOnlineStatus', getUser, updateOnlineStatus);
+userDetails.put('/change/password', getUser, passwordCheck, changePassword);
 userDetails.put('/profile', getUser, userDetailsCheck, addUserDetails);
 userDetails.get('/profile/:id', getUser, getAnotherUser);
 userDetails.get('/anotheruserdetails/:email', getUser, getAnotherUserByEmail);

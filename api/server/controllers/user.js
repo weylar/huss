@@ -20,6 +20,15 @@ class UserController {
     }
   }
 
+  static async changePassword(req, res, next) {
+    try {
+      const response = await UserService.changePassword(req);
+      return res.status(response.statusCode).json(response);
+    } catch (e) {
+      return next(e);
+    }
+  }
+
   static async addUserDetails(req, res, next) {
     try {
       const response = await UserService.addUserDetails(req, res);

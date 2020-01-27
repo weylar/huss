@@ -124,6 +124,31 @@ class UserValidation {
     return next();
   }
 
+  static passwordCheck(req, res, next) {
+    let { oldPassword, newPassword, confirmPassword } = req.body;
+
+    if (oldPassword) oldPassword = oldPassword;
+    if (newPassword) newPassword = newPassword;
+    if (confirmPassword) confirmPassword = confirmPassword;
+
+    const errors = [];
+
+    let isEmpty;
+    isEmpty = Helper.checkFieldEmpty(oldPassword, 'oldPassword');
+    if (isEmpty) errors.push(isEmpty);
+
+    isEmpty = Helper.checkFieldEmpty(newPassword, 'newPassword');
+    if (isEmpty) errors.push(isEmpty);
+
+    isEmpty = Helper.checkFieldEmpty(confirmPassword, 'confirmPassword');
+    if (isEmpty) errors.push(isEmpty);
+
+    if (errors.length > 0) return res.status(errors[0].statusCode).json(errors[0]);
+
+    req.body.password = newPassword;
+    return next();
+  }
+
   static userDetailsCheck(req, res, next){
     let { state, city, phoneNumber, profileImgUrl, firstName, lastName } = req.body;
 

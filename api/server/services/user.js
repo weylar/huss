@@ -90,6 +90,38 @@ class UserService {
     };
   }
 
+  static async changePassword(req) {
+
+    const foundUser = await db.User.findOne({ where: { id: req.userId } });
+    const hash = foundUser.password;
+    const { oldPassword, newPassword } = req.body;
+    
+
+    if (Helper.comparePassword(oldPassword, hash) === true) {
+      if (oldPassword == newPassword) {
+        return {
+          status: 'error',
+          statusCode: 422,
+          message: 'You cannot use the same password as the old one'
+        }
+      }
+
+      await db.User.update({password: newPassword}, { where: {id: req.userId}});
+
+      return {
+        status: 'success',
+        statusCode: 200,
+        message: 'Password successfully changed'
+      };
+    }
+
+    return {
+      status: 'error',
+      statusCode: 401,
+      message: 'Unable to change your password, check your password again'
+    }
+  }
+
   static async addUserDetails(req) {
 
     const getAuser = await db.User.findOne({ where: {email: req.userEmail} });
