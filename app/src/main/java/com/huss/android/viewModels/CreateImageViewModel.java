@@ -13,7 +13,6 @@ import com.huss.android.repositories.CreateImageRepository;
 public class CreateImageViewModel extends ViewModel {
 
     private MutableLiveData<Image> mutableLiveData;
-    private MutableLiveData<AdImage> mutableLive;
 
     public void init(Image.Data adImage, String token) {
         CreateImageRepository createAdRepository = CreateImageRepository.getInstance();
@@ -25,9 +24,6 @@ public class CreateImageViewModel extends ViewModel {
         return mutableLiveData;
     }
 
-    public LiveData<AdImage> getFeaturedImageResponse(Ad.Data adId, String token){
-        CreateImageRepository createAdRepository = CreateImageRepository.getInstance();
-       return mutableLive = createAdRepository.getFeaturedImage(adId, token);
-    }
+
 
 }

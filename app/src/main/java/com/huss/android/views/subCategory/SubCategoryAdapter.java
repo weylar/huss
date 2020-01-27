@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.huss.android.R;
 import com.huss.android.models.SubCategory;
-import com.huss.android.views.ads.latestAds.LatestAds;
-import com.huss.android.views.ads.singleAds.SingleAds;
+import com.huss.android.views.ads.latestAds.LatestAdsActivity;
+import com.huss.android.views.ads.singleAds.SingleAdsActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -49,8 +49,8 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
         View view = layoutInflater.inflate(R.layout.sub_cat_view, parent, false);
         view.setOnClickListener(v -> {
             String name = String.valueOf(v.getTag());
-            Intent intent =  new Intent(context, LatestAds.class);
-            intent.putExtra(SingleAds.NAME, name);
+            Intent intent =  new Intent(context, LatestAdsActivity.class);
+            intent.putExtra(SingleAdsActivity.NAME, name);
             intent.putExtra(CATEGORY, category);
             context.startActivity(intent);
         });

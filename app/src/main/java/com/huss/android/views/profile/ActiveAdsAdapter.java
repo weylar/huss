@@ -17,11 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.huss.android.R;
 import com.huss.android.models.AllAds;
-import com.huss.android.viewModels.UserAdsViewModel;
-import com.huss.android.views.ads.createAds.CreateAds;
-import com.huss.android.views.ads.singleAds.SingleAds;
+import com.huss.android.viewModels.ads.UserAdsViewModel;
+import com.huss.android.views.ads.createAds.CreateAdsActivity;
+import com.huss.android.views.ads.singleAds.SingleAdsActivity;
 import com.huss.android.utility.Utility;
-import com.huss.android.views.ads.createAds.CreateAds;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -50,9 +49,9 @@ public class ActiveAdsAdapter extends RecyclerView.Adapter<ActiveAdsAdapter.Cust
         View view = layoutInflater.inflate(R.layout.my_ads_layout, parent, false);
         view.setOnClickListener(v -> {
             int id = v.getId();
-            Intent intent = new Intent(context, SingleAds.class);
-            intent.putExtra(SingleAds.ID, id);
-            intent.putExtra(SingleAds.NAME, String.valueOf(v.getTag()));
+            Intent intent = new Intent(context, SingleAdsActivity.class);
+            intent.putExtra(SingleAdsActivity.ID, id);
+            intent.putExtra(SingleAdsActivity.NAME, String.valueOf(v.getTag()));
             context.startActivity(intent);
         });
         return new CustomViewHolder(view);
@@ -77,8 +76,8 @@ public class ActiveAdsAdapter extends RecyclerView.Adapter<ActiveAdsAdapter.Cust
                 popup.getMenuInflater().inflate(R.menu.my_ad_menu, popup.getMenu());
                 popup.setOnMenuItemClickListener(item -> {
                    if (item.getItemId() == R.id.edit_ad) {
-                       Intent intent = new Intent(context, CreateAds.class);
-                       intent.putExtra(SingleAds.ID, ad.getId());
+                       Intent intent = new Intent(context, CreateAdsActivity.class);
+                       intent.putExtra(SingleAdsActivity.ID, ad.getId());
                        context.startActivity(intent);
 
                     } else if (item.getItemId() == R.id.delete_ad) {

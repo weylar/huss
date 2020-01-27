@@ -9,7 +9,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/toolbar_height"
         app:cardElevation="2dp"
         app:contentPadding="10dp">
 
@@ -83,7 +83,6 @@
 
 
         <TextView
-            android:id="@+id/dark_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/change_image"
@@ -101,7 +100,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:orientation="horizontal"
-        android:weightSum="2">
+        android:weightSum="2"
+        android:baselineAligned="false">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/firstNameLayout"
@@ -193,7 +193,6 @@
         android:textColorHint="@color/colorAccent" />
 
     <Button
-        android:id="@+id/saveChanges"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"

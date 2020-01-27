@@ -18,22 +18,16 @@
     <string name="favorites">Favorite Ads</string>
     <string name="messages">Messages</string>
     <string name="communicate">Communicate</string>
-    <string name="send">Send</string>
     <string name="share">Share</string>
-    <string name="developer">Developer</string>
-    <string name="adsimages">adsImages</string>
     <string name="description">Description</string>
     <string name="make_call">make call</string>
     <string name="text_the_seller">Text the seller</string>
-    <string name="make_an_offer">Make an offer</string>
     <string name="report_abuse">Report Abuse</string>
     <string name="similar_ads">Similar Ads</string>
     <string name="settings_icon">settings icon</string>
     <string name="navigate_back">navigate back</string>
-    <string name="inactive">inactive</string>
     <string name="ads_profile">Ads</string>
     <string name="active">active</string>
-    <string name="action_geolocate">Pick Place</string>
     <string name="default_info_title">Default Location</string>
     <string name="default_info_snippet">No places found, because location permission is disabled.</string>
     <string name="go_backk">go back</string>
@@ -42,7 +36,6 @@
     <string name="select_category_and_sub_category">Select category and sub category</string>
     <string name="categorys">Category</string>
     <string name="sub_category">Sub Category</string>
-    <string name="name">Name</string>
     <string name="write_a_clear_title_for_your_ad">Write a clear title for your ad</string>
     <string name="description_detail">Provide a well detailed description of your ad</string>
     <string name="price">Price</string>
@@ -53,23 +46,18 @@
     <string name="ads_type_description">Please select Advert type</string>
     <string name="ads_imagess">Ads Images</string>
     <string name="create_ad">Create a new Ad</string>
-    <string name="add">Add</string>
-    <string name="add_image">add image</string>
     <string name="images">Images</string>
     <string name="naira">₦</string>
     <string name="drag_image_description">Drag to reorder, first one is used as featured image</string>
     <string name="preset">huss_ad_image</string>
     <string name="cloud_name">weylar</string>
-    <string name="delete_image">Delete</string>
-    <string name="mark_as_featured">Mark as featured</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="remove_item">remove item</string>
     <string name="standard_ad">Standard Ad</string>
     <string name="top_ad_30_days">Premium Ad</string>
     <string name="post_ad">Post Ad</string>
-    <string name="terms_and_condition">By posting ad, you agree and accept Huss.ng <font color="#ff69b4">terms and conditions</font></string>
+    <string name="terms_and_condition">By posting ad, you agree and accept Huss.ng </string>
     <string name="card_number">Card number</string>
     <string name="image_size_warning">Image shouldn\'t be more than 4MB</string>
     <string name="_0_70">(0/70)</string>
@@ -82,32 +70,20 @@
     <string name="sign_up">Sign up</string>
     <string name="confirm_password">Confirm password</string>
     <string name="already_have_an_account">Already have an account?</string>
-    <string name="password_reset">Password reset</string>
     <string name="send_password_reset_link">Send password reset link</string>
     <string name="reset_password">Reset password</string>
     <string name="forgot_password">Forgot password</string>
     <string name="password_rest_link_has_been_sent_to_your_email_please_follow_the_link_to_reset_ypur_password">Password rest link has been sent to your email, please follow the link to reset your password.</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
-    <string name="title_activity_settings">Settings</string>
 
     <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
 
     <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
 
     <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="settings">Settings</string>
     <string name="contact_details">Contact Details</string>
-    <string name="title_activity_maps">Map</string>
     <string name="pick_location">Pick Location</string>
     <string name="searching_for_your_location">Searching for your location...</string>
     <string name="phone">Phone</string>
@@ -119,7 +95,6 @@
     <string name="change_image">Change image</string>
     <string name="cap_active">Active</string>
     <string name="cap_inactive">Inactive</string>
-    <string name="chat">Chat</string>
     <string name="renew_ad">Renew Ad</string>
     <string name="edit_ad">Edit Ad</string>
     <string name="delete_ad">Delete Ad</string>
@@ -129,7 +104,7 @@
     <string name="fixed">Fixed</string>
     <string name="public_id">public_id</string>
     <string name="ads_upload_preset">ads_upload_preset</string>
-    <string name="phone_number_where_your_potential_buyers_can_reach_you">Phone number where your potential buyers can reach you</string>
+    <string name="phone_number_where_your_potential_buyers_can_reach_you">Number where your potential buyers can reach you</string>
     <string name="user_profile">User Profile</string>
     <string name="report_description">Help us understand the problem. What is going on with this Ad?</string>
     <string name="prepayment">Seller requested for a prepayment</string>
@@ -139,8 +114,25 @@
     <string name="comment">You can also leave a comment</string>
     <string name="violation_link">Learn more about reporting violations of our rules</string>
     <string name="submit">Submit</string>
-    <string name="all_ads">All Ads</string>
     <string name="call">Call</string>
+    <string name="useful_links">Useful Links</string>
+    <string name="app_logo">app logo</string>
+    <string name="terms_and_conditions_of_use">Terms and conditions of use</string>
+    <string name="safety_policy">Our safety policy</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="contact_us">Contact us</string>
+    <string name="close_button">close button</string>
+    <string name="option_button">Option button</string>
+    <string name="type_your_message">Type your message</string>
+    <string name="view_profile">View profile</string>
+    <string name="report_user">Report user</string>
+    <string name="clear_chats">Clear chats</string>
+    <string name="all_chats">All chats</string>
+    <string name="back_button">back button</string>
+    <string name="sign_up_short_note">Sign up and sell your first Ad in less than 5 min</string>
+    <string name="sign_in_short_note">Sign in to continue enjoying free Ads</string>
+    <string name="forgot_password_short_note">Input your email to get your password reset link</string>
+    <string name="reset_password_short_note">Input your new password</string>
 
 
 </resources>

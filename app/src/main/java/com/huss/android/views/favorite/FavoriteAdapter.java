@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.huss.android.R;
 import com.huss.android.models.Ads;
-import com.huss.android.views.ads.singleAds.SingleAds;
+import com.huss.android.views.ads.singleAds.SingleAdsActivity;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
@@ -58,9 +58,9 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Custom
         View view = layoutInflater.inflate(R.layout.latest_ads_view, parent, false);
         view.setOnClickListener(v -> {
             String id = String.valueOf(v.getId());
-            Intent intent = new Intent(context, SingleAds.class);
-            intent.putExtra(SingleAds.ID, id);
-            intent.putExtra(SingleAds.NAME, String.valueOf(v.getTag()));
+            Intent intent = new Intent(context, SingleAdsActivity.class);
+            intent.putExtra(SingleAdsActivity.ID, id);
+            intent.putExtra(SingleAdsActivity.NAME, String.valueOf(v.getTag()));
             context.startActivity(intent);
         });
         return new CustomViewHolder(view);

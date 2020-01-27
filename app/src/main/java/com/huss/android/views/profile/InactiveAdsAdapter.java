@@ -17,11 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.huss.android.R;
 import com.huss.android.models.AllAds;
-import com.huss.android.viewModels.UserAdsViewModel;
-import com.huss.android.views.ads.createAds.CreateAds;
-import com.huss.android.views.ads.singleAds.SingleAds;
+import com.huss.android.viewModels.ads.UserAdsViewModel;
+import com.huss.android.views.ads.createAds.CreateAdsActivity;
+import com.huss.android.views.ads.singleAds.SingleAdsActivity;
 import com.huss.android.utility.Utility;
-import com.huss.android.views.ads.createAds.CreateAds;
 import com.squareup.picasso.Picasso;
 import com.varunest.sparkbutton.SparkButton;
 
@@ -50,9 +49,9 @@ public class InactiveAdsAdapter extends RecyclerView.Adapter<InactiveAdsAdapter.
         View view = layoutInflater.inflate(R.layout.my_ads_layout, parent, false);
         view.setOnClickListener(v -> {
             String id = String.valueOf(v.getId());
-            Intent intent = new Intent(context, SingleAds.class);
-            intent.putExtra(SingleAds.ID, id);
-            intent.putExtra(SingleAds.NAME, String.valueOf(v.getTag()));
+            Intent intent = new Intent(context, SingleAdsActivity.class);
+            intent.putExtra(SingleAdsActivity.ID, id);
+            intent.putExtra(SingleAdsActivity.NAME, String.valueOf(v.getTag()));
             context.startActivity(intent);
         });
         return new CustomViewHolder(view);
@@ -82,15 +81,15 @@ public class InactiveAdsAdapter extends RecyclerView.Adapter<InactiveAdsAdapter.
                     info.setTitle("Activated!");
                     info.setNeutralButton("Ok", (dialog, id) -> {
                         dialog.dismiss();
-                        context.startActivity(new Intent(context, SingleAds.class).putExtra(SingleAds.ID, ad.getId()));
+                        context.startActivity(new Intent(context, SingleAdsActivity.class).putExtra(SingleAdsActivity.ID, ad.getId()));
 
                     });
 
 
                     info.show();
                 } else if (item.getItemId() == R.id.edit_ad) {
-                    Intent intent = new Intent(context, CreateAds.class);
-                    intent.putExtra(SingleAds.ID, ad.getId());
+                    Intent intent = new Intent(context, CreateAdsActivity.class);
+                    intent.putExtra(SingleAdsActivity.ID, ad.getId());
                     context.startActivity(intent);
 
                 } else if (item.getItemId() == R.id.delete_ad) {

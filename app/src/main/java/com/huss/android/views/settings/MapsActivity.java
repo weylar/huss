@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.huss.android.R;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -36,12 +37,13 @@ import com.google.android.libraries.places.api.model.PlaceLikelihood;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.huss.android.utility.NetworkReceiverUtil;
 import com.ldoublem.loadingviewlib.view.LVCircularZoom;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, NetworkReceiverUtil.ConnectivityReceiverListener {
 
     private GoogleMap mMap;
     private static final String TAG = "MapsActivity";
@@ -61,6 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LVCircularZoom lvCircularZoom;
     private TextView progressText;
     private LocationManager locationManager;
+    private Snackbar snackbar = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -275,5 +278,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void goBack(View view) {
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NetworkReceiverUtil.Companion.setConnectivityReceiverListener(this);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if (!isConnected){
+            snackbar = Snackbar.make(lstPlaces, "No internet connection", Snackbar.LENGTH_INDEFINITE);
+            snackbar.show();
+        }else{
+            if (snackbar != null) {
+                snackbar.dismiss();
+            }
+        }
     }
 }

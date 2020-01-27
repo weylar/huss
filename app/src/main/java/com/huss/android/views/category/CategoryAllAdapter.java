@@ -13,12 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.huss.android.R;
 import com.huss.android.models.Category;
-import com.huss.android.views.subCategory.SubCategoryView;
+import com.huss.android.views.subCategory.SubCategoryActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import static com.huss.android.views.ads.singleAds.SingleAds.NAME;
+import static com.huss.android.views.ads.singleAds.SingleAdsActivity.NAME;
 
 public class CategoryAllAdapter extends RecyclerView.Adapter<CategoryAllAdapter.CustomViewHolder>{
 
@@ -54,7 +54,7 @@ public class CategoryAllAdapter extends RecyclerView.Adapter<CategoryAllAdapter.
             View view = layoutInflater.inflate(R.layout.cat_view_all, parent, false);
             view.setOnClickListener(v -> {
                 String name = String.valueOf(v.getTag());
-                Intent intent =  new Intent(context, SubCategoryView.class);
+                Intent intent =  new Intent(context, SubCategoryActivity.class);
                 intent.putExtra(NAME, name);
                 context.startActivity(intent);
             });

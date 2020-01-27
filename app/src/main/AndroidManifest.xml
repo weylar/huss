@@ -14,7 +14,7 @@
     <dist:module dist:instant="true" />
 
     <application
-        android:name="com.huss.android.Init"
+        android:name=".Init"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,11 +24,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".views.subscription.Subscription"/>
+        <activity android:name=".views.home.AboutActivity"/>
+        <activity android:name=".views.subscription.SubscriptionActivity" />
         <activity android:name=".views.message.ChatActivity" />
         <activity android:name=".views.message.AllChatActivity" />
-        <activity android:name=".views.profile.UserProfile" />
-        <activity android:name=".views.settings.ChangePassword">
+        <activity android:name=".views.profile.UserProfileActivity" />
+        <activity android:name=".views.settings.ChangePasswordActivity">
             <intent-filter>
                 <action android:name="com.huss.android.views.settings.ChangePasswordActivity" />
 
@@ -40,7 +41,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name="com.huss.android.views.settings.MapsActivity" />
+        <activity android:name=".views.settings.MapsActivity" />
         <activity android:name=".views.settings.ContactDetailsActivity">
             <intent-filter>
                 <action android:name="com.huss.android.views.settings.ContactDetailsActivity" />
@@ -64,7 +65,7 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity android:name=".views.auth.ForgotPassword" />
+        <activity android:name=".views.auth.ForgotPasswordActivity" />
         <activity android:name=".views.auth.SignUpActivity" />
         <activity android:name=".views.auth.LoginActivity" />
 
@@ -72,16 +73,16 @@
             android:name="co.paystack.android.PublicKey"
             android:value="pk_test_91f5670d53cff8162b4df5bc8009ab9a305ca267" />
 
-        <activity android:name=".views.ads.createAds.CreateAds" />
+        <activity android:name=".views.ads.createAds.CreateAdsActivity" />
         <activity android:name=".views.ads.createAds.FullAdImagePreview" />
-        <activity android:name="com.huss.android.views.category.Category" />
-        <activity android:name="com.huss.android.views.subCategory.SubCategoryView" />
-        <activity android:name="com.huss.android.views.profile.Profile" />
-        <activity android:name="com.huss.android.views.favorite.Favorite" />
-        <activity android:name="com.huss.android.views.adsImages.ImageFull" />
-        <activity android:name="com.huss.android.views.ads.singleAds.SingleAds" />
-        <activity android:name="com.huss.android.views.ads.latestAds.LatestAds" />
-        <activity android:name="com.huss.android.views.home.MainActivity">
+        <activity android:name=".views.category.CategoryActivity" />
+        <activity android:name=".views.subCategory.SubCategoryActivity" />
+        <activity android:name=".views.profile.ProfileActivity" />
+        <activity android:name=".views.favorite.FavoriteActivity" />
+        <activity android:name=".views.adsImages.ImageFullActivity" />
+        <activity android:name=".views.ads.singleAds.SingleAdsActivity" />
+        <activity android:name=".views.ads.latestAds.LatestAdsActivity" />
+        <activity android:name=".views.home.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -89,12 +90,14 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.huss.android.utility.NetworkReceiverUtil">
+        <receiver android:name=".utility.NetworkReceiverUtil"
+            android:enabled="true">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
+
         </receiver>
+
     </application>
 
 </manifest>

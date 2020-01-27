@@ -28,9 +28,9 @@ public class ProfileAdsPager extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 1) {
-            return new InActiveAds(inactive);
+            return new InActiveAdsFragment(inactive);
         }
-        return new ActiveAds(active);
+        return new ActiveAdsFragment(active);
     }
 
     @Override

@@ -8,7 +8,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/toolbar_height"
         app:cardElevation="2dp"
         app:contentPadding="10dp">
 
@@ -28,7 +28,7 @@
                 android:id="@+id/page_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="16dp"
                 android:text="@string/pick_location"
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_toEndOf="@+id/back"

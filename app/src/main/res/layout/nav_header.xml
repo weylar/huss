@@ -41,7 +41,6 @@
         android:layout_below="@+id/profile_img_holder"
         android:layout_centerHorizontal="true"
         android:textColor="@color/colorPrimaryDark"
-        android:background="@drawable/name_bg"
         android:textSize="18sp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"

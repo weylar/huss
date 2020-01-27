@@ -31,7 +31,7 @@ class FragmentReport : DialogFragment(){
                 view.findViewById<RadioButton>(R.id.prepayment).id -> resources.getString(R.string.prepayment)
                 else -> ""
             }
-            val finalReason = "Category: $reason \nComment: ${view.findViewById<EditText>(R.id.report_description).text}"
+            val finalReason = "CategoryActivity: $reason \nComment: ${view.findViewById<EditText>(R.id.report_description).text}"
             if (reason.isEmpty()){
                     Toast.makeText(context, "Select at least one option", Toast.LENGTH_LONG).show()
             }else{

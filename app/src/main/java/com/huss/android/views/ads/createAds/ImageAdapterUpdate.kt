@@ -44,7 +44,7 @@ class ImageAdapterUpdate(private val context: Context, private val dataList: Arr
             bundle.putString("uri", dataList[position].imageUrl.toString())
             bundle.putInt("pos", position)
             fragment.arguments = bundle
-            fragment.show((context as CreateAds).supportFragmentManager, "TAG")
+            fragment.show((context as CreateAdsActivity).supportFragmentManager, "TAG")
 
         }
 

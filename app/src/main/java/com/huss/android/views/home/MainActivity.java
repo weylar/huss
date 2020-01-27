@@ -26,20 +26,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.huss.android.R;
 import com.huss.android.models.AllAds;
 import com.huss.android.models.Category;
 import com.huss.android.utility.NetworkReceiverUtil;
-import com.huss.android.viewModels.AdsViewModel;
-import com.huss.android.viewModels.CategoryViewModel;
+import com.huss.android.viewModels.ads.AdsViewModel;
+import com.huss.android.viewModels.category.CategoryViewModel;
 import com.huss.android.viewModels.ProfileViewModel;
-import com.huss.android.views.ads.createAds.CreateAds;
-import com.huss.android.views.ads.latestAds.LatestAds;
+import com.huss.android.views.ads.createAds.CreateAdsActivity;
+import com.huss.android.views.ads.latestAds.LatestAdsActivity;
 import com.huss.android.views.auth.LoginActivity;
+import com.huss.android.views.category.CategoryActivity;
 import com.huss.android.views.category.CategoryAdapter;
-import com.huss.android.views.favorite.Favorite;
-import com.huss.android.views.profile.Profile;
+import com.huss.android.views.favorite.FavoriteActivity;
+import com.huss.android.views.message.ChatActivity;
+import com.huss.android.views.profile.ProfileActivity;
 import com.huss.android.views.settings.SettingsActivity;
 import com.squareup.picasso.Picasso;
 
@@ -51,93 +54,70 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import timber.log.Timber;
 
 import static com.huss.android.utility.Utility.DEFAULT_IMAGE;
+import static com.huss.android.utility.Utility.FROM;
 import static com.huss.android.utility.Utility.KEY;
 import static com.huss.android.utility.Utility.MY_PREFERENCES;
 import static com.huss.android.utility.Utility.PROFILE_IMAGE_URL;
 import static com.huss.android.utility.Utility.TOKEN;
 import static com.huss.android.utility.Utility.USER_NAME;
-import static com.huss.android.views.ads.singleAds.SingleAds.NAME;
+import static com.huss.android.views.ads.singleAds.SingleAdsActivity.NAME;
 
-public class MainActivity extends AppCompatActivity {
-    RecyclerView catRecyclerView;
-    RecyclerView latestAdsRecyclerView;
-    RecyclerView topAdsRecyclerView;
-    CategoryAdapter categoryAdapter;
-    TopAdsAdapter topAdsAdapter;
-    LatestAdsAdapter latestAdsAdapter;
-    RecyclerView.LayoutManager layoutManagerCat, layoutManagerTop, layoutManagerLatestAds;
-    CategoryViewModel categoryViewModel;
-    AdsViewModel adsViewModel;
-    CircleImageView profileImage;
-    FloatingActionButton fab;
-    TextView placeholder, topAdLabel;
-    AutoCompleteTextView searchbox;
-    ShimmerFrameLayout shimmerFrameLayout, shimmerFrameLayoutTop, shimmerFrameLayoutLatest;
-    String token;
+public class MainActivity extends AppCompatActivity implements NetworkReceiverUtil.ConnectivityReceiverListener {
+    private AdsViewModel adsViewModel;
+    private TextView topAdLabel;
+    private AutoCompleteTextView searchBox;
+    private ShimmerFrameLayout shimmerFrameLayout, shimmerFrameLayoutTop, shimmerFrameLayoutLatest;
+    private String token;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    private NavigationView navigationView;
+    NetworkReceiverUtil networkReceiverUtil;
+    Snackbar snackbar;
 
-    @NotNull
-    public static NetworkReceiverUtil checkNetworkConnection(Context context, View view) {
-
-        return new NetworkReceiverUtil() {
-            @Override
-            protected void onNetworkChange(boolean state) {
-                if (!state) {
-                    Snackbar snackBar = Snackbar.make(view, "No network connection!", Snackbar.LENGTH_INDEFINITE);
-                    snackBar.setAction("Ok", v -> {
-                        snackBar.dismiss();
-                    });
-                    snackBar.setActionTextColor(context.getResources().getColor(R.color.colorAccent));
-                    snackBar.show();
-                }
-            }
-
-        };
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         topAdLabel = findViewById(R.id.top_ad_title);
-        searchbox = findViewById(R.id.searchbox);
-        placeholder = findViewById(R.id.placeholder);
-        profileImage = findViewById(R.id.profileImage);
+        searchBox = findViewById(R.id.searchbox);
+        TextView placeholderSmall = findViewById(R.id.placeholder);
+        CircleImageView profileImage = findViewById(R.id.profileImage);
         shimmerFrameLayoutTop = findViewById(R.id.shimmer_view_container2);
         shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
         shimmerFrameLayoutLatest = findViewById(R.id.shimmer_view_container3);
         token = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(TOKEN, "");
+        String imageUrl = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(PROFILE_IMAGE_URL, DEFAULT_IMAGE);
         suggestSearchInput();
-        searchbox.setOnEditorActionListener((v, actionId, event) -> {
+        searchBox.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                Intent intent = new Intent(this, LatestAds.class);
-                intent.putExtra(KEY, searchbox.getText().toString());
+                Intent intent = new Intent(this, LatestAdsActivity.class);
+                intent.putExtra(KEY, searchBox.getText().toString());
                 startActivity(intent);
                 return true;
             }
             return false;
         });
         fab.setOnClickListener(v -> {
-            startActivity(new Intent(this, CreateAds.class));
+            if (checkLoggedIn(this)) {
+                startActivity(new Intent(this, CreateAdsActivity.class));
+            } else {
+                forceLogin(CreateAdsActivity.class.getSimpleName());
+            }
+
+
         });
-        loadProfileImage(profileImage, placeholder, getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE)
-                .getString(PROFILE_IMAGE_URL, DEFAULT_IMAGE));
-        Timber.e(getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE)
-                .getString(PROFILE_IMAGE_URL, DEFAULT_IMAGE));
         drawerLayout = findViewById(R.id.activity_main);
         Toolbar toolbar = findViewById(R.id.homeToolBar);
         setSupportActionBar(toolbar);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-        navigationView = findViewById(R.id.nv);
+        NavigationView navigationView = findViewById(R.id.nv);
         View view = navigationView.getHeaderView(0);
         ImageView imageView = view.findViewById(R.id.profile_img);
         View.OnClickListener onClickListener = v -> {
-            startActivity(new Intent(this, Profile.class));
+            startActivity(new Intent(this, ProfileActivity.class));
             drawerLayout.closeDrawer(GravityCompat.START);
         };
         imageView.setOnClickListener(onClickListener);
@@ -145,33 +125,52 @@ public class MainActivity extends AppCompatActivity {
         textView.setOnClickListener(onClickListener);
         TextView button = view.findViewById(R.id.logout);
         TextView placeholder = view.findViewById(R.id.placeholder);
-        button.setOnClickListener(v -> {
-            logout();
-        });
-        textView.setText(getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(USER_NAME, ""));
-        loadProfileImage(imageView, placeholder, getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(PROFILE_IMAGE_URL,
-                DEFAULT_IMAGE));
+        if (checkLoggedIn(this)) {
+            button.setOnClickListener(v -> {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                logout();
+
+            });
+        } else {
+            button.setOnClickListener(v -> {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                forceLogin(MainActivity.class.getSimpleName());
+
+
+            });
+            button.setText(getResources().getString(R.string.sign_in));
+            navigationView.getMenu().getItem(1).setVisible(false);
+            navigationView.getMenu().getItem(2).setVisible(false);
+            navigationView.getMenu().getItem(3).setVisible(false);
+            textView.setText(getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(USER_NAME, ""));
+        }
+        loadProfileImage(profileImage, placeholderSmall, imageUrl);
+        loadProfileImage(imageView, placeholder, imageUrl);
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             drawerLayout.closeDrawer(GravityCompat.START);
             switch (id) {
                 case R.id.home:
                     startActivity(new Intent(MainActivity.this, MainActivity.class));
+                    finish();
                     break;
                 case R.id.favorite:
-                    startActivity(new Intent(MainActivity.this, Favorite.class));
+                    startActivity(new Intent(MainActivity.this, FavoriteActivity.class));
+
                     break;
                 case R.id.messages:
-
+                    startActivity(new Intent(MainActivity.this, ChatActivity.class));
                     break;
                 case R.id.setting:
                     startActivity(new Intent(this, SettingsActivity.class));
+
                     break;
                 case R.id.share:
 
+
                     break;
                 case R.id.about:
-
+                    startActivity(new Intent(this, AboutActivity.class));
                     break;
 
                 default:
@@ -182,26 +181,29 @@ public class MainActivity extends AppCompatActivity {
             return true;
 
         });
-
-
         onLoad();
         updateOnlineStatus(true);
+
+        networkReceiverUtil = new NetworkReceiverUtil();
+        registerReceiver(networkReceiverUtil, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NetworkReceiverUtil.Companion.setConnectivityReceiverListener(this);
     }
 
     private void updateOnlineStatus(boolean isOnline) {
         ProfileViewModel profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
         profileViewModel.initLastSeen(token, isOnline);
         profileViewModel.updateLastSeen().observe(this, v -> {
-            Timber.e("Called");
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(checkNetworkConnection(this, shimmerFrameLayout), filter);
-    }
 
     private void suggestSearchInput() {
         ArrayList<String> suggestions = new ArrayList<>();
@@ -212,71 +214,69 @@ public class MainActivity extends AppCompatActivity {
                 suggestions.add(ad.getTitle());
             }
             ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, suggestions);
-            searchbox.setAdapter(adapter);
-            searchbox.setThreshold(1);
+            searchBox.setAdapter(adapter);
+            searchBox.setThreshold(1);
         });
 
-        Timber.e(suggestions.toString());
 
 
     }
 
-    private boolean checkLoggedIn() {
-        if (getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(TOKEN, "").equals("")) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-            return false;
-        }
-        return true;
+    public static boolean checkLoggedIn(Context context) {
+        return !context.getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(TOKEN, "").equals("");
+    }
+
+    private void forceLogin(String from) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra(FROM, from);
+        startActivity(intent);
     }
 
     public void loadProfileImage(View imageview, TextView placeholder, String url) {
         if (url.equals(DEFAULT_IMAGE)) {
-            placeholder.setVisibility(View.VISIBLE);
-            imageview.setVisibility(View.GONE);
-            placeholder.setText(String.format("%s", getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(USER_NAME, "").charAt(0)));
+            if (checkLoggedIn(this)){
+                placeholder.setVisibility(View.VISIBLE);
+                imageview.setVisibility(View.GONE);
+                placeholder.setText(String.format("%s", getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(USER_NAME, "").charAt(0)));
+            }else{
+                placeholder.setVisibility(View.VISIBLE);
+                imageview.setVisibility(View.GONE);
+                placeholder.setText(String.format("%s", "H"));
+            }
+
         } else {
-            imageview.setVisibility(View.VISIBLE);
-            Picasso.Builder builder = new Picasso.Builder(this);
-            builder.build().load(url)
-                    .into((ImageView) imageview);
+                imageview.setVisibility(View.VISIBLE);
+                Picasso.Builder builder = new Picasso.Builder(this);
+                builder.build().load(url)
+                        .into((ImageView) imageview);
+
         }
     }
 
     private void logout() {
         SharedPreferences.Editor editor = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).edit().clear();
         editor.apply();
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
+        forceLogin(MainActivity.class.getSimpleName());
     }
 
 
     @Override
     public boolean onOptionsItemSelected(@NotNull MenuItem item) {
-
         if (actionBarDrawerToggle.onOptionsItemSelected(item))
             return true;
-
         return super.onOptionsItemSelected(item);
     }
 
     public void moreLatest(View view) {
-        Intent intent = new Intent(this, LatestAds.class);
+        Intent intent = new Intent(this, LatestAdsActivity.class);
         intent.putExtra(NAME, "Latest Ads");
         startActivity(intent);
     }
 
-
     protected void onLoad() {
 
         /*Get all categories using view model*/
-        categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
+        CategoryViewModel categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
         categoryViewModel.init(token);
         categoryViewModel.getPopularCategory().observe(this, val -> {
             generateCategoryList(val);
@@ -303,9 +303,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void generateCategoryList(Category categories) {
-        catRecyclerView = findViewById(R.id.recycler_cat);
-        categoryAdapter = new CategoryAdapter(this, categories.getData());
-        layoutManagerCat = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView catRecyclerView = findViewById(R.id.recycler_cat);
+        CategoryAdapter categoryAdapter = new CategoryAdapter(this, categories.getData());
+        RecyclerView.LayoutManager layoutManagerCat = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         catRecyclerView.setLayoutManager(layoutManagerCat);
         catRecyclerView.setAdapter(categoryAdapter);
         categoryAdapter.notifyDataSetChanged();
@@ -313,9 +313,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void generateTopAdsList(AllAds ads) {
-        topAdsRecyclerView = findViewById(R.id.recycler_top_ads);
-        topAdsAdapter = new TopAdsAdapter(this, ads);
-        layoutManagerTop = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView topAdsRecyclerView = findViewById(R.id.recycler_top_ads);
+        TopAdsAdapter topAdsAdapter = new TopAdsAdapter(this, ads);
+        RecyclerView.LayoutManager layoutManagerTop = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         topAdsRecyclerView.setLayoutManager(layoutManagerTop);
         topAdsRecyclerView.setAdapter(topAdsAdapter);
         if (topAdsAdapter.getItemCount() < 1) {
@@ -325,9 +325,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void generateLatestAdsList(AllAds ads) {
-        latestAdsRecyclerView = findViewById(R.id.recycler_latest_ads);
-        latestAdsAdapter = new LatestAdsAdapter(this, ads);
-        layoutManagerLatestAds = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView latestAdsRecyclerView = findViewById(R.id.recycler_latest_ads);
+        LatestAdsAdapter latestAdsAdapter = new LatestAdsAdapter(this, ads);
+        RecyclerView.LayoutManager layoutManagerLatestAds = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         latestAdsRecyclerView.setLayoutManager(layoutManagerLatestAds);
         latestAdsRecyclerView.setAdapter(latestAdsAdapter);
 
@@ -335,16 +335,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openProfile(View view) {
-        startActivity(new Intent(this, Profile.class));
+        if (checkLoggedIn(this)){
+            startActivity(new Intent(this, ProfileActivity.class));
+        }else{
+            forceLogin(ProfileActivity.class.getSimpleName());
+        }
+
     }
 
     public void allCategory(View view) {
-        startActivity(new Intent(this, com.huss.android.views.category.Category.class));
+        startActivity(new Intent(this, CategoryActivity.class));
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         updateOnlineStatus(false);
+        unregisterReceiver(networkReceiverUtil);
+    }
+
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if (!isConnected){
+             snackbar = Snackbar.make(topAdLabel, "No internet connection", Snackbar.LENGTH_INDEFINITE);
+            snackbar.show();
+        }else{
+           if (snackbar != null) {
+               snackbar.dismiss();
+           }
+        }
     }
 }

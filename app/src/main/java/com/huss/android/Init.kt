@@ -14,7 +14,6 @@ class Init: Application() {
             config["cloud_name"] = getString(R.string.cloud_name)
             MediaManager.init(this, config)
 
-            /*Paystack*/
             PaystackSdk.initialize(this)
 
         }

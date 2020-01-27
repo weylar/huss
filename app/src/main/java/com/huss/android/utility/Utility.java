@@ -26,5 +26,9 @@ public class Utility {
     public static final int STATUS_ACCEPTED_SUCCESS = 202;
     public static final String MY_PREFERENCES = "MyPrefs";
     public static final String BEARER = "Bearer";
+    public static final String FROM = "from";
+    public static final String PRODUCT = "product";
+    public static final String PRODUCT_ID = "product_id";
+    public static final String LAST_SEEN = "last_seen";
     public static final String DEFAULT_IMAGE = "https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/";
 }

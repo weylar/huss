@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".views.ads.createAds.CreateAds">
+    tools:context=".views.ads.createAds.CreateAdsActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/toolbar_height"
         app:cardElevation="2dp"
         app:contentPaddingTop="10dp">
 
@@ -27,6 +27,7 @@
                 <ImageView
                     android:id="@+id/back"
                     android:layout_width="@dimen/toolbar_icon_size"
+                    android:contentDescription="@string/back_button"
                     android:layout_height="wrap_content"
                     android:onClick="goBack"
                     android:src="@drawable/back" />
@@ -38,7 +39,8 @@
                     android:layout_centerHorizontal="true"
                     android:text="@string/create_ad"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    tools:ignore="RelativeOverlap" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -144,7 +146,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:drawableStart="@drawable/small_title"
                     android:drawablePadding="5dp"
                     android:text="@string/title" />
@@ -155,7 +156,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:text="@string/_0_70" />
+                    android:text="@string/_0_70"
+                    tools:ignore="RelativeOverlap" />
 
             </RelativeLayout>
 
@@ -194,7 +196,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:text="@string/_1_1200" />
+                    android:text="@string/_1_1200"
+                    tools:ignore="RelativeOverlap" />
             </RelativeLayout>
 
 
@@ -207,9 +210,11 @@
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/custom_bg"
                 android:gravity="top"
+                android:autofillHints="@string/description"
                 android:hint="@string/description_detail"
                 android:inputType="textMultiLine|textCapSentences"
-                android:padding="10dp" />
+                android:padding="10dp"
+                tools:targetApi="o" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -241,7 +246,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
-                android:drawableStart="@drawable/no_small_phone_"
+                android:drawableStart="@drawable/ic_call_gray"
                 android:drawablePadding="5dp"
                 android:text="@string/phone" />
 
@@ -261,7 +266,6 @@
                 android:padding="10dp" />
 
             <TextView
-                android:id="@+id/price_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"

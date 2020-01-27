@@ -1,47 +1,67 @@
 package com.huss.android.views.auth
 
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import com.huss.android.R
 import com.huss.android.models.Profile
+import com.huss.android.utility.NetworkReceiverUtil
 import com.huss.android.utility.Utility.*
 import com.huss.android.viewModels.auth.LoginViewModel
+import com.huss.android.views.ads.createAds.CreateAdsActivity
 import com.huss.android.views.home.MainActivity
-import com.google.android.material.snackbar.Snackbar
 import com.ldoublem.loadingviewlib.view.LVCircularZoom
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_login.emailLayout
+import kotlinx.android.synthetic.main.activity_login.passwordLayout
+import kotlinx.android.synthetic.main.activity_sign_up.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import com.huss.android.views.profile.ProfileActivity as ProfileView
 
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), NetworkReceiverUtil.ConnectivityReceiverListener {
 
     private val EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$"
     private val pattern: Pattern = Pattern.compile(EMAIL_PATTERN)
     private var matcher: Matcher? = null
+    private lateinit var to : String
+    private lateinit var networkReceiverUtil: NetworkReceiverUtil
+    private var snackbar: Snackbar? = null
+
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        if (intent.hasExtra(FROM))
+        to = intent.extras?.get(FROM) as String
+
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        networkReceiverUtil = NetworkReceiverUtil()
+        registerReceiver(networkReceiverUtil, filter)
+
+
 
     }
 
     fun goToForget(view: View) {
-        startActivity(Intent(this, ForgotPassword::class.java))
+        startActivity(Intent(this, ForgotPasswordActivity::class.java))
     }
     fun gotoSignUp(view: View) {
         startActivity(Intent(this, SignUpActivity::class.java))
-        finish()
+
     }
 
     fun signIn(view: View) {
@@ -51,9 +71,12 @@ class LoginActivity : AppCompatActivity() {
 
         if (!validateEmail(email)) {
             emailLayout.error = "Not a valid email address!"
+            emailLayout.editText?.setHintTextColor(Color.WHITE)
+
         }
         if (!validatePassword(password)) {
             passwordLayout.error = "Not a valid password!"
+            passwordLayout.editText?.setHintTextColor(Color.WHITE)
         }
         if (validateEmail(email) and validatePassword(password) ) {
             doLogin(email, password)
@@ -90,7 +113,12 @@ class LoginActivity : AppCompatActivity() {
             progress.dismiss()
             if (loginResponse.statusCode == STATUS_CODE_OK) {
                 saveData(loginResponse)
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = when (to){
+                    MainActivity::class.java.simpleName -> Intent(this, MainActivity::class.java)
+                    CreateAdsActivity::class.java.simpleName -> Intent(this, CreateAdsActivity::class.java)
+                    ProfileView::class.java.simpleName -> Intent(this, ProfileView::class.java)
+                    else -> Intent(this, MainActivity::class.java)
+                }
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
@@ -101,10 +129,6 @@ class LoginActivity : AppCompatActivity() {
         })
 
         }
-
-
-
-
 
     private fun saveData(profileData: Profile) {
         val sharedPref = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE)
@@ -137,5 +161,26 @@ class LoginActivity : AppCompatActivity() {
     private fun validatePassword(password: String): Boolean {
         return password.length > PASSWORD_LIMITATION
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(networkReceiverUtil)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        NetworkReceiverUtil.connectivityReceiverListener = this
+    }
+
+    override fun onNetworkConnectionChanged(isConnected: Boolean) {
+        if (!isConnected) {
+            snackbar = Snackbar.make(emailLayout, "No internet connection", Snackbar.LENGTH_INDEFINITE)
+            snackbar!!.show()
+        } else {
+            if (snackbar != null) {
+                snackbar!!.dismiss()
+            }
+        }
     }
 }

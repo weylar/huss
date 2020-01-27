@@ -42,8 +42,8 @@ public class SimilarAdsAdapter extends RecyclerView.Adapter<SimilarAdsAdapter.Cu
         View view = layoutInflater.inflate(R.layout.top_ads_view, parent, false);
         view.setOnClickListener(v -> {
             String id = String.valueOf(v.getId());
-            Intent intent = new Intent(context, SingleAds.class);
-            intent.putExtra(SingleAds.ID, id);
+            Intent intent = new Intent(context, SingleAdsActivity.class);
+            intent.putExtra(SingleAdsActivity.ID, id);
             context.startActivity(intent);
         });
 

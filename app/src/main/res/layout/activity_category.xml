@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.huss.android.views.category.Category">
+    tools:context="com.huss.android.views.category.CategoryActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/toolbar_height"
         app:cardElevation="2dp"
         app:contentPadding="10dp">
 

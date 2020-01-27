@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.huss.android.R;
 import com.huss.android.models.AllAds;
-import com.huss.android.views.ads.singleAds.SingleAds;
+import com.huss.android.views.ads.singleAds.SingleAdsActivity;
 import com.squareup.picasso.Picasso;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
@@ -21,8 +21,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static com.huss.android.views.ads.singleAds.SingleAds.ID;
-import static com.huss.android.views.ads.singleAds.SingleAds.NAME;
+import static com.huss.android.views.ads.singleAds.SingleAdsActivity.ID;
+import static com.huss.android.views.ads.singleAds.SingleAdsActivity.NAME;
+import static com.huss.android.views.home.MainActivity.checkLoggedIn;
 
 public class AllLatestAdsAdapter extends RecyclerView.Adapter<AllLatestAdsAdapter.CustomViewHolder> {
 
@@ -43,7 +44,7 @@ public class AllLatestAdsAdapter extends RecyclerView.Adapter<AllLatestAdsAdapte
         View view = layoutInflater.inflate(R.layout.latest_ads_view, parent, false);
         view.setOnClickListener(v -> {
             String id = String.valueOf(v.getId());
-            Intent intent = new Intent(context, SingleAds.class);
+            Intent intent = new Intent(context, SingleAdsActivity.class);
             intent.putExtra(ID, id);
             intent.putExtra(NAME, String.valueOf(v.getTag()));
             context.startActivity(intent);
@@ -59,34 +60,40 @@ public class AllLatestAdsAdapter extends RecyclerView.Adapter<AllLatestAdsAdapte
         holder.description.setText(ads.getDescription());
         holder.itemView.setId(ads.getId());
         holder.itemView.setTag(ads.getTitle());
-        holder.favorite.setChecked(ads.getFavorites());
         if (ads.getIsNegotiable()){
             holder.negotiable.setText(context.getResources().getString(R.string.negotiable));
         }else{
             holder.negotiable.setText(context.getResources().getString(R.string.fixed));
         }
+        if (checkLoggedIn(context)){
+            holder.favorite.setChecked(ads.getFavorites());
+            holder.favorite.setEventListener(new SparkEventListener() {
 
-        holder.favorite.setEventListener(new SparkEventListener() {
-
-            @Override
-            public void onEvent(ImageView button, boolean buttonState) {
-                if (buttonState) {
-                    // Button is active
-                } else {
-                    // Button is inactive
+                @Override
+                public void onEvent(ImageView button, boolean buttonState) {
+                    if (buttonState) {
+                        // Button is active
+                    } else {
+                        // Button is inactive
+                    }
                 }
-            }
 
-            @Override
-            public void onEventAnimationEnd(ImageView button, boolean buttonState) {
+                @Override
+                public void onEventAnimationEnd(ImageView button, boolean buttonState) {
 
-            }
+                }
 
-            @Override
-            public void onEventAnimationStart(ImageView button, boolean buttonState) {
+                @Override
+                public void onEventAnimationStart(ImageView button, boolean buttonState) {
 
-            }
-        });
+                }
+            });
+        }else{
+            holder.favorite.setVisibility(View.GONE);
+        }
+
+
+
 
         for (AllAds.Data.Image image: ads.getImages()){
             if (image.getDisplayImage()){

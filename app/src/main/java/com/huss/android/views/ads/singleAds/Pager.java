@@ -12,14 +12,14 @@ import android.widget.ImageView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.huss.android.R;
-import com.huss.android.views.adsImages.ImageFull;
+import com.huss.android.views.adsImages.ImageFullActivity;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-import static com.huss.android.views.adsImages.ImageFull.PAGE;
+import static com.huss.android.views.adsImages.ImageFullActivity.PAGE;
 
 public class Pager extends PagerAdapter {
     private Context mContext;
@@ -42,7 +42,7 @@ public class Pager extends PagerAdapter {
         View itemView = inflater.inflate(R.layout.ads_image_view, collection, false);
         ImageView photoView = itemView.findViewById(R.id.image_product);
         photoView.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, ImageFull.class);
+            Intent intent = new Intent(mContext, ImageFullActivity.class);
             intent.putExtra(PAGE, position);
             intent.putStringArrayListExtra("URL", allImagesUrl);
             mContext.startActivity(intent);

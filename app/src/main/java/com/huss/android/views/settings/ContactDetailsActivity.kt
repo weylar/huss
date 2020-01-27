@@ -19,29 +19,30 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.huss.android.R
-import com.huss.android.models.Profile
-import com.huss.android.utility.Utility.*
-import com.huss.android.viewModels.ProfileViewModel
 import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.ErrorInfo
 import com.cloudinary.android.callback.UploadCallback
 import com.google.android.material.snackbar.Snackbar
-import com.squareup.picasso.Picasso
-import androidx.lifecycle.Observer
+import com.huss.android.R
+import com.huss.android.models.Profile
+import com.huss.android.utility.NetworkReceiverUtil
+import com.huss.android.utility.Utility.*
+import com.huss.android.viewModels.ProfileViewModel
 import com.ldoublem.loadingviewlib.view.LVCircularZoom
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_contact_details.*
-import kotlinx.android.synthetic.main.activity_contact_details.email
 import kotlinx.android.synthetic.main.activity_create_ads.*
 import java.util.*
 
 
-class ContactDetailsActivity : AppCompatActivity() {
+class ContactDetailsActivity : AppCompatActivity(), NetworkReceiverUtil.ConnectivityReceiverListener {
 
     private val REQUEST_CODE_READ_STORAGE = 100
     private var uri: Uri? = null
     private var progress: AlertDialog? = null
+    private var snackbar: Snackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -311,6 +312,22 @@ class ContactDetailsActivity : AppCompatActivity() {
         editor.putString(LOCATION, location)
         editor.putString(PROFILE_IMAGE_URL, imageUrl)
         editor.apply()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        NetworkReceiverUtil.connectivityReceiverListener = this
+    }
+
+    override fun onNetworkConnectionChanged(isConnected: Boolean) {
+        if (!isConnected) {
+            snackbar = Snackbar.make(firstName, "No internet connection", Snackbar.LENGTH_INDEFINITE)
+            snackbar?.show()
+        } else {
+            if (snackbar != null) {
+                snackbar?.dismiss()
+            }
+        }
     }
 
 }

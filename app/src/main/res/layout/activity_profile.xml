@@ -8,12 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="com.huss.android.views.profile.Profile">
+        tools:context="com.huss.android.views.profile.ProfileActivity">
 
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/toolbar_height"
             app:cardElevation="2dp">
 
             <RelativeLayout
@@ -33,12 +33,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
+                    android:layout_toEndOf="@id/back"
+                    android:layout_toStartOf="@+id/settings"
                     android:gravity="center_horizontal"
                     android:text="@string/account"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="20sp" />
 
                 <ImageView
+                    android:id="@+id/settings"
                     android:layout_width="25dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"

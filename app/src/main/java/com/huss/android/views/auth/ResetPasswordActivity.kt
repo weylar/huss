@@ -1,34 +1,41 @@
 package com.huss.android.views.auth
 
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.ConnectivityManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import com.huss.android.R
 import com.huss.android.models.Profile
+import com.huss.android.utility.NetworkReceiverUtil
 import com.huss.android.utility.Utility
 import com.huss.android.utility.Utility.PASSWORD_LIMITATION
 import com.huss.android.viewModels.auth.ResetPasswordViewModel
 import com.huss.android.views.home.MainActivity
-import com.google.android.material.snackbar.Snackbar
 import com.ldoublem.loadingviewlib.view.LVCircularZoom
 import kotlinx.android.synthetic.main.activity_reset_password.*
-import kotlinx.android.synthetic.main.activity_reset_password.passwordLayout
 
-class ResetPasswordActivity : AppCompatActivity() {
+class ResetPasswordActivity : AppCompatActivity(), NetworkReceiverUtil.ConnectivityReceiverListener {
     var token: String? = null
     var id: String? = null
+    private lateinit var networkReceiverUtil: NetworkReceiverUtil
+    private var snackbar: Snackbar? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset_password)
         handleIntent(intent)
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        networkReceiverUtil = NetworkReceiverUtil()
+        registerReceiver(networkReceiverUtil, filter)
     }
 
 
@@ -122,5 +129,30 @@ class ResetPasswordActivity : AppCompatActivity() {
     private fun validatePassword(password: String): Boolean {
         return password.length > PASSWORD_LIMITATION
 
+    }
+
+    fun goBack(view: View) {
+        finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(networkReceiverUtil)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        NetworkReceiverUtil.connectivityReceiverListener = this
+    }
+
+    override fun onNetworkConnectionChanged(isConnected: Boolean) {
+        if (!isConnected) {
+            snackbar = Snackbar.make(passwordLayout, "No internet connection", Snackbar.LENGTH_INDEFINITE)
+            snackbar?.show()
+        } else {
+            if (snackbar != null) {
+                snackbar?.dismiss()
+            }
+        }
     }
 }
