@@ -8,6 +8,7 @@ import adRouter from './server/routes/product';
 import adImageRouter from './server/routes/image';
 import favoriteRouter from './server/routes/favorite';
 import notificationRouter from './server/routes/notification';
+import adReportRouter from './server/routes/adReport';
 
 const app = express();
 
@@ -16,8 +17,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const port = process.env.PORT || 3000;
-// when a random route is inputed
-app.get('/', (req, res) => res.status(200).send({
+
+app.get('/', (res) => res.status(200).send({
   status: 'success',
   statusCode: 200,
   message: 'Welcome to the huss API.'
@@ -31,6 +32,7 @@ app.use('/api/v1/ad', adRouter);
 app.use('/api/v1/adImage', adImageRouter);
 app.use('/api/v1/favorite', favoriteRouter);
 app.use('/api/v1/notification', notificationRouter);
+app.use('/api/v1/adReport', adReportRouter);
 
 app.use((req, res, next) => {
   const error = new Error('Route Does not Exist');

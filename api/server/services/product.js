@@ -238,6 +238,15 @@ class AdService {
       order: [['id', 'DESC']], attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });
 
+    if (!req.userId) {
+      return {
+        status: 'success',
+        statusCode: 200,
+        data: allUserAds,
+        message: 'All ads have been retrieved successfully'
+      }
+    }
+
     let res = allUserAds.map(elem => {
       return db.Favorite.findOne({ where: {userId: req.userId, productId: elem.dataValues.id}});
       
@@ -271,6 +280,15 @@ class AdService {
       order: [['id', 'DESC']],
       attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });
+
+    if (!req.userId) {
+      return {
+        status: 'success',
+        statusCode: 200,
+        data: allAds,
+        message: 'All ads have been retrieved successfully'
+      }
+    }
 
     let res = allAds.map(elem => {
       return db.Favorite.findOne({ where: {userId: req.userId, productId: elem.dataValues.id}});

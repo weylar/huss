@@ -15,9 +15,9 @@ adRouter.post('/:categoryName/:subCategoryName/create', getUser, adCheck, create
 adRouter.get('/getAd/:adId', getUser, getAd);
 adRouter.get('/getOwnAd/:adId', getUser, getOwnAd);
 adRouter.get('/getAllAds', getAllAds);
-adRouter.get('/getAllUserAds/:userId', getUser, getAllUserAds);
+adRouter.get('/getAllUserAds/:userId', getAllUserAds);
 adRouter.get('/getAllOwnAds', getUser, getAllOwnAds);
-adRouter.get('/getAllAdsByLimit', getUser, getAllAdsByLimit);
+adRouter.get('/getAllAdsByLimit', getAllAdsByLimit);
 adRouter.get('/getAllOwnAdsByLimit/:limit', getUser, getAllOwnAdsByLimit);
 adRouter.get('/paginateAds/:offset/:limit', getUser, paginateAds);
 adRouter.get('/paginateOwnAds/:offset/:limit', getUser, paginateOwnAds);
