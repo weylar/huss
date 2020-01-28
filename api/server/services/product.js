@@ -123,9 +123,9 @@ class AdService {
       const favorites = await db.Favorite.findAll({ where: { productId: oldAd.id, userId: req.userId }});
       let isFavorited;
       if (favorites.length > 0) {
-        isFavorited = true;
+        isFavorite = true;
       } else {
-        isFavorited = false;
+        isFavorite = false;
       }
       
     return {
