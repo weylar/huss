@@ -13,7 +13,7 @@ class FavoriteService {
       }
     }
 
-    const isExist = await db.Favorite.findOne({ where: { userId: req.userId, id: adId } });
+    const isExist = await db.Favorite.findOne({ where: { userId: req.userId, productId: adId } });
     if (isExist) {
       return {
         status: 'error',
