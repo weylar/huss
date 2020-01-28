@@ -71,15 +71,6 @@ class AdService {
       };
     }
 
-    if(!req.userId) {
-      return {
-        status: 'success',
-        statusCode: 200,
-        data: oldAd,
-        message: 'Ad sucessfully retrieved'
-      }
-    }
-
     let title = oldAd.title
     title = title.capitalize();
     let category = oldAd.categoryName;
@@ -89,6 +80,15 @@ class AdService {
       where: { title:  { [Op.iLike]: `%${title}%` }, categoryName: category },
       attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });
+
+    if(!req.userId) {
+      return {
+        status: 'success',
+        statusCode: 200,
+        data: oldAd,
+        message: 'Ad sucessfully retrieved'
+      }
+    }
 
     let res = result.map(elem => {
       return db.Favorite.findOne({ where: {userId: req.userId, productId: elem.dataValues.id}});
