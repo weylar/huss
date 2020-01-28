@@ -17,6 +17,8 @@ class Auth {
         return next();
       } else {
         req.userId = null;
+
+        return next();
       }
     } catch (e) {
       return res.status(401).send({
