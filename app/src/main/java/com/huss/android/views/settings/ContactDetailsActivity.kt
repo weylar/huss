@@ -151,7 +151,7 @@ class ContactDetailsActivity : AppCompatActivity(), NetworkReceiverUtil.Connecti
             REQUEST_CODE_READ_STORAGE -> {
                 if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     val snackbar = Snackbar.make(add, "Permission denied!", Snackbar.LENGTH_SHORT)
-                    snackbar.setAction("Ok", { snackbar.dismiss() })
+                    snackbar.setAction("Ok") { snackbar.dismiss() }
                     snackbar.setActionTextColor(resources.getColor(R.color.colorAccent))
                     snackbar.show()
                 } else {

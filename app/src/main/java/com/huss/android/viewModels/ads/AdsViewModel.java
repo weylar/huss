@@ -37,13 +37,6 @@ public class AdsViewModel extends ViewModel {
         return mutableLiveDataAllAds;
     }
 
-    public void initSearchAds(String key) {
-        if (mutableLiveDataAllAds != null) return;
-        adsRepository = AdsRepository.getInstance();
-        mutableLiveDataAllAds = adsRepository.getSearchAds(key);
-
-    }
-
     public void initSingleAd(String key, String token) {
         adsRepository = AdsRepository.getInstance();
         mutableLiveDataSingle = adsRepository.getSingleAds(key, token);
@@ -54,9 +47,6 @@ public class AdsViewModel extends ViewModel {
         return mutableLiveDataSingle;
     }
 
-    public LiveData<AllAds> getSearchAds() {
-        return mutableLiveDataAllAds;
-    }
 
 
 }

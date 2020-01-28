@@ -8,10 +8,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.huss.android.R;
 import com.huss.android.models.AllAds;
+import com.huss.android.viewModels.FavoriteViewModel;
 import com.huss.android.views.ads.singleAds.SingleAdsActivity;
 import com.squareup.picasso.Picasso;
 import com.varunest.sparkbutton.SparkButton;
@@ -19,7 +24,11 @@ import com.varunest.sparkbutton.SparkEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import timber.log.Timber;
+
+import static com.huss.android.utility.Utility.MY_PREFERENCES;
 import static com.huss.android.utility.Utility.STANDARD_AD;
+import static com.huss.android.utility.Utility.TOKEN;
 import static com.huss.android.views.ads.singleAds.SingleAdsActivity.ID;
 import static com.huss.android.views.ads.singleAds.SingleAdsActivity.NAME;
 import static com.huss.android.views.home.MainActivity.checkLoggedIn;
@@ -29,8 +38,12 @@ public class TopAdsAdapter extends RecyclerView.Adapter<TopAdsAdapter.CustomView
 
     private AllAds dataList;
     private Context context;
+    private  FavoriteViewModel favoriteViewModel;
+    private String token;
 
     TopAdsAdapter(Context context, AllAds dataList) {
+        favoriteViewModel = ViewModelProviders.of((FragmentActivity) context).get(FavoriteViewModel.class);
+         token = context.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE).getString(TOKEN, "");
         this.context = context;
         this.dataList = dataList;
 
@@ -59,15 +72,17 @@ public class TopAdsAdapter extends RecyclerView.Adapter<TopAdsAdapter.CustomView
             holder.price.setText(String.format("₦%s", String.format("%,d", Integer.parseInt(ad.getPrice()))));
             holder.itemView.setId(ad.getId());
             if (checkLoggedIn(context)){
+                Timber.e("isFavorites: " + ad.getFavorites() + " " + ad.getTitle());
                 holder.favorite.setChecked(ad.getFavorites());
                 holder.favorite.setEventListener(new SparkEventListener() {
 
                     @Override
                     public void onEvent(ImageView button, boolean buttonState) {
                         if (buttonState) {
-                            // Button is active
+                            favoriteViewModel.favoriteAd(token, ad.getId().toString());
                         } else {
-                            // Button is inactive
+                            favoriteViewModel.unFavoriteAd(token, ad.getId().toString());
+
                         }
                     }
 

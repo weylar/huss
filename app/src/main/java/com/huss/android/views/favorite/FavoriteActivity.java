@@ -16,11 +16,17 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.huss.android.R;
 import com.huss.android.models.Ads;
+import com.huss.android.models.AllAds;
+import com.huss.android.models.FavoriteAd;
 import com.huss.android.utility.NetworkReceiverUtil;
 import com.huss.android.viewModels.FavoriteViewModel;
+import com.huss.android.viewModels.ads.AdsViewModel;
 import com.huss.android.views.home.MainActivity;
 
 import java.util.List;
+
+import static com.huss.android.utility.Utility.MY_PREFERENCES;
+import static com.huss.android.utility.Utility.TOKEN;
 
 public class FavoriteActivity extends AppCompatActivity implements NetworkReceiverUtil.ConnectivityReceiverListener {
     RecyclerView recyclerView;
@@ -30,6 +36,7 @@ public class FavoriteActivity extends AppCompatActivity implements NetworkReceiv
     LinearLayoutManager layoutManager;
     NetworkReceiverUtil networkReceiverUtil;
     private Snackbar snackbar = null;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,7 @@ public class FavoriteActivity extends AppCompatActivity implements NetworkReceiv
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         networkReceiverUtil = new NetworkReceiverUtil();
         registerReceiver(networkReceiverUtil, filter);
+        token = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(TOKEN, "");
 
     }
 
@@ -49,10 +57,12 @@ public class FavoriteActivity extends AppCompatActivity implements NetworkReceiv
 
 
         favoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
-        favoriteViewModel.init(/*TODO: Append user id*/ "");
-        favoriteViewModel.getFavoriteAds().observe(this, favoriteAds -> {
+        favoriteViewModel.getMyFavoriteAds(getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(TOKEN, "") );
+        favoriteViewModel.getFavAds().observe(this, favoriteAds -> {
 
-            FavoriteActivity.this.generateFavoriteAds(favoriteAds);
+//                generateFavoriteAds(favoriteAds);
+
+
             shimmerFrameLayout.setVisibility(View.GONE);
         });
     }
@@ -62,10 +72,10 @@ public class FavoriteActivity extends AppCompatActivity implements NetworkReceiv
     }
 
 
-    private void generateFavoriteAds(List<Ads> ads) {
+    private void generateFavoriteAds(AllAds ads) {
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView = findViewById(R.id.favorite_recycler);
-        favoriteAdapter = new FavoriteAdapter(this, ads);
+//        favoriteAdapter = new FavoriteAdapter(this, ads);
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(favoriteAdapter);

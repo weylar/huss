@@ -133,6 +133,8 @@
     <string name="sign_in_short_note">Sign in to continue enjoying free Ads</string>
     <string name="forgot_password_short_note">Input your email to get your password reset link</string>
     <string name="reset_password_short_note">Input your new password</string>
+    <string name="offensive">Sending threathening or offensive messages</string>
+    <string name="meet">Can\'t provide office or refuses to meet</string>
 
 
 </resources>

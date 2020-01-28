@@ -1,6 +1,7 @@
 package com.huss.android.views.message
 
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
@@ -15,14 +16,13 @@ import androidx.appcompat.widget.PopupMenu
 import com.huss.android.R
 import com.huss.android.utility.Utility.*
 import com.huss.android.views.ads.singleAds.SingleAdsActivity
-import com.huss.android.views.ads.singleAds.report.FragmentReport
+import com.huss.android.views.ads.singleAds.SingleAdsActivity.ID
+import com.huss.android.views.ads.singleAds.report.FragmentReportUser
 import com.huss.android.views.profile.UserProfileActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_chat.*
-import kotlinx.android.synthetic.main.activity_contact_details.*
 
 class ChatActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
@@ -41,7 +41,7 @@ class ChatActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         } else {
-            chat_header.text = "Chat about - General"
+            chat_header.visibility = View.GONE
         }
 
         val builder = Picasso.Builder(this)
@@ -63,7 +63,11 @@ class ChatActivity : AppCompatActivity() {
 
                 } else if (item.itemId == R.id.report_user) {
                     val fm = supportFragmentManager
-                    val reportFrag = FragmentReport()
+                    val reportFrag = FragmentReportUser()
+                    val bundle = Bundle()
+                    bundle.putString(TOKEN, getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE).getString(TOKEN, ""))
+                    bundle.putString(USER_ID, intent.extras?.getString(USER_ID))
+                    reportFrag.arguments = bundle
                     reportFrag.show(fm, "report_fragment")
                 }
                 true
@@ -73,7 +77,7 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun sendMessage() {
-        send.setOnEditorActionListener { v: TextView?, actionId: Int, event: KeyEvent? ->
+        send.setOnEditorActionListener { _: TextView?, actionId: Int, _: KeyEvent? ->
             if (actionId == EditorInfo.IME_ACTION_SEND) {
                 send()
                 return@setOnEditorActionListener true
@@ -83,7 +87,7 @@ class ChatActivity : AppCompatActivity() {
         send.setOnTouchListener(View.OnTouchListener { _, event ->
             val drawableRight = 2
             if (event.action == MotionEvent.ACTION_UP) {
-                if (event.rawX >= location.right - location.compoundDrawables[drawableRight].bounds.width()) {
+                if (event.rawX >= send.right - send.compoundDrawables[drawableRight].bounds.width()) {
                     send()
                     return@OnTouchListener true
                 }

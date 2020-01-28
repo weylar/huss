@@ -5,9 +5,11 @@ import com.huss.android.models.AdImage;
 import com.huss.android.models.Ads;
 import com.huss.android.models.AllAds;
 import com.huss.android.models.Category;
+import com.huss.android.models.FavoriteAd;
 import com.huss.android.models.Image;
 import com.huss.android.models.Location;
 import com.huss.android.models.Profile;
+import com.huss.android.models.Report;
 import com.huss.android.models.SingleAd;
 import com.huss.android.models.SubCategory;
 
@@ -27,6 +29,7 @@ import retrofit2.http.Query;
 
 public interface HussAPI {
 
+    /*Categories and subcategories*/
     @GET("category/all/getPopularCategories")
     Call<Category> getPopularCategory(@Header("Authorization") String name);
 
@@ -36,22 +39,6 @@ public interface HussAPI {
     @GET("subCategory/{categoryName}/getAllSubCategories")
     Call<SubCategory> getSubCategory(@Header("Authorization") String name,
                                      @Path("categoryName") String categoryName);
-
-
-    @GET("user/profile/{id}")
-    Call<Profile> getUserProfile(@Header("Authorization") String name,
-                                 @Path("id") String id);
-
-
-    @PUT("user/profile")
-    @FormUrlEncoded
-    Call<Profile> updateUserProfile(@Header("Authorization") String name,
-                                    @Field("profileImgUrl") String imageUrl,
-                                    @Field("firstName") String firstName,
-                                    @Field("lastName") String lastName,
-                                    @Field("phoneNumber") String phone,
-                                    @Field("city") String location);
-
 
     @POST("ad/{categoryName}/{subCategoryName}/create")
     @FormUrlEncoded
@@ -65,6 +52,23 @@ public interface HussAPI {
                      @Header("Authorization") String name);
 
 
+    /*Profile*/
+    @GET("user/profile/{id}")
+    Call<Profile> getUserProfile(@Header("Authorization") String name,
+                                 @Path("id") String id);
+
+    @PUT("user/profile")
+    @FormUrlEncoded
+    Call<Profile> updateUserProfile(@Header("Authorization") String name,
+                                    @Field("profileImgUrl") String imageUrl,
+                                    @Field("firstName") String firstName,
+                                    @Field("lastName") String lastName,
+                                    @Field("phoneNumber") String phone,
+                                    @Field("city") String location);
+
+
+
+    /*Ads*/
     @DELETE("ad/deleteAd/{id}")
     Call<Ads> deleteUserAd(@Header("Authorization") String token,
                            @Path("id") int id);
@@ -88,11 +92,17 @@ public interface HussAPI {
                             @Field("location") String location,
                             @Field("isNegotiable") Boolean isNegotiable);
 
-    @GET("photos")
-    Call<List<Ads>> getSimilarAds(@Query("name") String adsName);
 
-    @GET("photos")
-    Call<List<Ads>> getFavoriteAds(@Query("userId") String userID);
+    @POST("favorite/{adId}/create")
+    Call<AllAds> favorite(@Header("Authorization") String token,
+                          @Path("adId") String adId);
+
+    @GET("favorite/{adId}/deleteFavorite")
+    Call<AllAds> unFavorite(@Header("Authorization") String token,
+                          @Path("adId") String adId);
+
+    @GET("favorite")
+    Call<FavoriteAd> getUserFavoritedAds(@Header("Authorization") String token);
 
     @GET("ad/getAllOwnAds")
     Call<AllAds> getUserAds(@Header("Authorization") String token);
@@ -152,4 +162,17 @@ public interface HussAPI {
                                 @Field("password") String password,
                                 @Field("confirmPassword") String confirmPassword);
 
+
+    @POST("adReport/create")
+    @FormUrlEncoded
+    Call<Report> reportAd(@Header("Authorization") String token,
+                          @Field("productId") int productId,
+                          @Field("userIAD") int userId,
+                          @Field("reason") String reason);
+
+    @POST("adReport/create")
+    @FormUrlEncoded
+    Call<Report> reportUser(@Header("Authorization") String token,
+                          @Field("userIAD") int userId,
+                          @Field("reason") String reason);
 }

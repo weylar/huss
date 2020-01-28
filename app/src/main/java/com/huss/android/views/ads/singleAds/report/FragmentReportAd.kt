@@ -8,15 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.huss.android.R
-import timber.log.Timber
+import com.huss.android.models.Report
+import com.huss.android.utility.Utility.TOKEN
+import com.huss.android.utility.Utility.USER_ID
+import com.huss.android.viewModels.ReportViewModel
+import com.huss.android.views.ads.singleAds.SingleAdsActivity.ID
 
 
-class FragmentReport : DialogFragment(){
+class FragmentReportAd : DialogFragment(){
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_report, container, false)
+        val view = inflater.inflate(R.layout.fragment_report_ad, container, false)
         view.findViewById<TextView>(R.id.learn_more).setOnClickListener{
             val browserIntent = Intent(Intent.ACTION_VIEW)
             browserIntent.data = Uri.parse("https://huss.ng/rule_and_regulations")
@@ -31,14 +37,23 @@ class FragmentReport : DialogFragment(){
                 view.findViewById<RadioButton>(R.id.prepayment).id -> resources.getString(R.string.prepayment)
                 else -> ""
             }
-            val finalReason = "CategoryActivity: $reason \nComment: ${view.findViewById<EditText>(R.id.report_description).text}"
+            val finalReason = "Category: $reason \nComment: ${view.findViewById<EditText>(R.id.report_description).text}"
             if (reason.isEmpty()){
                     Toast.makeText(context, "Select at least one option", Toast.LENGTH_LONG).show()
             }else{
-                /*TODO: Send to db*/
-                Timber.e(finalReason)
-                Toast.makeText(context, "Ad reported, thanks for the feedback", Toast.LENGTH_LONG).show()
-                dismiss()
+                val reportViewModel = ViewModelProviders.of(this.activity!!).get(ReportViewModel::class.java)
+                val reportModel = Report().data
+                reportModel.productId = Integer.parseInt(arguments!![ID].toString())
+                reportModel.userId = Integer.parseInt(arguments!![USER_ID].toString())
+                reportModel.reason = finalReason
+                reportViewModel.init(arguments!![TOKEN].toString(), reportModel)
+                activity?.let { it1 ->
+                    reportViewModel.reportCallBack().observe(it1, Observer<Report>{
+                        Toast.makeText(context, "Ad reported, thanks for the feedback", Toast.LENGTH_LONG).show()
+                        dismiss()
+                    })
+                }
+
             }
         }
         return view

@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
         shimmerFrameLayoutLatest = findViewById(R.id.shimmer_view_container3);
         token = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(TOKEN, "");
         String imageUrl = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(PROFILE_IMAGE_URL, DEFAULT_IMAGE);
+        String username = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(USER_NAME, DEFAULT_IMAGE);
         suggestSearchInput();
         searchBox.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -126,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
         TextView button = view.findViewById(R.id.logout);
         TextView placeholder = view.findViewById(R.id.placeholder);
         if (checkLoggedIn(this)) {
+            textView.setText(username);
             button.setOnClickListener(v -> {
                 drawerLayout.closeDrawer(GravityCompat.START);
                 logout();
@@ -282,21 +284,16 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
             generateCategoryList(val);
             shimmerFrameLayout.setVisibility(View.GONE);
         });
-        /*Get top ads using view model*/
-        adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
-        adsViewModel.initAllAdsByLimit(token);
-        adsViewModel.getAllAdsByLimit().observe(this, ads -> {
-            MainActivity.this.generateTopAdsList(ads);
-            shimmerFrameLayoutTop.setVisibility(View.GONE);
-        });
 
 
         /*Get latest ads using view model*/
         adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
         adsViewModel.initAllAdsByLimit(token);
         adsViewModel.getAllAdsByLimit().observe(this, ads -> {
-            MainActivity.this.generateLatestAdsList(ads);
+            generateLatestAdsList(ads);
+            generateTopAdsList(ads);
             shimmerFrameLayoutLatest.setVisibility(View.GONE);
+            shimmerFrameLayoutTop.setVisibility(View.GONE);
         });
 
 
@@ -318,6 +315,7 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
         RecyclerView.LayoutManager layoutManagerTop = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         topAdsRecyclerView.setLayoutManager(layoutManagerTop);
         topAdsRecyclerView.setAdapter(topAdsAdapter);
+        topAdsAdapter.notifyDataSetChanged();
         if (topAdsAdapter.getItemCount() < 1) {
             topAdLabel.setVisibility(View.GONE);
         }
@@ -330,6 +328,7 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
         RecyclerView.LayoutManager layoutManagerLatestAds = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         latestAdsRecyclerView.setLayoutManager(layoutManagerLatestAds);
         latestAdsRecyclerView.setAdapter(latestAdsAdapter);
+        latestAdsAdapter.notifyDataSetChanged();
 
 
     }

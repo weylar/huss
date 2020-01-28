@@ -21,10 +21,11 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.huss.android.R;
 import com.huss.android.models.SingleAd;
+import com.huss.android.utility.TimeFormat;
 import com.huss.android.utility.Utility;
 import com.huss.android.viewModels.ProfileViewModel;
 import com.huss.android.viewModels.ads.AdsViewModel;
-import com.huss.android.views.ads.singleAds.report.FragmentReport;
+import com.huss.android.views.ads.singleAds.report.FragmentReportAd;
 import com.huss.android.views.message.ChatActivity;
 import com.huss.android.views.profile.ProfileActivity;
 import com.huss.android.views.profile.UserProfileActivity;
@@ -32,6 +33,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,8 +44,10 @@ import static com.huss.android.utility.Utility.PHONE;
 import static com.huss.android.utility.Utility.PRODUCT;
 import static com.huss.android.utility.Utility.PRODUCT_ID;
 import static com.huss.android.utility.Utility.PROFILE_IMAGE_URL;
+import static com.huss.android.utility.Utility.TOKEN;
 import static com.huss.android.utility.Utility.USER_ID;
 import static com.huss.android.utility.Utility.USER_NAME;
+import static com.huss.android.views.home.MainActivity.checkLoggedIn;
 
 public class SingleAdsActivity extends AppCompatActivity {
 
@@ -94,18 +98,21 @@ public class SingleAdsActivity extends AppCompatActivity {
         adsViewModel.initSingleAd(token, id);
         adsViewModel.getSingleAd().observe(this, ads -> {
             generateAds(ads.getData());
+            userId = ads.getData().getUserId().toString();
             productDetails = ads.getData().getTitle() + " (" + ads.getData().getPrice() + ")";
             generateSimilarAds(ads.getData().getSimilarAds());
             shimmerImage.hideShimmer();
             shimmerImage.setVisibility(View.GONE);
             root.setVisibility(View.VISIBLE);
 
+            if (checkLoggedIn(this)) {
+                if (userId.equals(ownerId)) {
+                    makeCall.setVisibility(View.GONE);
+                    message.setVisibility(View.GONE);
+                }
+            }
         });
 
-        if (userId.equals(ownerId)) {
-            makeCall.setVisibility(View.GONE);
-            message.setVisibility(View.GONE);
-        }
 
     }
 
@@ -154,6 +161,7 @@ public class SingleAdsActivity extends AppCompatActivity {
                 lastseen.setText("Status: Online");
                 lastSeen = "Online";
             } else {
+//                String formatTime = TimeFormat.getTimeAgo(profile.getData().getLastSeen())
                 lastSeen = String.format("Last seen, %s", profile.getData().getLastSeen());
                 lastseen.setText(lastSeen);
             }
@@ -167,14 +175,21 @@ public class SingleAdsActivity extends AppCompatActivity {
         });
 
 
+
         report.setOnClickListener(v -> {
             FragmentManager fm = getSupportFragmentManager();
-            FragmentReport reportFrag = new FragmentReport();
+            FragmentReportAd reportFrag = new FragmentReportAd();
+            Bundle bundle = new Bundle();
+            bundle.putString(TOKEN, token);
+            bundle.putString(ID, id);
+            bundle.putString(USER_ID, userId);
+            reportFrag.setArguments(bundle);
             reportFrag.show(fm, "report_fragment");
         });
 
 
     }
+
 
     private void generateSimilarAds(List<SingleAd.SimilarAd> ads) {
         if (ads.size() < 1) {

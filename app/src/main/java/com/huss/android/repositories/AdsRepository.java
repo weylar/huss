@@ -6,6 +6,7 @@ import com.huss.android.data.HussAPI;
 import com.huss.android.data.RetrofitClientInstance;
 import com.huss.android.models.Ads;
 import com.huss.android.models.AllAds;
+import com.huss.android.models.FavoriteAd;
 import com.huss.android.models.SingleAd;
 
 import org.jetbrains.annotations.NotNull;
@@ -139,25 +140,66 @@ public class AdsRepository {
         return adsData;
     }
 
-    public MutableLiveData<List<Ads>> getFavoriteAds(String userId) {
-        final MutableLiveData<List<Ads>> adsData = new MutableLiveData<>();
+    public MutableLiveData<FavoriteAd> getUserFavorite(String token) {
+        final MutableLiveData<FavoriteAd> adsData = new MutableLiveData<>();
         HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
-        Call<List<Ads>> call = retrofit.getFavoriteAds(userId);
-        call.enqueue(new Callback<List<Ads>>() {
+        Call<FavoriteAd> call = retrofit.getUserFavoritedAds(BEARER + " " + token);
+        call.enqueue(new Callback<FavoriteAd>() {
             @Override
-            public void onResponse(Call<List<Ads>> call, Response<List<Ads>> response) {
+            public void onResponse(@NotNull Call<FavoriteAd> call, @NotNull Response<FavoriteAd> response) {
                 if (response.isSuccessful()) {
-                    Timber.e("onResponseFav: SUCCESS");
+                    Timber.e("Success");
                     adsData.setValue(response.body());
+
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Ads>> call, Throwable t) {
-                Timber.e("%sFav Failed", t.getMessage());
+            public void onFailure(@NotNull Call<FavoriteAd> call, @NotNull Throwable t) {
+                Timber.e("%sFailed", t.getMessage());
+
             }
         });
         return adsData;
+    }
+
+    public void favoriteAds(String token, String adId) {
+        HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
+        Call<AllAds> call = retrofit.favorite(BEARER + " " +token, adId);
+        call.enqueue(new Callback<AllAds>() {
+            @Override
+            public void onResponse(@NotNull Call<AllAds> call, @NotNull Response<AllAds> response) {
+                if (response.isSuccessful()) {
+                    Timber.e("onResponseFav: SUCCESS");
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<AllAds> call, @NotNull Throwable t) {
+                Timber.e("%sFav Failed", t.getMessage());
+            }
+        });
+
+    }
+    public void unFavoriteAds(String token, String adId) {
+        HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
+        Call<AllAds> call = retrofit.unFavorite(BEARER + " " + token, adId);
+        call.enqueue(new Callback<AllAds>() {
+            @Override
+            public void onResponse(@NotNull Call<AllAds> call, @NotNull Response<AllAds> response) {
+                if (response.isSuccessful()) {
+                    Timber.e("onResponseFav: SUCCESS");
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<AllAds> call, @NotNull Throwable t) {
+                Timber.e("%sFav Failed", t.getMessage());
+            }
+        });
+
     }
 
     public MutableLiveData<SingleAd> getSingleAds(String token, String id) {
@@ -226,27 +268,7 @@ public class AdsRepository {
         return adsData;
     }
 
-    public MutableLiveData<List<Ads>> getSimilarAds(String name) {
-        final MutableLiveData<List<Ads>> adsData = new MutableLiveData<>();
-        HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
-        Call<List<Ads>> call = retrofit.getSimilarAds(name);
-        call.enqueue(new Callback<List<Ads>>() {
-            @Override
-            public void onResponse(Call<List<Ads>> call, Response<List<Ads>> response) {
-                if (response.isSuccessful()) {
-                    Timber.e("onResponse: SUCCESS");
-                    adsData.setValue(response.body());
-                }
-            }
 
-            @Override
-            public void onFailure(Call<List<Ads>> call, Throwable t) {
-                Timber.e("%sFailed", t.getMessage());
-                // adsData.setValue(null);
-            }
-        });
-        return adsData;
-    }
 
     public MutableLiveData<Ads> createAd(Ads.Data ad, String token) {
         final MutableLiveData<Ads> adsData = new MutableLiveData<>();

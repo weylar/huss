@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         app:cardBackgroundColor="@color/colorAccent"
         app:cardElevation="2dp"
         app:contentPadding="10dp"
@@ -58,8 +58,8 @@
 
             <ImageView
                 android:id="@+id/menu"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_toStartOf="@id/close"
                 android:src="@drawable/ic_more_horiz_white"
                 android:layout_marginEnd="8dp"
@@ -68,8 +68,8 @@
 
             <ImageView
                 android:id="@+id/close"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/ic_close_white"
                 android:layout_centerVertical="true"
@@ -116,7 +116,8 @@
         android:layout_margin="16dp"
         android:hint="@string/type_your_message"
         android:background="@drawable/custom_edittext_sign_in"
-        android:padding="16dp"
+        android:padding="12dp"
+        android:imeOptions="actionSend"
         android:inputType="textCapSentences"
         android:autofillHints="text"
         android:drawableEnd="@drawable/small_send_message"

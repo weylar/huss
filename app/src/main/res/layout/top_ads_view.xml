@@ -80,14 +80,13 @@
 
             <com.varunest.sparkbutton.SparkButton
                 android:id="@+id/favorite"
-                android:layout_width="45dp"
+                android:layout_width="20dp"
                 android:layout_height="45dp"
                 android:layout_alignParentEnd="true"
-                android:layout_margin="0dp"
                 android:contentDescription="@string/favorite"
                 app:sparkbutton_activeImage="@drawable/favorite_yes"
                 app:sparkbutton_animationSpeed="1.5"
-                app:sparkbutton_iconSize="25dp"
+                app:sparkbutton_iconSize="20dp"
                 app:sparkbutton_inActiveImage="@drawable/favorite_no"
                 app:sparkbutton_primaryColor="@color/colorAccent"
                 app:sparkbutton_secondaryColor="@color/colorAccent" />
