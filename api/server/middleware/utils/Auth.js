@@ -15,6 +15,8 @@ class Auth {
         req.isAdmin = decoded.isAdmin;
 
         return next();
+      } else {
+        req.userId = null;
       }
     } catch (e) {
       return res.status(401).send({
