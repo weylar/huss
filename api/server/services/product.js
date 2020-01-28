@@ -121,7 +121,7 @@ class AdService {
       const foundAd = await db.Product.findOne({ where: {id: oldAd.id}, attributes: { exclude: 'name' }});
       const adImages = await db.Image.findAll({ where: {productId: oldAd.id } });
       const favorites = await db.Favorite.findAll({ where: { productId: oldAd.id, userId: req.userId }});
-      let isFavorited;
+      let isFavorite;
       if (favorites.length > 0) {
         isFavorite = true;
       } else {
@@ -147,7 +147,7 @@ class AdService {
         createdAt: foundAd.createdAt,
         adImages,
         similarAds,
-        isFavorited
+        isFavorite
       },
       message: 'Ad sucessfully retrieved'
     };
@@ -162,11 +162,11 @@ class AdService {
     const adImages = await db.Image.findAll({ where: {productId: req.params.adId } });
 
     const favorites = await db.Favorite.findAll({ where: { productId: req.params.adId, userId: req.userId }});
-    let isFavorited;
+    let isFavorite;
       if (favorites.length > 0) {
-        isFavorited = true;
+        isFavorite = true;
       } else {
-        isFavorited = false;
+        isFavorite = false;
       }
 
     if (foundAd) {
@@ -188,7 +188,7 @@ class AdService {
           location: foundAd.location,
           createdAt: foundAd.createdAt,
           adImages,
-          isFavorited
+          isFavorite
         },
         message: 'Ad sucessfully retrieved'
       };
