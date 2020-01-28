@@ -81,7 +81,7 @@ class AdService {
       attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });
 
-    if(!req.headers.authorization) {
+    if(!req.userId) {
       return {
         status: 'success',
         statusCode: 200,
@@ -207,7 +207,7 @@ class AdService {
       order: [['id', 'DESC']], attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });
 
-    if (!req.headers.authorization) {
+    if (!req.userId) {
       return {
         status: 'success',
         statusCode: 200,
@@ -247,7 +247,7 @@ class AdService {
       order: [['id', 'DESC']], attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });
 
-    if (!req.headers.authorization) {
+    if (!req.userId) {
       return {
         status: 'success',
         statusCode: 200,
@@ -290,7 +290,7 @@ class AdService {
       attributes: { exclude: 'name' }, include: [{ model: db.Image }]
     });
 
-    if (!req.headers.authorization) {
+    if (!req.userId) {
       return {
         status: 'success',
         statusCode: 200,
