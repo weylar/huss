@@ -8,11 +8,11 @@ const { getUser } = Auth;
 const favoriteRouter = Router();
 
 favoriteRouter.post('/:adId/create', getUser, createFavorite);
-favoriteRouter.get('/:favoriteId', getUser, getAFavorite);
+favoriteRouter.get('/:adId', getUser, getAFavorite);
 favoriteRouter.get('/', getUser, getAllFavorites);
 favoriteRouter.get('/getAllFavoritesByLimit/:limit', getUser, getAllFavoritesByLimit);
 favoriteRouter.get('/paginateAllFavorites/:offset/:limit', getUser, paginateAllFavorites);
 favoriteRouter.get('/:adId/adFavorites', getUser, getAllAdFavorites);
-favoriteRouter.get('/:favoriteId/deleteFavorite', getUser, deleteFavorite);
+favoriteRouter.get('/:adId/deleteFavorite', getUser, deleteFavorite);
 
 export default favoriteRouter;

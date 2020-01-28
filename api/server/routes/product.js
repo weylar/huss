@@ -12,7 +12,7 @@ const { getUser } = Auth;
 const adRouter = Router();
 
 adRouter.post('/:categoryName/:subCategoryName/create', getUser, adCheck, createAd);
-adRouter.get('/getAd/:adId', getUser, getAd);
+adRouter.get('/getAd/:adId', getAd);
 adRouter.get('/getOwnAd/:adId', getUser, getOwnAd);
 adRouter.get('/getAllAds', getAllAds);
 adRouter.get('/getAllUserAds/:userId', getAllUserAds);

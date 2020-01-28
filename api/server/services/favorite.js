@@ -36,7 +36,7 @@ class FavoriteService {
   }
 
   static async getAFavorite(req) {
-    const favorite = await db.Favorite.findOne({ where: { id: req.params.favoriteId } });
+    const favorite = await db.Favorite.findOne({ where: { productId: req.params.adId, userId: req.userId } });
 
     if(!favorite) {
       return {
@@ -127,7 +127,7 @@ class FavoriteService {
 
   static async deleteFavorite(req) {
     const deletedFavorite = await db.Favorite.destroy(
-      { where: { userId: req.userId, id: req.params.favoriteId } }
+      { where: { userId: req.userId, productId: req.params.adId } }
     );
 
     if(!deletedFavorite) {
