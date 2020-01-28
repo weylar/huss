@@ -12,12 +12,12 @@ const { getUser } = Auth;
 const adRouter = Router();
 
 adRouter.post('/:categoryName/:subCategoryName/create', getUser, adCheck, createAd);
-adRouter.get('/getAd/:adId', getAd);
+adRouter.get('/getAd/:adId', getUser, getAd);
 adRouter.get('/getOwnAd/:adId', getUser, getOwnAd);
-adRouter.get('/getAllAds', getAllAds);
-adRouter.get('/getAllUserAds/:userId', getAllUserAds);
+adRouter.get('/getAllAds', getUser, getAllAds);
+adRouter.get('/getAllUserAds/:userId', getUser, getAllUserAds);
 adRouter.get('/getAllOwnAds', getUser, getAllOwnAds);
-adRouter.get('/getAllAdsByLimit', getAllAdsByLimit);
+adRouter.get('/getAllAdsByLimit', getUser, getAllAdsByLimit);
 adRouter.get('/getAllOwnAdsByLimit/:limit', getUser, getAllOwnAdsByLimit);
 adRouter.get('/paginateAds/:offset/:limit', getUser, paginateAds);
 adRouter.get('/paginateOwnAds/:offset/:limit', getUser, paginateOwnAds);
