@@ -88,7 +88,7 @@ class AdService {
       return {
         status: 'success',
         statusCode: 200,
-        data: {oldAd, adImages, similarAds: result},
+        data: {...oldAd, adImages, similarAds: result},
         message: 'Ad sucessfully retrieved'
       };
     }
