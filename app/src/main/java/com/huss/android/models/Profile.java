@@ -10,8 +10,6 @@ public class Profile {
     private Data data;
 
 
-    private Profile value;
-
     public String getStatus() {
         return status;
     }

@@ -31,10 +31,10 @@ public class AdsRepository {
         return adsRepository;
     }
 
-    public MutableLiveData<AllAds> getAllAdsByLimit(String token) {
+    public MutableLiveData<AllAds> getAllAdsByLimit() {
         final MutableLiveData<AllAds> adsData = new MutableLiveData<>();
         HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
-        Call<AllAds> call = retrofit.getAllAdsByLimit(BEARER + " " + token);
+        Call<AllAds> call = retrofit.getAllAdsByLimit();
         call.enqueue(new Callback<AllAds>() {
             @Override
             public void onResponse(@NotNull Call<AllAds> call, @NotNull Response<AllAds> response) {
@@ -52,10 +52,10 @@ public class AdsRepository {
         return adsData;
     }
 
-    public MutableLiveData<AllAds> getAllAds(String token) {
+    public MutableLiveData<AllAds> getAllAds() {
         final MutableLiveData<AllAds> adsData = new MutableLiveData<>();
         HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
-        Call<AllAds> call = retrofit.getAllAds(BEARER + " " + token);
+        Call<AllAds> call = retrofit.getAllAds();
         call.enqueue(new Callback<AllAds>() {
             @Override
             public void onResponse(@NotNull Call<AllAds> call, @NotNull Response<AllAds> response) {
@@ -205,12 +205,11 @@ public class AdsRepository {
     public MutableLiveData<SingleAd> getSingleAds(String token, String id) {
         final MutableLiveData<SingleAd> adsData = new MutableLiveData<>();
         HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
-        Call<SingleAd> call = retrofit.getSingleAds(BEARER + " " + token, id);
+        Call<SingleAd> call = retrofit.getSingleAds(BEARER + " " +token, id);
         call.enqueue(new Callback<SingleAd>() {
             @Override
             public void onResponse(@NotNull Call<SingleAd> call, @NotNull Response<SingleAd> response) {
                 if (response.isSuccessful()) {
-                    Timber.e("onResponse: SINGLE SUCCESS");
                     adsData.setValue(response.body());
                 }
             }
@@ -267,8 +266,6 @@ public class AdsRepository {
         });
         return adsData;
     }
-
-
 
     public MutableLiveData<Ads> createAd(Ads.Data ad, String token) {
         final MutableLiveData<Ads> adsData = new MutableLiveData<>();

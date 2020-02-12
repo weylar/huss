@@ -67,7 +67,6 @@ public interface HussAPI {
                                     @Field("city") String location);
 
 
-
     /*Ads*/
     @DELETE("ad/deleteAd/{id}")
     Call<Ads> deleteUserAd(@Header("Authorization") String token,
@@ -99,7 +98,7 @@ public interface HussAPI {
 
     @GET("favorite/{adId}/deleteFavorite")
     Call<AllAds> unFavorite(@Header("Authorization") String token,
-                          @Path("adId") String adId);
+                            @Path("adId") String adId);
 
     @GET("favorite")
     Call<FavoriteAd> getUserFavoritedAds(@Header("Authorization") String token);
@@ -112,10 +111,10 @@ public interface HussAPI {
                                 @Path("userId") String id);
 
     @GET("ad/getAllAdsByLimit")
-    Call<AllAds> getAllAdsByLimit(@Header("Authorization") String token);
+    Call<AllAds> getAllAdsByLimit();
 
     @GET("ad/getAllAds")
-    Call<AllAds> getAllAds(@Header("Authorization") String token);
+    Call<AllAds> getAllAds();
 
     @PUT("auth/updateOnlineStatus")
     @FormUrlEncoded
@@ -173,6 +172,6 @@ public interface HussAPI {
     @POST("adReport/create")
     @FormUrlEncoded
     Call<Report> reportUser(@Header("Authorization") String token,
-                          @Field("userIAD") int userId,
-                          @Field("reason") String reason);
+                            @Field("userIAD") int userId,
+                            @Field("reason") String reason);
 }

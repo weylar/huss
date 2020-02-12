@@ -12,17 +12,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.huss.android.R;
 import com.huss.android.models.SingleAd;
 import com.huss.android.utility.TimeFormat;
 import com.huss.android.utility.Utility;
+import com.huss.android.viewModels.FavoriteViewModel;
 import com.huss.android.viewModels.ProfileViewModel;
 import com.huss.android.viewModels.ads.AdsViewModel;
 import com.huss.android.views.ads.singleAds.report.FragmentReportAd;
@@ -30,6 +33,8 @@ import com.huss.android.views.message.ChatActivity;
 import com.huss.android.views.profile.ProfileActivity;
 import com.huss.android.views.profile.UserProfileActivity;
 import com.squareup.picasso.Picasso;
+import com.varunest.sparkbutton.SparkButton;
+import com.varunest.sparkbutton.SparkEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,6 +43,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import timber.log.Timber;
 
 import static com.huss.android.utility.Utility.LAST_SEEN;
 import static com.huss.android.utility.Utility.PHONE;
@@ -54,6 +60,7 @@ public class SingleAdsActivity extends AppCompatActivity {
     public static final String ID = "AdsId";
     public static final String NAME = "Name";
     ViewPager viewPager;
+    SparkButton sparkButton;
     RecyclerView similarAdsRecycler;
     Pager pager;
     AdsViewModel adsViewModel;
@@ -88,6 +95,7 @@ public class SingleAdsActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPagerAds);
         root = findViewById(R.id.root);
         root.setVisibility(View.GONE);
+        sparkButton = findViewById(R.id.favorite);
         similarAdsRecycler = findViewById(R.id.similarAdsRecycler);
         id = getIntent().getStringExtra(ID);
         token = getSharedPreferences(Utility.MY_PREFERENCES, MODE_PRIVATE).getString(Utility.TOKEN, "");
@@ -95,9 +103,9 @@ public class SingleAdsActivity extends AppCompatActivity {
         name = getIntent().getStringExtra(NAME);
         similarLabel = findViewById(R.id.similar_label);
         adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
-        adsViewModel.initSingleAd(token, id);
-        adsViewModel.getSingleAd().observe(this, ads -> {
+        adsViewModel.getSingleAd(token, id).observe(this, ads -> {
             generateAds(ads.getData());
+            favorite(ads.getData().getFavorite());
             userId = ads.getData().getUserId().toString();
             productDetails = ads.getData().getTitle() + " (" + ads.getData().getPrice() + ")";
             generateSimilarAds(ads.getData().getSimilarAds());
@@ -110,14 +118,46 @@ public class SingleAdsActivity extends AppCompatActivity {
                     makeCall.setVisibility(View.GONE);
                     message.setVisibility(View.GONE);
                 }
+            }else{
+                sparkButton.setVisibility(View.GONE);
             }
         });
+
+
 
 
     }
 
     public void goBack(View view) {
         finish();
+    }
+
+    private void favorite(boolean isFavorite){
+
+        FavoriteViewModel favoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
+        sparkButton.setChecked(isFavorite);
+        sparkButton.setEventListener(new SparkEventListener() {
+            @Override
+            public void onEvent(ImageView button, boolean buttonState) {
+                if (buttonState){
+                favoriteViewModel.favoriteAd(token, id);
+                }else{
+                    favoriteViewModel.unFavoriteAd(token, id);
+                }
+
+            }
+
+            @Override
+            public void onEventAnimationEnd(ImageView button, boolean buttonState) {
+
+            }
+
+            @Override
+            public void onEventAnimationStart(ImageView button, boolean buttonState) {
+
+            }
+        });
+
     }
 
 
@@ -152,13 +192,39 @@ public class SingleAdsActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager, true);
         dateAndTime.setText(String.format("%s | %s", ads.getLocation(), formatDate(ads.getCreatedAt())));
         userId = ads.getUserId().toString();
+        getPosterInfo(circleImageView, username, lastseen, registered, phone);
+
+
+        report.setOnClickListener(v -> {
+            if (checkLoggedIn(this)) {
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentReportAd reportFrag = new FragmentReportAd();
+                Bundle bundle = new Bundle();
+                bundle.putString(TOKEN, token);
+                bundle.putString(ID, id);
+                bundle.putString(USER_ID, userId);
+                reportFrag.setArguments(bundle);
+                reportFrag.show(fm, "report_fragment");
+            }else{
+                loginWarning(v);
+            }
+        });
+
+
+    }
+
+    private void loginWarning(View v) {
+        Snackbar.make(v, "You must login to perform this action!", Snackbar.LENGTH_LONG).show();
+    }
+
+    private void getPosterInfo(CircleImageView circleImageView, TextView username, TextView lastseen, TextView registered, ImageView phone) {
         ProfileViewModel profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
         profileViewModel.init(token, userId);
         profileViewModel.getProfile().observe(this, profile -> {
             userName = String.format("%s %s", profile.getData().getFirstName(), profile.getData().getLastName());
             username.setText(userName);
             if (profile.getData().isOnline()) {
-                lastseen.setText("Status: Online");
+                lastseen.setText(R.string.online_status);
                 lastSeen = "Online";
             } else {
 //                String formatTime = TimeFormat.getTimeAgo(profile.getData().getLastSeen())
@@ -173,21 +239,6 @@ public class SingleAdsActivity extends AppCompatActivity {
             builder.build().load(profileImageUrl)
                     .into(circleImageView);
         });
-
-
-
-        report.setOnClickListener(v -> {
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentReportAd reportFrag = new FragmentReportAd();
-            Bundle bundle = new Bundle();
-            bundle.putString(TOKEN, token);
-            bundle.putString(ID, id);
-            bundle.putString(USER_ID, userId);
-            reportFrag.setArguments(bundle);
-            reportFrag.show(fm, "report_fragment");
-        });
-
-
     }
 
 
@@ -206,30 +257,36 @@ public class SingleAdsActivity extends AppCompatActivity {
 
 
     public void text(View view) {
-        if (!userId.equals(ownerId)) {
-            Intent intent = new Intent(this, ChatActivity.class);
-            intent.putExtra(PRODUCT, productDetails);
-            intent.putExtra(PRODUCT_ID, id);
-            intent.putExtra(USER_NAME, userName);
-            intent.putExtra(USER_ID, userId);
-            intent.putExtra(LAST_SEEN, lastSeen);
-            intent.putExtra(PROFILE_IMAGE_URL, profileImageUrl);
-            startActivity(intent);
+        if (checkLoggedIn(this)) {
+            if (!userId.equals(ownerId)) {
+                Intent intent = new Intent(this, ChatActivity.class);
+                intent.putExtra(PRODUCT, productDetails);
+                intent.putExtra(PRODUCT_ID, id);
+                intent.putExtra(USER_NAME, userName);
+                intent.putExtra(USER_ID, userId);
+                intent.putExtra(LAST_SEEN, lastSeen);
+                intent.putExtra(PROFILE_IMAGE_URL, profileImageUrl);
+                startActivity(intent);
+            }
+        }else{
+            loginWarning(view);
         }
     }
 
     public void makeCall(View view) {
-        Intent i = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber));
-        try {
-            startActivity(i);
-        } catch (SecurityException s) {
-            Toast.makeText(this, s.getMessage(), Toast.LENGTH_LONG).show();
+        if (checkLoggedIn(this)) {
+            Intent i = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber));
+            try {
+                startActivity(i);
+            } catch (SecurityException s) {
+                Toast.makeText(this, s.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }else{
+            loginWarning(view);
         }
     }
 
-    public void favoriteAds(View view) {
 
-    }
 
     private String formatPrice(String price) {
         String value = Integer.parseInt(price) > 1000000000 ? "\u20A6" + (Float.parseFloat(price) / 1000000000) + "B" :

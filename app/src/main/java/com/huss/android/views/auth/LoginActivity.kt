@@ -121,6 +121,7 @@ class LoginActivity : AppCompatActivity(), NetworkReceiverUtil.ConnectivityRecei
                 }
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.putExtra(FROM, LoginActivity::class.java.simpleName)
                 startActivity(intent)
                 this.finish()
             }else{

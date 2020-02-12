@@ -135,6 +135,7 @@
     <string name="reset_password_short_note">Input your new password</string>
     <string name="offensive">Sending threathening or offensive messages</string>
     <string name="meet">Can\'t provide office or refuses to meet</string>
+    <string name="online_status">Status: Online</string>
 
 
 </resources>

@@ -87,8 +87,7 @@ class CreateAdsActivity : AppCompatActivity(), BottomNavPay.PayState, NetworkRec
         if (intent.extras != null) {
             val id = intent.extras?.get(ID).toString()
             val viewModel = ViewModelProviders.of(this).get(AdsViewModel::class.java)
-            viewModel.initSingleAd(token, id)
-            viewModel.singleAd.observe(this, Observer {
+            viewModel.getSingleAd(token, id).observe(this, Observer {
                 adTitle.setText(it.data.title)
                 adDescription.setText(it.data.description)
                 adLocation.setText(it.data.location)

@@ -26,15 +26,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.huss.android.R;
 import com.huss.android.models.AllAds;
 import com.huss.android.models.Category;
 import com.huss.android.utility.NetworkReceiverUtil;
+import com.huss.android.viewModels.ProfileViewModel;
 import com.huss.android.viewModels.ads.AdsViewModel;
 import com.huss.android.viewModels.category.CategoryViewModel;
-import com.huss.android.viewModels.ProfileViewModel;
 import com.huss.android.views.ads.createAds.CreateAdsActivity;
 import com.huss.android.views.ads.latestAds.LatestAdsActivity;
 import com.huss.android.views.auth.LoginActivity;
@@ -51,7 +50,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import timber.log.Timber;
 
 import static com.huss.android.utility.Utility.DEFAULT_IMAGE;
 import static com.huss.android.utility.Utility.FROM;
@@ -63,6 +61,11 @@ import static com.huss.android.utility.Utility.USER_NAME;
 import static com.huss.android.views.ads.singleAds.SingleAdsActivity.NAME;
 
 public class MainActivity extends AppCompatActivity implements NetworkReceiverUtil.ConnectivityReceiverListener {
+    NetworkReceiverUtil networkReceiverUtil;
+    Snackbar snackbar;
+    TextView placeholderSmall;
+    CircleImageView profileImage;
+    String imageUrl, username;
     private AdsViewModel adsViewModel;
     private TextView topAdLabel;
     private AutoCompleteTextView searchBox;
@@ -70,35 +73,43 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
     private String token;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    NetworkReceiverUtil networkReceiverUtil;
-    Snackbar snackbar;
+    FloatingActionButton fab;
 
+    public static boolean checkLoggedIn(Context context) {
+        return !context.getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(TOKEN, "").equals("");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         topAdLabel = findViewById(R.id.top_ad_title);
         searchBox = findViewById(R.id.searchbox);
-        TextView placeholderSmall = findViewById(R.id.placeholder);
-        CircleImageView profileImage = findViewById(R.id.profileImage);
+        placeholderSmall = findViewById(R.id.placeholder);
+        profileImage = findViewById(R.id.profileImage);
         shimmerFrameLayoutTop = findViewById(R.id.shimmer_view_container2);
         shimmerFrameLayout = findViewById(R.id.shimmer_view_container);
         shimmerFrameLayoutLatest = findViewById(R.id.shimmer_view_container3);
         token = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(TOKEN, "");
-        String imageUrl = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(PROFILE_IMAGE_URL, DEFAULT_IMAGE);
-        String username = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(USER_NAME, DEFAULT_IMAGE);
+        imageUrl = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(PROFILE_IMAGE_URL, DEFAULT_IMAGE);
+        username = getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(USER_NAME, DEFAULT_IMAGE);
         suggestSearchInput();
-        searchBox.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                Intent intent = new Intent(this, LatestAdsActivity.class);
-                intent.putExtra(KEY, searchBox.getText().toString());
-                startActivity(intent);
-                return true;
-            }
-            return false;
-        });
+        fireSearch();
+        fireCreateAd();
+        drawerLayout = findViewById(R.id.activity_main);
+        Toolbar toolbar = findViewById(R.id.homeToolBar);
+        setSupportActionBar(toolbar);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        networkReceiverUtil = new NetworkReceiverUtil();
+        registerReceiver(networkReceiverUtil, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        onLoad();
+
+    }
+
+    private void fireCreateAd() {
         fab.setOnClickListener(v -> {
             if (checkLoggedIn(this)) {
                 startActivity(new Intent(this, CreateAdsActivity.class));
@@ -108,12 +119,24 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
 
 
         });
-        drawerLayout = findViewById(R.id.activity_main);
-        Toolbar toolbar = findViewById(R.id.homeToolBar);
-        setSupportActionBar(toolbar);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
+    }
+
+    private void fireSearch() {
+        searchBox.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                Intent intent = new Intent(this, LatestAdsActivity.class);
+                intent.putExtra(KEY, searchBox.getText().toString());
+                startActivity(intent);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NetworkReceiverUtil.Companion.setConnectivityReceiverListener(this);
         NavigationView navigationView = findViewById(R.id.nv);
         View view = navigationView.getHeaderView(0);
         ImageView imageView = view.findViewById(R.id.profile_img);
@@ -133,6 +156,10 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
                 logout();
 
             });
+            button.setText(getResources().getString(R.string.logout));
+            navigationView.getMenu().getItem(1).setVisible(true);
+            navigationView.getMenu().getItem(2).setVisible(true);
+            navigationView.getMenu().getItem(3).setVisible(true);
         } else {
             button.setOnClickListener(v -> {
                 drawerLayout.closeDrawer(GravityCompat.START);
@@ -183,20 +210,8 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
             return true;
 
         });
-        onLoad();
         updateOnlineStatus(true);
 
-        networkReceiverUtil = new NetworkReceiverUtil();
-        registerReceiver(networkReceiverUtil, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-
-
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        NetworkReceiverUtil.Companion.setConnectivityReceiverListener(this);
     }
 
     private void updateOnlineStatus(boolean isOnline) {
@@ -206,11 +221,10 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
         });
     }
 
-
     private void suggestSearchInput() {
         ArrayList<String> suggestions = new ArrayList<>();
         adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
-        adsViewModel.initAllAds(token);
+        adsViewModel.initAllAds();
         adsViewModel.getAllAds().observe(this, ads -> {
             for (AllAds.Data ad : ads.getData()) {
                 suggestions.add(ad.getTitle());
@@ -221,11 +235,6 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
         });
 
 
-
-    }
-
-    public static boolean checkLoggedIn(Context context) {
-        return !context.getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(TOKEN, "").equals("");
     }
 
     private void forceLogin(String from) {
@@ -236,21 +245,21 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
 
     public void loadProfileImage(View imageview, TextView placeholder, String url) {
         if (url.equals(DEFAULT_IMAGE)) {
-            if (checkLoggedIn(this)){
+            if (checkLoggedIn(this)) {
                 placeholder.setVisibility(View.VISIBLE);
                 imageview.setVisibility(View.GONE);
                 placeholder.setText(String.format("%s", getSharedPreferences(MY_PREFERENCES, MODE_PRIVATE).getString(USER_NAME, "").charAt(0)));
-            }else{
+            } else {
                 placeholder.setVisibility(View.VISIBLE);
                 imageview.setVisibility(View.GONE);
                 placeholder.setText(String.format("%s", "H"));
             }
 
         } else {
-                imageview.setVisibility(View.VISIBLE);
-                Picasso.Builder builder = new Picasso.Builder(this);
-                builder.build().load(url)
-                        .into((ImageView) imageview);
+            imageview.setVisibility(View.VISIBLE);
+            Picasso.Builder builder = new Picasso.Builder(this);
+            builder.build().load(url)
+                    .into((ImageView) imageview);
 
         }
     }
@@ -276,7 +285,6 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
     }
 
     protected void onLoad() {
-
         /*Get all categories using view model*/
         CategoryViewModel categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
         categoryViewModel.init(token);
@@ -288,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
 
         /*Get latest ads using view model*/
         adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
-        adsViewModel.initAllAdsByLimit(token);
+        adsViewModel.initAllAdsByLimit();
         adsViewModel.getAllAdsByLimit().observe(this, ads -> {
             generateLatestAdsList(ads);
             generateTopAdsList(ads);
@@ -311,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
 
     private void generateTopAdsList(AllAds ads) {
         RecyclerView topAdsRecyclerView = findViewById(R.id.recycler_top_ads);
-        TopAdsAdapter topAdsAdapter = new TopAdsAdapter(this, ads);
+        HomeAdsAdapter topAdsAdapter = new HomeAdsAdapter(this, ads);
         RecyclerView.LayoutManager layoutManagerTop = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         topAdsRecyclerView.setLayoutManager(layoutManagerTop);
         topAdsRecyclerView.setAdapter(topAdsAdapter);
@@ -324,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
 
     private void generateLatestAdsList(AllAds ads) {
         RecyclerView latestAdsRecyclerView = findViewById(R.id.recycler_latest_ads);
-        LatestAdsAdapter latestAdsAdapter = new LatestAdsAdapter(this, ads);
+        HomeAdsAdapter latestAdsAdapter = new HomeAdsAdapter(this, ads);
         RecyclerView.LayoutManager layoutManagerLatestAds = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         latestAdsRecyclerView.setLayoutManager(layoutManagerLatestAds);
         latestAdsRecyclerView.setAdapter(latestAdsAdapter);
@@ -334,9 +342,9 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
     }
 
     public void openProfile(View view) {
-        if (checkLoggedIn(this)){
+        if (checkLoggedIn(this)) {
             startActivity(new Intent(this, ProfileActivity.class));
-        }else{
+        } else {
             forceLogin(ProfileActivity.class.getSimpleName());
         }
 
@@ -356,13 +364,13 @@ public class MainActivity extends AppCompatActivity implements NetworkReceiverUt
 
     @Override
     public void onNetworkConnectionChanged(boolean isConnected) {
-        if (!isConnected){
-             snackbar = Snackbar.make(topAdLabel, "No internet connection", Snackbar.LENGTH_INDEFINITE);
+        if (!isConnected) {
+            snackbar = Snackbar.make(topAdLabel, "No internet connection", Snackbar.LENGTH_INDEFINITE);
             snackbar.show();
-        }else{
-           if (snackbar != null) {
-               snackbar.dismiss();
-           }
+        } else {
+            if (snackbar != null) {
+                snackbar.dismiss();
+            }
         }
     }
 }

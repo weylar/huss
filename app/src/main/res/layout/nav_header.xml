@@ -55,6 +55,7 @@
         android:background="@drawable/radial_accent_bg"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
+        android:padding="4dp"
         android:text="@string/logout"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary" />

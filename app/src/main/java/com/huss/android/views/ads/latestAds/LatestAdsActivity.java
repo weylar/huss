@@ -56,7 +56,7 @@ public class LatestAdsActivity extends AppCompatActivity {
             String key =  Objects.requireNonNull(getIntent().getStringExtra(KEY));
             pageTitle.setText(String.format("Search results for %s", key));
             adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
-            adsViewModel.initAllAds(token);
+            adsViewModel.initAllAds();
             adsViewModel.getAllAds().observe(this, ads -> {
                 List<AllAds.Data> searchedResult = new ArrayList<>();
                 for (AllAds.Data ad : ads.getData()){
@@ -74,7 +74,7 @@ public class LatestAdsActivity extends AppCompatActivity {
             if (getIntent().getStringExtra(CATEGORY) == null){
                 pageTitle.setText(getIntent().getStringExtra(NAME));
                 adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
-                adsViewModel.initAllAds(token);
+                adsViewModel.initAllAds();
                 adsViewModel.getAllAds().observe(this, ads -> {
                     generateLatestAdsList(ads.getData());
                     shimmerFrameLayout.hideShimmer();
@@ -84,7 +84,7 @@ public class LatestAdsActivity extends AppCompatActivity {
             }else {
                 pageTitle.setText(String.format("%s >> %s", getIntent().getStringExtra(CATEGORY), getIntent().getStringExtra(NAME)));
                 adsViewModel = ViewModelProviders.of(this).get(AdsViewModel.class);
-                adsViewModel.initAllAds(token);
+                adsViewModel.initAllAds();
                 adsViewModel.getAllAds().observe(this, ads -> {
                     List<AllAds.Data> filtered = new ArrayList<>();
                     for (AllAds.Data ad : ads.getData()){

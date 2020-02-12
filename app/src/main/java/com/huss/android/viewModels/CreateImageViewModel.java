@@ -4,9 +4,6 @@ package com.huss.android.viewModels;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import com.huss.android.models.Ad;
-import com.huss.android.models.AdImage;
 import com.huss.android.models.Image;
 import com.huss.android.repositories.CreateImageRepository;
 

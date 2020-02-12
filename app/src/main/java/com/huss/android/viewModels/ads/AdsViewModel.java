@@ -13,11 +13,11 @@ public class AdsViewModel extends ViewModel {
     private MutableLiveData<AllAds> mutableLiveDataAllAdsByLimit;
     private MutableLiveData<AllAds> mutableLiveDataAllAds;
     private MutableLiveData<SingleAd> mutableLiveDataSingle;
-    private AdsRepository adsRepository;
+    private AdsRepository adsRepository = AdsRepository.getInstance();
 
-    public void initAllAdsByLimit(String token) {
-        adsRepository = AdsRepository.getInstance();
-        mutableLiveDataAllAdsByLimit = adsRepository.getAllAdsByLimit(token );
+    public void initAllAdsByLimit() {
+
+        mutableLiveDataAllAdsByLimit = adsRepository.getAllAdsByLimit();
 
     }
 
@@ -26,9 +26,8 @@ public class AdsViewModel extends ViewModel {
         return mutableLiveDataAllAdsByLimit;
     }
 
-    public void initAllAds(String token) {
-        adsRepository = AdsRepository.getInstance();
-        mutableLiveDataAllAds = adsRepository.getAllAds(token );
+    public void initAllAds() {
+        mutableLiveDataAllAds = adsRepository.getAllAds();
 
     }
 
@@ -37,13 +36,10 @@ public class AdsViewModel extends ViewModel {
         return mutableLiveDataAllAds;
     }
 
-    public void initSingleAd(String key, String token) {
-        adsRepository = AdsRepository.getInstance();
-        mutableLiveDataSingle = adsRepository.getSingleAds(key, token);
 
-    }
 
-    public LiveData<SingleAd> getSingleAd() {
+    public LiveData<SingleAd> getSingleAd(String token, String key) {
+        mutableLiveDataSingle = adsRepository.getSingleAds(token, key);
         return mutableLiveDataSingle;
     }
 

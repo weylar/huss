@@ -8,34 +8,40 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.huss.android.R;
 import com.huss.android.models.AllAds;
+import com.huss.android.viewModels.FavoriteViewModel;
 import com.huss.android.views.ads.singleAds.SingleAdsActivity;
 import com.squareup.picasso.Picasso;
 import com.varunest.sparkbutton.SparkButton;
-import com.varunest.sparkbutton.SparkEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.huss.android.utility.Utility.MY_PREFERENCES;
 import static com.huss.android.utility.Utility.STANDARD_AD;
+import static com.huss.android.utility.Utility.TOKEN;
 import static com.huss.android.views.ads.singleAds.SingleAdsActivity.ID;
 import static com.huss.android.views.ads.singleAds.SingleAdsActivity.NAME;
-import static com.huss.android.views.home.MainActivity.checkLoggedIn;
 
-public class LatestAdsAdapter extends RecyclerView.Adapter<LatestAdsAdapter.CustomViewHolder> {
+public class HomeAdsAdapter extends RecyclerView.Adapter<HomeAdsAdapter.CustomViewHolder> {
 
 
     private AllAds dataList;
     private Context context;
+    private FavoriteViewModel favoriteViewModel;
+    private String token;
 
-    LatestAdsAdapter(Context context, AllAds dataList) {
+    HomeAdsAdapter(Context context, AllAds dataList) {
+        favoriteViewModel = ViewModelProviders.of((FragmentActivity) context).get(FavoriteViewModel.class);
+        token = context.getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE).getString(TOKEN, "");
         this.context = context;
         this.dataList = dataList;
 
     }
-
 
     @NotNull
     @Override
@@ -56,36 +62,14 @@ public class LatestAdsAdapter extends RecyclerView.Adapter<LatestAdsAdapter.Cust
     public void onBindViewHolder(@NotNull CustomViewHolder holder, int position) {
         AllAds.Data ad = dataList.getData().get(position);
         if (ad.getType().equals(STANDARD_AD)) {
-            holder.label.setVisibility(View.GONE);
             holder.txtTitle.setText(ad.getTitle());
             holder.price.setText(String.format("₦%s", String.format("%,d", Integer.parseInt(ad.getPrice()))));
             holder.itemView.setId(ad.getId());
-            if (checkLoggedIn(context)){
-                holder.favorite.setChecked(ad.getFavorites());
-                holder.favorite.setEventListener(new SparkEventListener() {
-
-                    @Override
-                    public void onEvent(ImageView button, boolean buttonState) {
-                        if (buttonState) {
-                            // Button is active
-                        } else {
-                            // Button is inactive
-                        }
-                    }
-
-                    @Override
-                    public void onEventAnimationEnd(ImageView button, boolean buttonState) {
-
-                    }
-
-                    @Override
-                    public void onEventAnimationStart(ImageView button, boolean buttonState) {
-
-                    }
-                });
-            }else{
-                holder.favorite.setVisibility(View.GONE);
+            holder.favorite.setVisibility(View.GONE);
+            if (ad.getType().equals(STANDARD_AD)){
+                holder.label.setVisibility(View.GONE);
             }
+
             for (AllAds.Data.Image image : ad.getImages()) {
                 if (image.getDisplayImage()) {
                     Picasso.Builder builder = new Picasso.Builder(context);
@@ -94,8 +78,9 @@ public class LatestAdsAdapter extends RecyclerView.Adapter<LatestAdsAdapter.Cust
                 }
             }
 
-
         }
+
+
     }
 
     @Override
@@ -107,13 +92,14 @@ public class LatestAdsAdapter extends RecyclerView.Adapter<LatestAdsAdapter.Cust
     }
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
+
         public final View mView;
+
         TextView txtTitle;
         TextView price;
-        TextView label, negotiable;
+        TextView label;
         SparkButton favorite;
         private ImageView image;
-
 
         CustomViewHolder(View itemView) {
             super(itemView);

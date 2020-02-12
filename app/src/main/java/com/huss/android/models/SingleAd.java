@@ -132,7 +132,8 @@ public class SingleAd {
         private String createdAt;
         private List<AdImage> adImages = null;
         private List<SimilarAd> similarAds = null;
-        private Boolean isFavorited;
+        @SerializedName("isFavorite")
+        private boolean isFavorite;
 
         public Integer getId() {
             return id;
@@ -254,12 +255,12 @@ public class SingleAd {
             this.similarAds = similarAds;
         }
 
-        public Boolean getIsFavorited() {
-            return isFavorited;
+        public boolean getFavorite() {
+            return isFavorite;
         }
 
-        public void setIsFavorited(Boolean isFavorited) {
-            this.isFavorited = isFavorited;
+        public void setFavorite(boolean isFavorite) {
+            this.isFavorite = isFavorite;
         }
 
     }
@@ -332,7 +333,6 @@ public class SingleAd {
         }
 
     }
-
 
     public class SimilarAd {
 

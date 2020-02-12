@@ -31,7 +31,6 @@ public class SimilarAdsAdapter extends RecyclerView.Adapter<SimilarAdsAdapter.Cu
     SimilarAdsAdapter(Context context, List<SingleAd.SimilarAd> dataList) {
         this.context = context;
         this.dataList = dataList;
-        Timber.e(dataList.size() +"");
 
     }
 

@@ -6,8 +6,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.huss.android.data.HussAPI;
 import com.huss.android.data.RetrofitClientInstance;
-import com.huss.android.models.Ad;
-import com.huss.android.models.AdImage;
 import com.huss.android.models.Image;
 import com.huss.android.utility.Utility;
 
@@ -54,25 +52,25 @@ public class CreateImageRepository {
         return adData;
     }
 
- public MutableLiveData<AdImage> getFeaturedImage(Ad.Data adImage, String token) {
-        final MutableLiveData<AdImage> adData = new MutableLiveData<>();
-        HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
-        Call<AdImage> call = retrofit.getFeaturedImage(adImage.getId(), Utility.BEARER + " " + token);
-        call.enqueue(new Callback<AdImage>() {
-            @Override
-            public void onResponse(@NotNull Call<AdImage> call, @NotNull Response<AdImage> response) {
-                if (response.isSuccessful()) {
-                    adData.setValue(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(@NotNull Call<AdImage> call, @NotNull Throwable throwable) {
-                Log.e("Aminu", throwable.getMessage());
-            }
-        });
-        return adData;
-    }
+// public MutableLiveData<AdImage> getFeaturedImage(Ad.Data adImage, String token) {
+//        final MutableLiveData<AdImage> adData = new MutableLiveData<>();
+//        HussAPI retrofit = RetrofitClientInstance.getRetrofitInstance().create(HussAPI.class);
+//        Call<AdImage> call = retrofit.getFeaturedImage(adImage.getId(), Utility.BEARER + " " + token);
+//        call.enqueue(new Callback<AdImage>() {
+//            @Override
+//            public void onResponse(@NotNull Call<AdImage> call, @NotNull Response<AdImage> response) {
+//                if (response.isSuccessful()) {
+//                    adData.setValue(response.body());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(@NotNull Call<AdImage> call, @NotNull Throwable throwable) {
+//                Log.e("Aminu", throwable.getMessage());
+//            }
+//        });
+//        return adData;
+//    }
 
 
 }
