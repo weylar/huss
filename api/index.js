@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const port = process.env.PORT || 3000;
 
-app.get('/', (res) => res.status(200).send({
+app.get('/', (_,res) => res.status(200).send({
   status: 'success',
   statusCode: 200,
   message: 'Welcome to the huss API.'
