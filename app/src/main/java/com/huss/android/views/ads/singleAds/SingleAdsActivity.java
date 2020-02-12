@@ -45,6 +45,7 @@ import java.util.Locale;
 import de.hdodenhof.circleimageview.CircleImageView;
 import timber.log.Timber;
 
+import static com.huss.android.utility.TimeFormat.formatDBTimeToLongMilli;
 import static com.huss.android.utility.Utility.LAST_SEEN;
 import static com.huss.android.utility.Utility.PHONE;
 import static com.huss.android.utility.Utility.PRODUCT;
@@ -227,8 +228,8 @@ public class SingleAdsActivity extends AppCompatActivity {
                 lastseen.setText(R.string.online_status);
                 lastSeen = "Online";
             } else {
-//                String formatTime = TimeFormat.getTimeAgo(profile.getData().getLastSeen())
-                lastSeen = String.format("Last seen, %s", profile.getData().getLastSeen());
+               String formatTime = TimeFormat.getTimeAgo(formatDBTimeToLongMilli(profile.getData().getLastSeen()));
+                lastSeen = String.format("Last seen, %s", formatTime);
                 lastseen.setText(lastSeen);
             }
             profileImageUrl = profile.getData().getProfileImgUrl();
