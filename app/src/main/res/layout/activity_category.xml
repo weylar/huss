@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".views.subCategory.SubCategoryView">
+    tools:context="com.huss.android.views.category.CategoryActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/toolbar_height"
         app:cardElevation="2dp"
         app:contentPadding="10dp">
 
@@ -22,8 +21,8 @@
                 android:id="@+id/back"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="wrap_content"
-                android:onClick="goBack"
                 android:contentDescription="@string/go_backk"
+                android:onClick="goBack"
                 android:src="@drawable/back" />
 
             <TextView
@@ -31,8 +30,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="15dp"
-                android:text="@string/category"
                 android:layout_toEndOf="@+id/back"
+                android:text="@string/category"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="20sp" />
 
 
@@ -44,15 +44,26 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cat_recycler"
         android:layout_width="match_parent"
-        android:layout_margin="20dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_height="wrap_content"/>
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone"/>
 
-    <com.ldoublem.loadingviewlib.view.LVCircularZoom
-        android:id="@+id/progress"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_gravity="center"
-        android:layout_margin="5dp" />
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/gray"/>
+
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </LinearLayout>

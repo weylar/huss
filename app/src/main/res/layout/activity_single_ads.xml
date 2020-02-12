@@ -2,21 +2,32 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/gray" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/root"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            tools:context=".views.home.MainActivity">
+            tools:context="com.huss.android.views.home.MainActivity">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -29,31 +40,22 @@
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabDots"
-                    android:layout_alignParentBottom="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
                     app:tabBackground="@drawable/tab_selector"
                     app:tabGravity="center"
-                    app:tabIndicatorHeight="0dp"/>
+                    app:tabIndicatorHeight="0dp" />
 
             </RelativeLayout>
-
-
-            <com.ldoublem.loadingviewlib.view.LVCircularZoom
-                android:id="@+id/progress"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:visibility="gone" />
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:background="@color/colorPrimary"
-                android:padding="20dp">
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -82,8 +84,6 @@
                         android:layout_height="wrap_content"
                         android:drawableStart="@drawable/ic_seen24dp"
                         android:drawablePadding="10dp"
-                        android:paddingEnd="5dp"
-
                         tools:text="245" />
 
                     <TextView
@@ -100,13 +100,14 @@
                     <TextView
                         android:id="@+id/price"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="bottom"
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
                         android:textColor="@color/colorAccent"
-                        android:textSize="30sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
                         tools:text="$25" />
 
@@ -120,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 app:cardElevation="2dp"
-                app:contentPadding="20dp">
+                app:contentPadding="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -147,6 +148,7 @@
 
             </androidx.cardview.widget.CardView>
 
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -167,6 +169,8 @@
                             android:id="@+id/profile_img"
                             android:layout_width="50sp"
                             android:layout_height="50sp"
+                            android:layout_centerVertical="true"
+                            android:onClick="openUserProfile"
                             tools:src="@drawable/sample" />
 
                         <LinearLayout
@@ -187,6 +191,12 @@
                                 tools:text="Aminu Idris" />
 
                             <TextView
+                                android:id="@+id/registered"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="Registered, 2:30PM" />
+
+                            <TextView
                                 android:id="@+id/lastseen"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -196,16 +206,18 @@
 
 
                         <ImageView
+                            android:id="@+id/make_call"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:layout_toStartOf="@+id/message_icon"
                             android:contentDescription="@string/make_call"
-                            android:paddingTop="15dp"
-                            android:paddingEnd="20dp"
-                            android:paddingBottom="15dp"
                             android:onClick="makeCall"
-                            android:src="@drawable/small_phone" />
+                            android:paddingStart="18dp"
+                            android:paddingTop="15dp"
+                            android:paddingEnd="18dp"
+                            android:paddingBottom="15dp"
+                            android:src="@drawable/small_phone_" />
 
                         <ImageView
                             android:id="@+id/message_icon"
@@ -214,48 +226,48 @@
                             android:layout_alignParentEnd="true"
                             android:layout_centerInParent="true"
                             android:contentDescription="@string/text_the_seller"
-                            android:padding="15dp"
                             android:onClick="text"
+                            android:padding="18dp"
                             android:src="@drawable/small_message" />
 
 
                     </RelativeLayout>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="25dp">
+                    <!--                    <RelativeLayout-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginTop="25dp">-->
 
-                        <Button
-                            android:id="@+id/makeOffer"
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:background="@drawable/button_offer"
-                            android:onClick="bid"
-                            android:text="@string/make_an_offer"
-                            android:textColor="@color/colorPrimary"
-                            android:textStyle="bold" />
+                    <!--                        <Button-->
+                    <!--                            android:id="@+id/makeOffer"-->
+                    <!--                            android:layout_width="150dp"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:layout_centerVertical="true"-->
+                    <!--                            android:background="@drawable/button_offer"-->
+                    <!--                            android:onClick="bid"-->
+                    <!--                            android:text="@string/make_an_offer"-->
+                    <!--                            android:textColor="@color/colorPrimary"-->
+                    <!--                            android:textStyle="bold" />-->
 
-                        <EditText
-                            android:id="@+id/offerPrice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerInParent="true"
-                            android:layout_toEndOf="@+id/makeOffer"
-                            android:gravity="end"
-                            android:padding="15sp"
-                            tools:text="$500"
-                            android:inputType="number"
-                            android:maxLength="9"
-                            android:background="@drawable/custom_edittext"
-                            android:textColor="@color/colorAccent"
-                            android:textStyle="bold"
-                            android:layout_marginStart="10sp"
-                            android:textSize="25sp" />
+                    <!--                        <EditText-->
+                    <!--                            android:id="@+id/offerPrice"-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:layout_alignParentEnd="true"-->
+                    <!--                            android:layout_centerInParent="true"-->
+                    <!--                            android:layout_toEndOf="@+id/makeOffer"-->
+                    <!--                            android:gravity="end"-->
+                    <!--                            android:padding="15sp"-->
+                    <!--                            tools:text="$500"-->
+                    <!--                            android:inputType="number"-->
+                    <!--                            android:maxLength="9"-->
+                    <!--                            android:background="@drawable/custom_edittext"-->
+                    <!--                            android:textColor="@color/colorAccent"-->
+                    <!--                            android:textStyle="bold"-->
+                    <!--                            android:layout_marginStart="10sp"-->
+                    <!--                            android:textSize="25sp" />-->
 
-                    </RelativeLayout>
+                    <!--                    </RelativeLayout>-->
 
                     <TextView
                         android:id="@+id/report"
@@ -274,7 +286,9 @@
 
             </androidx.cardview.widget.CardView>
 
+
             <androidx.cardview.widget.CardView
+                android:id="@+id/card_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -287,11 +301,12 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/similar_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
-                        android:textColor="@color/colorPrimaryDark"
                         android:text="@string/similar_ads"
+                        android:textColor="@color/colorPrimaryDark"
                         android:textSize="18sp" />
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -315,9 +330,12 @@
 
         <ImageView
             android:id="@+id/back"
-            android:layout_width="@dimen/toolbar_icon_size"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/back_bg"
             android:onClick="goBack"
+            android:padding="4dp"
+            android:contentDescription="@string/back_button"
             android:src="@drawable/back_white" />
 
         <TextView
@@ -328,13 +346,22 @@
             android:layout_toEndOf="@+id/back"
             android:textSize="20sp" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.varunest.sparkbutton.SparkButton
+            android:id="@+id/favorite"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_alignParentEnd="true"
-            android:onClick="favoriteAds"
-            android:src="@drawable/favorite_no" />
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/favorite"
+            app:sparkbutton_activeImage="@drawable/favorite_yes"
+            app:sparkbutton_animationSpeed="1.5"
+            app:sparkbutton_iconSize="25dp"
+            app:sparkbutton_inActiveImage="@drawable/favorite_no"
+            app:sparkbutton_primaryColor="@color/colorAccent"
+            app:sparkbutton_secondaryColor="@color/colorAccent" />
 
 
     </RelativeLayout>
+
 </RelativeLayout>

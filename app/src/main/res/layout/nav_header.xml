@@ -1,37 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:background="@drawable/nav_header_bck">
+    android:layout_height="230dp"
+    android:background="@drawable/nav_header_bck"
+    android:paddingTop="25dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_img"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_margin="10dp"
-        android:src="@drawable/sample"
-        android:layout_centerInParent="true"
-        android:contentDescription="@string/profile_image" />
-
-    <TextView
+    <RelativeLayout
+        android:id="@+id/profile_img_holder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Aminu Idris"
-        android:layout_below="@+id/profile_img"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20sp"/>
+        android:layout_centerInParent="true"
+        android:layout_margin="10dp">
+
+        <TextView
+            android:id="@+id/placeholder"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/circle"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            tools:text="I"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/image_bg"
+            android:contentDescription="@string/profile_image"
+            android:src="@drawable/sample" />
+    </RelativeLayout>
 
     <TextView
-        android:layout_width="60dp"
+        android:id="@+id/profileName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_img_holder"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        tools:text="Aminu Idris" />
+
+    <TextView
+        android:id="@+id/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_margin="10dp"
-        android:text="@string/logout"
-        android:padding="5dp"
-        android:textAlignment="center"
         android:background="@drawable/radial_accent_bg"
-        android:textColor="@color/colorPrimary"
-        android:layout_alignParentEnd="true"/>
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:padding="4dp"
+        android:text="@string/logout"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary" />
 
 </RelativeLayout>

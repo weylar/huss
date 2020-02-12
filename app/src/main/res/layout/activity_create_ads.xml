@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".views.ads.createAds.CreateAdsActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        app:cardElevation="2dp"
+        app:contentPaddingTop="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:id="@+id/back"
+                    android:layout_width="@dimen/toolbar_icon_size"
+                    android:contentDescription="@string/back_button"
+                    android:layout_height="wrap_content"
+                    android:onClick="goBack"
+                    android:src="@drawable/back" />
+
+                <TextView
+                    android:id="@+id/page_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/create_ad"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="20sp"
+                    tools:ignore="RelativeOverlap" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:contentDescription="@string/help_icon"
+                    android:onClick="helpClick"
+                    android:src="@drawable/help_50px" />
+
+            </RelativeLayout>
+
+            <ProgressBar
+                android:id="@+id/progressUpload"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="0dp"
+                android:indeterminate="true"
+                android:visibility="gone" />
+
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/select_category_and_sub_category" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/custom_bg"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:drawableStart="@drawable/small_file"
+                    android:drawablePadding="5dp"
+                    android:text="@string/categorys"
+                    android:textColor="@color/colorAccent" />
+
+                <Spinner
+                    android:id="@+id/categories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/custom_bg"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:drawableStart="@drawable/small_sub_cat"
+                    android:drawablePadding="5dp"
+                    android:text="@string/sub_category"
+                    android:textColor="@color/colorAccent" />
+
+                <Spinner
+                    android:id="@+id/sub_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/small_title"
+                    android:drawablePadding="5dp"
+                    android:text="@string/title" />
+
+                <TextView
+                    android:id="@+id/titleCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/_0_70"
+                    tools:ignore="RelativeOverlap" />
+
+            </RelativeLayout>
+
+
+            <EditText
+                android:id="@+id/adTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/custom_bg"
+                android:drawablePadding="5dp"
+                android:hint="@string/write_a_clear_title_for_your_ad"
+                android:importantForAutofill="no"
+                android:inputType="text|textCapSentences"
+                android:padding="10dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/small_description"
+                    android:drawablePadding="5dp"
+                    android:text="@string/description" />
+
+                <TextView
+                    android:id="@+id/descCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/_1_1200"
+                    tools:ignore="RelativeOverlap" />
+            </RelativeLayout>
+
+
+            <EditText
+                android:id="@+id/adDescription"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/custom_bg"
+                android:gravity="top"
+                android:autofillHints="@string/description"
+                android:hint="@string/description_detail"
+                android:inputType="textMultiLine|textCapSentences"
+                android:padding="10dp"
+                tools:targetApi="o" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:drawableStart="@drawable/small_location"
+                android:drawablePadding="5dp"
+                android:text="@string/location" />
+
+
+            <AutoCompleteTextView
+                android:id="@+id/adLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/custom_bg"
+                android:drawablePadding="5dp"
+                android:hint="@string/location_description"
+                android:importantForAutofill="no"
+                android:inputType="text|textCapSentences"
+                android:padding="10dp" />
+
+            <TextView
+                android:id="@+id/phone_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:drawableStart="@drawable/ic_call_gray"
+                android:drawablePadding="5dp"
+                android:text="@string/phone" />
+
+
+            <EditText
+                android:id="@+id/phone_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/custom_bg"
+                android:drawablePadding="5dp"
+                android:hint="@string/phone_number_where_your_potential_buyers_can_reach_you"
+                android:importantForAutofill="no"
+                android:inputType="phone"
+                android:padding="10dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:drawableStart="@drawable/small_price"
+                android:drawablePadding="5dp"
+                android:labelFor="@+id/price"
+                android:text="@string/price" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <EditText
+                    android:id="@+id/adPrice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_bg"
+                    android:hint="@string/naira"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:maxLength="13"
+                    android:padding="10dp" />
+
+                <CheckBox
+                    android:id="@+id/isNegotiable_checkbox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:buttonTint="@color/colorAccent"
+                    android:text="@string/negotiable" />
+
+            </LinearLayout>
+
+            <!--Select Images Section-->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:drawableStart="@drawable/small_image"
+                android:drawablePadding="5dp"
+                android:text="@string/images" />
+
+            <TextView
+                android:id="@+id/dragDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/drag_image_description"
+                android:textSize="13sp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:src="@drawable/add_white"
+                    app:backgroundTint="@color/colorAccent"
+                    app:fabSize="mini" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/imagesRecycler"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:visibility="gone" />
+
+
+                <View
+                    android:id="@+id/add_image_view"
+                    android:layout_width="90dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/fake_radius_image" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/image_size_warning" />
+
+            <TextView
+                android:id="@+id/typeInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:drawableEnd="@drawable/small_info"
+                android:drawablePadding="10dp"
+                android:text="@string/ads_type_description" />
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/custom_bg"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:weightSum="2">
+
+                <RadioButton
+                    android:id="@+id/freeCheck"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:buttonTint="@color/colorAccent"
+                    android:padding="10dp"
+                    android:text="@string/standard_ad" />
+
+                <RadioButton
+                    android:id="@+id/payCheck"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_offer"
+                    android:buttonTint="@color/colorPrimaryDark"
+                    android:padding="10dp"
+                    android:text="@string/top_ad_30_days"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold" />
+
+            </RadioGroup>
+
+
+            <Button
+                android:id="@+id/postAd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:background="@drawable/button_offer"
+                android:text="@string/post_ad"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/terms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center_horizontal"
+                android:text="@string/terms_and_condition" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
