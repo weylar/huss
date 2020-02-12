@@ -85,7 +85,7 @@ class AdService {
     });
 
     let resultIndex = result.findIndex(elem => elem.dataValues.id === oldAd.id);
-    similarAds.splice(resultIndex, 1);
+    result.splice(resultIndex, 1);
 
     if (req.userId === null) {
       return {
