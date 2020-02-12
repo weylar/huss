@@ -88,7 +88,23 @@ class AdService {
       return {
         status: 'success',
         statusCode: 200,
-        data: {...oldAd, adImages, similarAds: result},
+        data: {
+          id: oldAd.id,
+          userId: oldAd.userId,
+          description: oldAd.description,
+          categoryName: oldAd.categoryName,
+          subCategoryName: oldAd.subCategoryName,
+          title: oldAd.title,
+          price: oldAd.price,
+          type: oldAd.type,
+          status: oldAd.status,
+          isNegotiable: oldAd.isNegotiable,
+          count: oldAd.count,
+          location: oldAd.location,
+          createdAt: oldAd.createdAt,
+          adImages,
+          similarAds: result
+        },
         message: 'Ad sucessfully retrieved'
       };
     }
