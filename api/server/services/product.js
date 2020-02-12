@@ -84,7 +84,7 @@ class AdService {
       include: [{ model: db.Image }]
     });
 
-    let resultIndex = similarAds.findIndex(elem => elem.dataValues.id === oldAd.id);
+    let resultIndex = result.findIndex(elem => elem.dataValues.id === oldAd.id);
     similarAds.splice(resultIndex, 1);
 
     if (req.userId === null) {
